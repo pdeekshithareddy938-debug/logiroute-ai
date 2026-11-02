@@ -1,0 +1,66 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("ADMIN") // 'ADMIN' | 'RIDER' | 'CUSTOMER'
+  vehicle   String?
+  battery   Int?
+  address   String?
+  orders    Order[]  @relation("CustomerOrders")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Courier {
+  id        String   @id @default(uuid())
+  name      String
+  vehicle   String
+  battery   Int
+  status    String   @default("idle") // 'idle' | 'in-transit'
+  waves     Wave[]
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wave {
+  id        String   @id @default(uuid())
+  name      String
+  corridor  String
+  status    String   @default("pending") // 'pending' | 'in-transit' | 'completed'
+  courierId String?
+  courier   Courier? @relation(fields: [courierId], references: [id])
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  customer    String
+  address     String
+  lat         Float
+  lng         Float
+  packageDesc String
+  weightKg    Float
+  priority    String   @default("MEDIUM")
+  status      String   @default("pending") // 'pending' | 'packed' | 'in-transit' | 'delivered'
+  waveId      String?
+  wave        Wave?    @relation(fields: [waveId], references: [id])
+  customerId  String?
+  customerUser User?   @relation("CustomerOrders", fields: [customerId], references: [id])
+  courierId   String?
+  courier     Courier? @relation(fields: [courierId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

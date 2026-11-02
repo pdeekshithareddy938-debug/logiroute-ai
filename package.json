@@ -1,0 +1,22 @@
+{
+  "name": "ai-based-delivery-planning-system",
+  "version": "1.0.0",
+  "description": "LogiRoute AI - Full Stack Delivery Planning & Quick-Commerce Ecosystem",
+  "scripts": {
+    "start": "node start-local.js",
+    "dev": "node start-local.js",
+    "start:online": "node start-online.js",
+    "share": "npx localtunnel --port 5173",
+    "backend": "npm --prefix backend start",
+    "frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "delivery",
+    "route-optimization",
+    "express",
+    "react",
+    "prisma",
+    "quick-commerce"
+  ]
+}
