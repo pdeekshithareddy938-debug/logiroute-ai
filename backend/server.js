@@ -1,9 +1,19 @@
 require('dotenv').config();
 const path = require('path');
+const fs = require('fs');
+
 require('dotenv').config({ path: path.join(__dirname, '.env') });
-if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = 'file:./prisma/dev.db';
+
+const prismaDir = path.join(__dirname, 'prisma');
+if (!fs.existsSync(prismaDir)) {
+  fs.mkdirSync(prismaDir, { recursive: true });
 }
+
+// In Prisma SQLite, relative path 'file:./dev.db' is resolved relative to schema.prisma (backend/prisma/)
+if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes('prisma/dev.db')) {
+  process.env.DATABASE_URL = 'file:./dev.db';
+}
+
 const { execSync } = require('child_process');
 const express = require('express');
 const cors = require('cors');
@@ -1443,13 +1453,29 @@ if (fs.existsSync(frontendDistPath)) {
 async function startServer() {
   try {
     console.log('[Prisma] Connecting to SQLite database...');
+    console.log(`[Prisma] Using database URL: ${process.env.DATABASE_URL}`);
     await prisma.$connect();
     console.log('[Prisma] Connected successfully.');
 
-    // Auto-seed if database is empty on first boot
-    const count = await prisma.user.count();
-    if (count === 0) {
-      await seedDatabase();
+    // Auto-seed if database is empty on first boot, or initialize tables if fresh
+    try {
+      const count = await prisma.user.count();
+      if (count === 0) {
+        await seedDatabase();
+      }
+    } catch (dbErr) {
+      console.log('[Prisma] Initializing database tables...');
+      try {
+        const { execSync } = require('child_process');
+        execSync('npx prisma db push --skip-generate --accept-data-loss', {
+          cwd: __dirname,
+          stdio: 'inherit',
+          env: { ...process.env }
+        });
+        await seedDatabase();
+      } catch (pushErr) {
+        console.warn('[Prisma] Table initialization notice:', pushErr.message);
+      }
     }
 
     const HOST = '0.0.0.0';
