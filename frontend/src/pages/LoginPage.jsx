@@ -92,146 +92,146 @@ const PORTALS = [
     badgeIconColor: '#FF5722',
     badgeIconDropShadow: 'drop-shadow(0 0 3px rgba(255, 87, 34, 0.40))',
     badgeStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.58) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 246, 240, 0.70) 100%)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       color: '#0F172A',
-      border: '1px solid rgba(255, 255, 255, 0.92)',
+      border: '1px solid rgba(255, 255, 255, 0.95)',
       boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05), inset 0 1px 1.5px rgba(255, 255, 255, 0.95)',
     },
     accountInfo: 'Demo: customer@gmail.com',
     mailIconColor: '#EF4444',
-    subtitleColor: '#C2410C',
+    subtitleColor: '#EA580C',
     desc: 'Browse instant quick-commerce grocery catalog, temperature badges, and real-time live 3D order tracking.',
     // Luminous Frosted Glass Squircle for Symbol
     luminousGlassStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 235, 225, 0.38) 50%, rgba(255, 215, 200, 0.48) 100%)',
-      backdropFilter: 'blur(12px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.88)',
-      boxShadow: '0 8px 24px -4px rgba(239, 68, 68, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(239, 68, 68, 0.18)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 240, 230, 0.55) 50%, rgba(255, 220, 205, 0.65) 100%)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      border: '1.5px solid rgba(255, 255, 255, 0.95)',
+      boxShadow: '0 8px 20px -4px rgba(255, 120, 80, 0.25), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95)',
     },
-    // Light, Glossy Peach & Warm Coral Glassmorphism
+    // Luminous Soft Cream & Warm Coral Glassmorphism
     cardStyle: {
-      background: 'linear-gradient(150deg, rgba(255, 246, 240, 0.85) 0%, rgba(255, 228, 215, 0.72) 48%, rgba(255, 195, 180, 0.78) 100%)',
-      backdropFilter: 'blur(20px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.85)',
-      boxShadow: '0 20px 45px -12px rgba(255, 120, 90, 0.22), 0 8px 24px -6px rgba(0, 0, 0, 0.04), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(255, 255, 255, 0.45)',
+      background: 'linear-gradient(168deg, rgba(255, 252, 248, 0.84) 0%, rgba(255, 235, 222, 0.68) 42%, rgba(255, 196, 182, 0.76) 100%)',
+      backdropFilter: 'blur(24px) saturate(190%)',
+      WebkitBackdropFilter: 'blur(24px) saturate(190%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.90)',
+      boxShadow: '0 25px 50px -12px rgba(255, 120, 80, 0.22), 0 8px 24px -4px rgba(0, 0, 0, 0.04), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(255, 255, 255, 0.40)',
     },
     demoPillStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 230, 220, 0.45) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.70) 0%, rgba(255, 232, 222, 0.45) 100%)',
       border: '1px solid rgba(255, 255, 255, 0.90)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
-      boxShadow: '0 4px 15px rgba(239, 68, 68, 0.10), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
+      boxShadow: '0 4px 15px rgba(239, 68, 68, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(255, 195, 180, 0.35) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(255, 196, 182, 0.50) 0%, transparent 100%)',
     },
     iconBg: 'bg-white/80 backdrop-blur-md text-[#FF5722] border border-white/90',
   },
   {
     id: 'rider',
     title: 'Delivery Partner HUD',
-    subtitle: 'Deliver & Earn. Hyper-Local.',
+    subtitle: 'Deliver more. Earn more.',
     role: 'RIDER',
     path: '/rider/login',
     buttonText: 'Rider Login →',
     icon: ScooterIcon3D,
-    badgeText: 'Active Navigation HUD',
+    badgeText: 'Fleet Partner',
     badgeIcon: Bike,
-    badgeIconColor: '#FF3D00',
-    badgeIconDropShadow: 'drop-shadow(0 0 3px rgba(255, 61, 0, 0.40))',
+    badgeIconColor: '#3B82F6',
+    badgeIconDropShadow: 'drop-shadow(0 0 3px rgba(59, 130, 246, 0.40))',
     badgeStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.58) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 246, 255, 0.70) 100%)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       color: '#0F172A',
-      border: '1px solid rgba(255, 255, 255, 0.92)',
+      border: '1px solid rgba(255, 255, 255, 0.95)',
       boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05), inset 0 1px 1.5px rgba(255, 255, 255, 0.95)',
     },
     accountInfo: 'Demo: rider@logiroute.ai',
     mailIconColor: '#F97316',
     subtitleColor: '#EA580C',
-    desc: 'Accept multi-stop dispatch waves, dark store bay pick-up confirmation, and real-time turn-by-turn routing.',
+    desc: 'Turn-by-turn routing navigation, cold-chain SLA telemetry, dispatch wave acceptance, and shift manager.',
     // Luminous Frosted Glass Squircle for Symbol
     luminousGlassStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 230, 215, 0.38) 50%, rgba(255, 205, 185, 0.48) 100%)',
-      backdropFilter: 'blur(12px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.88)',
-      boxShadow: '0 8px 24px -4px rgba(255, 61, 0, 0.32), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(255, 61, 0, 0.20)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 245, 255, 0.55) 50%, rgba(230, 220, 255, 0.65) 100%)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      border: '1.5px solid rgba(255, 255, 255, 0.95)',
+      boxShadow: '0 8px 20px -4px rgba(129, 140, 248, 0.25), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95)',
     },
-    // Light, Glossy Lavender & Pale Purple Glassmorphism
+    // Luminous Icy-Lavender & Pale Purple-Pink Glassmorphism
     cardStyle: {
-      background: 'linear-gradient(150deg, rgba(248, 244, 255, 0.85) 0%, rgba(236, 222, 255, 0.72) 48%, rgba(225, 200, 252, 0.78) 100%)',
-      backdropFilter: 'blur(20px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.85)',
-      boxShadow: '0 20px 45px -12px rgba(192, 132, 252, 0.22), 0 8px 24px -6px rgba(0, 0, 0, 0.04), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(255, 255, 255, 0.45)',
+      background: 'linear-gradient(168deg, rgba(248, 250, 255, 0.84) 0%, rgba(228, 235, 255, 0.68) 42%, rgba(238, 208, 255, 0.76) 100%)',
+      backdropFilter: 'blur(24px) saturate(190%)',
+      WebkitBackdropFilter: 'blur(24px) saturate(190%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.90)',
+      boxShadow: '0 25px 50px -12px rgba(165, 180, 252, 0.22), 0 8px 24px -4px rgba(0, 0, 0, 0.04), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(255, 255, 255, 0.40)',
     },
     demoPillStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(238, 225, 255, 0.45) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.70) 0%, rgba(235, 225, 255, 0.45) 100%)',
       border: '1px solid rgba(255, 255, 255, 0.90)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
-      boxShadow: '0 4px 15px rgba(192, 132, 252, 0.10), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
+      boxShadow: '0 4px 15px rgba(165, 180, 252, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(225, 200, 252, 0.35) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(238, 208, 255, 0.50) 0%, transparent 100%)',
     },
     iconBg: 'bg-white/80 backdrop-blur-md text-[#FF3D00] border border-white/90',
   },
   {
     id: 'admin',
-    title: 'Admin Operations Hub',
-    subtitle: 'Dark Store Control Tower.',
+    title: 'Control Tower Console',
+    subtitle: 'Manage. Monitor. Grow.',
     role: 'ADMIN',
     path: '/admin/login',
     buttonText: 'Admin Login →',
     icon: BarChartIcon3D,
-    badgeText: 'Control Tower & 2-Opt',
+    badgeText: 'Hub Operations',
     badgeIcon: Building2,
     badgeIconColor: '#EA580C',
     badgeIconDropShadow: 'drop-shadow(0 0 3px rgba(234, 88, 12, 0.40))',
     badgeStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.58) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 250, 235, 0.70) 100%)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       color: '#0F172A',
-      border: '1px solid rgba(255, 255, 255, 0.92)',
+      border: '1px solid rgba(255, 255, 255, 0.95)',
       boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05), inset 0 1px 1.5px rgba(255, 255, 255, 0.95)',
     },
     accountInfo: 'Demo: admin@logiroute.ai',
     mailIconColor: '#EA580C',
-    subtitleColor: '#B45309',
+    subtitleColor: '#EA580C',
     desc: 'GIS live fleet radar, multi-order wave dispatching, TSP route optimization, and dark store inventory sync.',
     // Luminous Frosted Glass Squircle for Symbol
     luminousGlassStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 240, 215, 0.38) 50%, rgba(255, 215, 175, 0.48) 100%)',
-      backdropFilter: 'blur(12px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.88)',
-      boxShadow: '0 8px 24px -4px rgba(249, 115, 22, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(249, 115, 22, 0.18)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 248, 220, 0.55) 50%, rgba(255, 230, 185, 0.65) 100%)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      border: '1.5px solid rgba(255, 255, 255, 0.95)',
+      boxShadow: '0 8px 20px -4px rgba(245, 158, 11, 0.25), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95)',
     },
-    // Bright, Airy Pastel Yellow Fading into Light Peach Glassmorphism
+    // Luminous Sunny Pastel Yellow & Warm Peach Glassmorphism
     cardStyle: {
-      background: 'linear-gradient(150deg, rgba(255, 254, 235, 0.88) 0%, rgba(254, 246, 205, 0.74) 48%, rgba(255, 232, 215, 0.78) 100%)',
-      backdropFilter: 'blur(20px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.85)',
-      boxShadow: '0 20px 45px -12px rgba(250, 204, 21, 0.20), 0 8px 24px -6px rgba(0, 0, 0, 0.04), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(255, 255, 255, 0.45)',
+      background: 'linear-gradient(168deg, rgba(255, 254, 235, 0.88) 0%, rgba(254, 240, 185, 0.72) 42%, rgba(254, 212, 160, 0.78) 100%)',
+      backdropFilter: 'blur(24px) saturate(190%)',
+      WebkitBackdropFilter: 'blur(24px) saturate(190%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.90)',
+      boxShadow: '0 25px 50px -12px rgba(245, 158, 11, 0.22), 0 8px 24px -4px rgba(0, 0, 0, 0.04), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(255, 255, 255, 0.40)',
     },
     demoPillStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 244, 220, 0.45) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.70) 0%, rgba(255, 244, 215, 0.45) 100%)',
       border: '1px solid rgba(255, 255, 255, 0.90)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
-      boxShadow: '0 4px 15px rgba(251, 191, 36, 0.10), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
+      boxShadow: '0 4px 15px rgba(245, 158, 11, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.90)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(255, 232, 215, 0.35) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(254, 212, 160, 0.50) 0%, transparent 100%)',
     },
     iconBg: 'bg-white/80 backdrop-blur-md text-[#EA580C] border border-white/90',
   }
@@ -343,11 +343,11 @@ export default function LoginPage() {
                       {/* Luminous Glass Symbol Box matching reference image */}
                       <div 
                         style={portal.luminousGlassStyle}
-                        className="w-13 h-13 rounded-[20px] flex items-center justify-center relative overflow-hidden group-hover:scale-105 group-hover:-translate-y-0.5 transition-all duration-300 select-none shadow-xs"
+                        className="w-[52px] h-[52px] rounded-[18px] flex items-center justify-center relative overflow-hidden group-hover:scale-105 group-hover:-translate-y-0.5 transition-all duration-300 select-none shadow-sm"
                       >
                         {/* Specular Diagonal/Top Glass Glare Highlight */}
                         <div 
-                          className="absolute top-0 inset-x-0 h-[48%] rounded-t-[20px] pointer-events-none"
+                          className="absolute top-0 inset-x-0 h-[48%] rounded-t-[18px] pointer-events-none"
                           style={{
                             background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.15) 60%, transparent 100%)',
                           }}
@@ -362,7 +362,7 @@ export default function LoginPage() {
                       {/* Translucent Glass Pill Badge */}
                       <span 
                         style={portal.badgeStyle}
-                        className="px-3 py-1 rounded-full text-[11px] font-bold shadow-2xs flex items-center gap-1.5 transition-all select-none"
+                        className="px-3 py-1 rounded-full text-[11px] font-bold shadow-sm flex items-center gap-1.5 transition-all select-none"
                       >
                         {BadgeIconComponent && (
                           <BadgeIconComponent 
