@@ -2,19 +2,56 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
-  Building2,
-  Sparkles,
+  User,
   Lock,
-  Mail,
-  ArrowRight,
-  ShieldAlert,
-  Radio,
-  ShoppingBag,
-  Bike,
   Eye,
   EyeOff,
+  Shield,
+  ShieldAlert,
+  Sparkles,
+  ArrowLeft,
+  X,
+  Bike,
+  Building2,
+  ShoppingBag,
   Cpu
 } from 'lucide-react';
+
+function AdminShieldLogo3D({ className = "w-16 h-14" }) {
+  return (
+    <svg className={className} viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="adminShieldGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#FFA040" />
+          <stop offset="40%" stopColor="#FF6F22" />
+          <stop offset="100%" stopColor="#E63900" />
+        </linearGradient>
+        <filter id="adminShieldShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#FF5722" floodOpacity="0.4" />
+        </filter>
+      </defs>
+      <g filter="url(#adminShieldShadow)">
+        {/* Shield shape */}
+        <path
+          d="M 30,6 C 42,6 50,12 50,18 C 50,34 38,48 30,54 C 22,48 10,34 10,18 C 10,12 18,6 30,6 Z"
+          fill="url(#adminShieldGrad)"
+        />
+        {/* Inner highlight line */}
+        <path
+          d="M 30,9 C 40,9 47,14 47,19 C 47,32 37,45 30,50 C 23,45 13,32 13,19 C 13,14 20,9 30,9 Z"
+          stroke="rgba(255,255,255,0.4)"
+          strokeWidth="1.5"
+          fill="none"
+        />
+        {/* Padlock */}
+        <rect x="23" y="27" width="14" height="11" rx="2.5" fill="#FFFFFF" />
+        <path d="M 26,27 L 26,23 C 26,20.8 27.8,19 30,19 C 32.2,19 34,20.8 34,23 L 34,27" stroke="#FFFFFF" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="30" cy="32" r="1.5" fill="#FF5722" />
+        <line x1="30" y1="33" x2="30" y2="35.5" stroke="#FF5722" strokeWidth="1.5" strokeLinecap="round" />
+      </g>
+    </svg>
+  );
+}
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -34,6 +71,10 @@ export default function AdminLoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      setErrorBanner('Please enter your Admin Email / Username and Password');
+      return;
+    }
     setErrorBanner('');
     setIsLoading(true);
 
@@ -50,153 +91,185 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070d19] text-slate-100 flex flex-col justify-center items-center p-4 font-sans selection:bg-cyan-500/30 selection:text-cyan-200 relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen w-full relative flex items-center justify-center p-4 sm:p-6 md:p-8 font-sans overflow-x-hidden selection:bg-[#FF5722]/20 selection:text-[#FF5722]">
+      
+      {/* ==================================================================== */}
+      {/* 3D SCENE BACKGROUND: Modern Warehouse, Delivery Van, Parcels & Gear  */}
+      {/* ==================================================================== */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-700 transform scale-100"
+        style={{
+          backgroundImage: `url('/assets/admin_bg_3d.png'), url('/assets/admin_reference.jpg')`,
+          backgroundColor: '#FDEEE6',
+        }}
+      >
+        {/* Ambient Warm Warehouse & Volumetric Lighting Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-100/20 via-transparent to-stone-900/35 pointer-events-none" />
+        <div className="absolute inset-0 bg-radial from-transparent via-amber-100/10 to-stone-900/25 pointer-events-none" />
+      </div>
 
-      <div className="max-w-md w-full z-10">
-        {/* Hub Operations Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-semibold mb-3">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span>HUB-01 CONTROL TOWER · SF POD</span>
+      {/* Top Left Navigation Pill */}
+      <div className="fixed top-4 left-4 sm:top-6 sm:left-6 z-30 flex items-center gap-2">
+        <Link
+          to="/login"
+          aria-label="Back to Portal Gateway"
+          className="px-3 py-1.5 rounded-full bg-white/85 hover:bg-white backdrop-blur-md border border-white/90 text-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all active:scale-95"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 text-slate-600" />
+          <span>All Portals</span>
+        </Link>
+      </div>
+
+      {/* Top Right Quick Demo Fill Pill */}
+      <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-30">
+        <button
+          type="button"
+          onClick={handleQuickFill}
+          className="px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border border-[#FF6F43]/40 text-[#FF451A] text-xs font-bold flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-[#FF6F43] animate-pulse" />
+          <span>Demo Fill</span>
+        </button>
+      </div>
+
+      {/* ==================================================================== */}
+      {/* CENTRAL FLOATING 3D GLASS CARD (Translucent Frosted Glassmorphism)   */}
+      {/* ==================================================================== */}
+      <div className="relative z-20 w-full max-w-[390px] sm:max-w-[420px] my-auto">
+        
+        {/* Contact Shadow on Polished Industrial Floor */}
+        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[85%] h-6 bg-stone-950/25 blur-xl rounded-full pointer-events-none" />
+
+        {/* The Card Body */}
+        <div className="w-full bg-white/85 backdrop-blur-2xl border border-white/90 rounded-[32px] p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(255,87,34,0.18),0_15px_35px_-5px_rgba(0,0,0,0.08),inset_0_1px_2px_rgba(255,255,255,0.9)] flex flex-col relative transition-all duration-300">
+          
+          {/* Brand Header */}
+          <div className="flex flex-col items-center text-center mb-5">
+            <AdminShieldLogo3D className="w-14 h-14 mb-1 text-[#FF5722]" />
+            <h1 className="text-[22px] sm:text-[24px] font-extrabold text-[#111827] tracking-tight leading-tight">
+              LogiRoute AI
+            </h1>
+            <p className="text-[12px] font-medium text-slate-500 tracking-wide mt-0.5">
+              Smart 10-Minute Delivery
+            </p>
           </div>
 
-          <div className="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-cyan-500/20">
-            <Building2 className="w-7 h-7" />
+          {/* Title & Subtitle */}
+          <div className="text-center mb-5">
+            <h2 className="text-[20px] font-bold text-[#1E293B] tracking-tight">
+              Admin Login
+            </h2>
+            <p className="text-[13px] text-slate-500 mt-0.5 font-normal">
+              Manage. Monitor. Grow.
+            </p>
           </div>
 
-          <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center justify-center gap-2">
-            <span>LogiRoute AI</span>
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              Control Tower
-            </span>
-          </h1>
-          <p className="text-xs text-slate-400 mt-1 font-mono">
-            Dark Store Operations Console — Authorized Personnel Only
-          </p>
-        </div>
-
-        {/* High-Visibility Error Banner */}
-        {errorBanner && (
-          <div className="mb-4 bg-rose-950/80 border-2 border-rose-500 rounded-2xl p-4 shadow-xl shadow-rose-950/40 animate-shake">
-            <div className="flex items-start gap-3">
-              <ShieldAlert className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
-              <div className="text-xs text-rose-200 font-mono font-medium leading-relaxed">
-                {errorBanner}
-              </div>
+          {/* Error Banner */}
+          {errorBanner && (
+            <div className="mb-4 bg-rose-50/95 border border-rose-200 rounded-2xl p-3 flex items-start gap-2.5 text-xs text-rose-800 animate-fadeIn shadow-xs">
+              <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+              <div className="flex-1 font-medium leading-relaxed">{errorBanner}</div>
+              <button
+                type="button"
+                onClick={() => setErrorBanner('')}
+                className="text-rose-400 hover:text-rose-600 ml-1"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Login Card */}
-        <div className="bg-[#0b1220]/95 border border-cyan-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-2xl relative">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 shadow-sm shadow-cyan-500/50" />
-
-          {/* Demo Quick-Fill Button */}
-          <div className="mb-6">
-            <button
-              type="button"
-              onClick={handleQuickFill}
-              className="w-full py-2.5 px-4 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 font-mono font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.99] shadow-sm"
-            >
-              <Sparkles className="w-4 h-4 text-cyan-400" />
-              <span>🏢 Sign in as Deekshitha (Hub Lead)</span>
-            </button>
-          </div>
-
-          <div className="relative flex py-2 items-center mb-5">
-            <div className="flex-grow border-t border-slate-800"></div>
-            <span className="flex-shrink mx-3 text-slate-500 text-[10px] uppercase font-mono tracking-wider">
-              Operator Credentials
-            </span>
-            <div className="flex-grow border-t border-slate-800"></div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-3.5">
+            
+            {/* Admin Email or Username Input */}
             <div>
-              <label className="text-xs font-mono text-slate-300 block mb-1.5">
-                Operations Email
-              </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <User className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Admin Email or Username"
                   required
-                  placeholder="admin@logiroute.ai"
-                  className="w-full bg-slate-900/90 border border-slate-800 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-600 font-mono transition-all outline-none"
+                  className="w-full bg-white/90 border border-slate-200/90 focus:bg-white focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 font-medium transition-all outline-none shadow-xs"
                 />
               </div>
             </div>
 
+            {/* Password Input */}
             <div>
-              <label className="text-xs font-mono text-slate-300 block mb-1.5">
-                Security Key / Password
-              </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
                   required
-                  placeholder="••••••••"
-                  className="w-full bg-slate-900/90 border border-slate-800 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 rounded-xl pl-10 pr-10 py-2.5 text-xs text-white placeholder-slate-600 font-mono transition-all outline-none"
+                  className="w-full bg-white/90 border border-slate-200/90 focus:bg-white focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 font-medium transition-all outline-none shadow-xs"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
-            <div className="pt-2">
+            {/* Operational Info Badge */}
+            <div className="flex items-center justify-between px-1 py-1 text-[11px] text-slate-500">
+              <span className="flex items-center gap-1.5 font-mono">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                HUB-01 Control Tower
+              </span>
+              <span className="text-[#FF5722] font-semibold">
+                Personnel Only
+              </span>
+            </div>
+
+            {/* Primary Action Button: 🛡️ Secure Login → */}
+            <div className="pt-1.5">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-xs shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-50 font-mono"
+                style={{
+                  height: '52px',
+                  borderRadius: '26px',
+                  background: 'linear-gradient(135deg, #FF6F43 0%, #FF451A 100%)',
+                }}
+                className="w-full text-white font-bold text-base tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-[#FF5722]/35 hover:shadow-xl hover:shadow-[#FF5722]/45 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-60 cursor-pointer"
               >
                 {isLoading ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
-                    <span>Enter Hub Operations Console</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <Shield className="w-4 h-4 fill-white/20" />
+                    <span>Secure Login →</span>
                   </>
                 )}
               </button>
             </div>
           </form>
 
-          {/* Cross-App Navigation Links */}
-          <div className="mt-6 pt-5 border-t border-slate-800/80 flex flex-col gap-2 text-[11px] text-slate-500 text-center font-mono">
-            <span>Customer or Partner Portal?</span>
-            <div className="flex items-center justify-center gap-3">
-              <Link
-                to="/customer/login"
-                className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1"
-              >
-                <ShoppingBag className="w-3.5 h-3.5" />
-                <span>Shopper App</span>
-              </Link>
-              <span>•</span>
-              <Link
-                to="/rider/login"
-                className="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1"
-              >
-                <Bike className="w-3.5 h-3.5" />
-                <span>Partner HUD</span>
-              </Link>
-            </div>
+          {/* Quick Switch Links */}
+          <div className="mt-6 pt-4 border-t border-slate-100/80 flex items-center justify-center gap-3 text-[11px] text-slate-400">
+            <Link to="/customer/login" className="hover:text-emerald-600 transition-colors flex items-center gap-1">
+              <ShoppingBag className="w-3 h-3" />
+              <span>Customer Store</span>
+            </Link>
+            <span>•</span>
+            <Link to="/rider/login" className="hover:text-amber-600 transition-colors flex items-center gap-1">
+              <Bike className="w-3 h-3" />
+              <span>Partner HUD</span>
+            </Link>
           </div>
         </div>
       </div>
+
     </div>
   );
 }

@@ -6,129 +6,135 @@ import {
   Building2,
   ArrowRight,
   ShieldCheck,
-  Radio,
   Lock,
-  ExternalLink
+  Sparkles
 } from 'lucide-react';
 
 const APPS = [
   {
     id: 'customer',
-    title: 'Shopper Consumer App',
-    subtitle: 'Groceries in 8–10 Minutes',
+    title: 'Customer Storefront',
+    subtitle: 'Shop Smart. Get Fast.',
     role: 'CUSTOMER',
     path: '/customer/login',
-    buttonText: 'Open Customer Login (/customer/login)',
+    buttonText: 'Customer Login →',
     icon: ShoppingBag,
-    color: 'emerald',
-    badge: 'Blinkit / Zepto Style',
-    themeBg: 'bg-emerald-500/10 hover:bg-emerald-500/20 border-emerald-500/30 text-emerald-400',
-    btnBg: 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 border border-emerald-500',
-    accountInfo: 'Verified Account: customer@gmail.com',
-    desc: 'Browse instant dark store inventory, live 8-minute SLA countdown, and 4-stage doorstep tracking.'
+    badge: 'Grocery & 3D Catalog',
+    accentColor: '#FF6F43',
+    bgPreview: '/assets/customer_bg_3d.png',
+    accountInfo: 'Demo: customer@gmail.com',
+    desc: 'Browse instant quick-commerce grocery catalog, temperature badges, and real-time live 3D order tracking.'
   },
   {
     id: 'rider',
     title: 'Delivery Partner HUD',
-    subtitle: 'Fleet Logistics Companion',
+    subtitle: 'Deliver more. Earn more.',
     role: 'RIDER',
     path: '/rider/login',
-    buttonText: 'Open Partner Login (/rider/login)',
+    buttonText: 'Rider Login →',
     icon: Bike,
-    color: 'amber',
-    badge: 'Zepto Rider Style',
-    themeBg: 'bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 text-amber-400',
-    btnBg: 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg shadow-amber-500/30 border border-amber-400',
-    accountInfo: 'Verified Fleet ID: rider@logiroute.ai (#DP-402)',
-    desc: 'Order acceptance pings, Staging Bay B-02 bag handover, turn-by-turn road navigation, and proof of delivery.'
+    badge: 'Fleet Partner',
+    accentColor: '#FF5722',
+    bgPreview: '/assets/rider_bg_3d.png',
+    accountInfo: 'Demo: rider@logiroute.ai',
+    desc: 'Turn-by-turn routing navigation, cold-chain SLA telemetry, dispatch wave acceptance, and shift manager.'
   },
   {
     id: 'admin',
-    title: 'Dark Store Operations Console',
-    subtitle: 'Internal Control Tower',
+    title: 'Control Tower Console',
+    subtitle: 'Manage. Monitor. Grow.',
     role: 'ADMIN',
     path: '/admin/login',
-    buttonText: 'Open Hub Manager Login (/admin/login)',
+    buttonText: 'Admin Login →',
     icon: Building2,
-    color: 'cyan',
-    badge: 'Instamart Hub Lead',
-    themeBg: 'bg-cyan-500/10 hover:bg-cyan-500/20 border-cyan-500/30 text-cyan-400',
-    btnBg: 'bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-cyan-500/30 border border-cyan-400/40',
-    accountInfo: 'Lead Operator: admin@logiroute.ai (Deekshitha)',
-    desc: 'GIS fleet radar, 2-Opt TSP route untangling, wave dispatching, and 90-second dark store packing SLA.'
+    badge: 'Hub Operations',
+    accentColor: '#E64A19',
+    bgPreview: '/assets/admin_bg_3d.png',
+    accountInfo: 'Demo: admin@logiroute.ai',
+    desc: 'GIS live fleet radar, multi-order wave dispatching, TSP route optimization, and dark store inventory sync.'
   }
 ];
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-[#070d19] text-slate-100 flex flex-col justify-center items-center p-4 relative overflow-hidden font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
-      {/* Background Neon Gradients */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen w-full relative flex flex-col justify-center items-center p-4 sm:p-6 md:p-10 font-sans overflow-x-hidden selection:bg-[#FF5722]/20 selection:text-[#FF5722]">
+      
+      {/* 3D Pastel Sky & Volumetric Lighting Background */}
+      <div 
+        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('/assets/rider_bg_3d.png')`,
+          backgroundColor: '#FDEEE6',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-100/40 via-peach-100/30 to-stone-900/40 backdrop-blur-[6px]" />
+      </div>
 
-      <div className="max-w-4xl w-full z-10 py-6">
+      <div className="max-w-5xl w-full z-10 py-6 my-auto">
+        
         {/* Brand Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs font-mono font-semibold text-slate-300 mb-3 shadow-inner">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span>SF QUICK-COMMERCE ECOSYSTEM // ZERO CROSS-ROLE BLEED</span>
+        <div className="text-center mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/90 text-xs font-semibold text-[#FF451A] mb-3 shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-[#FF6F43] animate-pulse" />
+            <span>SMART 10-MINUTE QUICK-COMMERCE ECOSYSTEM</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight flex items-center justify-center gap-2.5">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#111827] tracking-tight flex items-center justify-center gap-2.5">
             <span>LogiRoute</span>
-            <span className="bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 bg-clip-text text-transparent">
-              Fast Delivery Platform
+            <span className="bg-gradient-to-r from-[#FF7A45] via-[#FF5722] to-[#E63900] bg-clip-text text-transparent">
+              AI Platform
             </span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-2 max-w-xl mx-auto leading-relaxed">
-            Unified Last-Mile Dispatch & Quick-Commerce Ecosystem
+          <p className="text-xs sm:text-sm text-slate-600 mt-2 max-w-xl mx-auto font-medium">
+            Select your portal to experience the 3D customer marketplace, rider navigation HUD, or fulfillment control tower.
           </p>
         </div>
 
-        {/* 3 Isolated App Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+        {/* 3 Frosted Glass App Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {APPS.map((app) => {
             const Icon = app.icon;
 
             return (
               <div
                 key={app.id}
-                className="bg-[#0b1220]/95 border border-slate-800/90 hover:border-slate-700 rounded-3xl p-6 shadow-2xl backdrop-blur-xl flex flex-col justify-between transition-all hover:scale-[1.01]"
+                className="bg-white/85 hover:bg-white/95 border border-white/95 rounded-[32px] p-6 sm:p-7 shadow-[0_20px_50px_-15px_rgba(255,87,34,0.18),0_10px_25px_-5px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(255,255,255,0.9)] backdrop-blur-2xl flex flex-col justify-between transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl group relative overflow-hidden"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${app.themeBg}`}>
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FFF3EC] to-[#FFE2D1] border border-[#FF5722]/30 flex items-center justify-center text-[#FF5722] shadow-xs group-hover:scale-105 transition-transform">
                       <Icon className="w-6 h-6" />
                     </div>
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-slate-900 border border-slate-800 text-slate-300">
+                    <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-white/90 border border-slate-200/90 text-slate-700 shadow-2xs">
                       {app.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-extrabold text-white mb-1">
+                  <h2 className="text-lg font-bold text-[#111827] tracking-tight mb-0.5">
                     {app.title}
-                  </h3>
-                  <div className="text-xs font-mono text-cyan-400 font-semibold mb-3">
+                  </h2>
+                  <div className="text-xs font-semibold text-[#FF5722] mb-3">
                     {app.subtitle}
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed mb-4">
+                  <p className="text-xs text-slate-600 leading-relaxed mb-4">
                     {app.desc}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-slate-800/80 space-y-3">
-                  <div className="text-[11px] font-mono text-slate-500 bg-slate-900/60 rounded-xl px-2.5 py-1.5 border border-slate-800/80 truncate">
+                <div className="pt-4 border-t border-slate-100/90 space-y-3">
+                  <div className="text-[11px] font-mono font-medium text-slate-500 bg-slate-50/90 rounded-xl px-3 py-2 border border-slate-200/70 truncate">
                     {app.accountInfo}
                   </div>
 
-                  {/* Primary Link Button: Direct Link to Dedicated Login Screen */}
                   <Link
                     to={app.path}
-                    className={`w-full py-3 px-4 rounded-xl font-bold text-xs shadow-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98] ${app.btnBg}`}
+                    style={{
+                      background: 'linear-gradient(135deg, #FF6F43 0%, #FF451A 100%)',
+                    }}
+                    className="w-full py-3.5 px-4 rounded-2xl font-bold text-xs text-white shadow-lg shadow-[#FF5722]/30 hover:shadow-[#FF5722]/45 flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
                   >
                     <Lock className="w-3.5 h-3.5" />
-                    <span className="font-mono">{app.buttonText}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>{app.buttonText}</span>
                   </Link>
                 </div>
               </div>
@@ -136,10 +142,12 @@ export default function LoginPage() {
           })}
         </div>
 
-        {/* Security Footer Notice */}
-        <div className="text-center text-[11px] font-mono text-slate-500">
-          Strict RBAC Gate Active · Authenticate with registered credentials to access each application
+        {/* Security Notice */}
+        <div className="text-center text-xs font-medium text-slate-600 flex items-center justify-center gap-1.5">
+          <ShieldCheck className="w-4 h-4 text-[#FF5722]" />
+          <span>Role-Based Secure Access · LogiRoute AI Quick-Commerce Platform</span>
         </div>
+
       </div>
     </div>
   );
