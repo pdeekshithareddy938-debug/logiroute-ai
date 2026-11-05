@@ -92,8 +92,8 @@ const CULINARY_CATALOG = [
     weight: '380g',
     price: 14.50,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
-    description: 'Double A5 Wagyu patties, melted cave-aged Gruyère, black winter...',
+    img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Double A5 Wagyu patties, melted cave-aged Gruyère, black winter truffle coulis.',
   },
   {
     id: 'prod-cold-brew',
@@ -106,8 +106,8 @@ const CULINARY_CATALOG = [
     weight: '350ml',
     price: 5.20,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=800&q=80',
-    description: 'Single-origin Ethiopian Yirgacheffe steeped 24 hours with velvety...',
+    img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Single-origin Ethiopian Yirgacheffe steeped 24 hours with velvety crema microfoam.',
   },
   {
     id: 'prod-power-bowl',
@@ -120,13 +120,13 @@ const CULINARY_CATALOG = [
     weight: '320g',
     price: 12.99,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80',
-    description: 'Quinoa, roasted vegetables, feta, and herb dressing...',
+    img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Quinoa, roasted vegetables, crisp radishes, feta, and fresh herb vinaigrette.',
   },
   {
     id: 'prod-lava-cake',
-    name: 'Chocolate Lava Cake',
-    displayName: 'Chocolate Lava Cake',
+    name: 'Belgian Chocolate Truffle Drip Cake',
+    displayName: 'Chocolate Truffle Cake',
     category: 'Snacks & More',
     thermalState: 'SWEET',
     badgeText: '🍰 Sweet Treat',
@@ -134,8 +134,8 @@ const CULINARY_CATALOG = [
     weight: '250g',
     price: 8.75,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=800&q=80',
-    description: 'Warm chocolate cake with molten center...',
+    img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Rich Belgian dark chocolate sponge with molten ganache drip & chocolate rosettes.',
   },
   {
     id: 'prod-burrata-pizza',
@@ -148,7 +148,7 @@ const CULINARY_CATALOG = [
     weight: '450g',
     price: 16.80,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&h=420&q=80',
     description: '48-hour fermented leopard crust, San Marzano tomato coulis, molten burrata.',
   },
   {
@@ -162,13 +162,13 @@ const CULINARY_CATALOG = [
     weight: '1 Litre',
     price: 3.90,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=600&h=420&q=80',
     description: 'Non-homogenized pasture-raised organic whole milk with heavy cream top.',
   },
   {
     id: 'prod-sesame-gelato',
-    name: 'Hokkaido Roasted Black Sesame Gelato',
-    displayName: 'Hokkaido Sesame Gelato',
+    name: 'Hokkaido Roasted Artisanal Gelato',
+    displayName: 'Hokkaido Artisanal Gelato',
     category: 'Frozen Foods',
     thermalState: 'FROZEN',
     badgeText: '❄️ Frozen -18°C',
@@ -176,8 +176,8 @@ const CULINARY_CATALOG = [
     weight: '500g',
     price: 7.90,
     eta: '10 mins',
-    img: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=800&q=80',
-    description: 'Slow-churned Hokkaido milk with stone-ground toasted black sesame.',
+    img: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Slow-churned Hokkaido milk gelato with stone-ground toasted black sesame.',
   },
   {
     id: 'prod-avocado-sourdough',
@@ -190,8 +190,8 @@ const CULINARY_CATALOG = [
     weight: '310g',
     price: 11.50,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80',
-    description: 'Hand-mashed Hass avocado, microgreens, dukkah spice on toasted artisan sourdough.',
+    img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Hand-mashed Hass avocado, sunny organic egg, dukkah on artisan sourdough.',
   },
   {
     id: 'prod-salmon-sushi-box',
@@ -204,27 +204,27 @@ const CULINARY_CATALOG = [
     weight: '360g',
     price: 15.90,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
+    img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=600&h=420&q=80',
     description: 'Sashimi-grade Norwegian Atlantic salmon nigiri, avocado maki, pickled ginger.',
   },
   {
-    id: 'prod-berry-acai-bowl',
-    name: 'Wild Berry & Dragonfruit Açaí Bowl',
-    displayName: 'Berry Dragonfruit Açaí',
+    id: 'prod-berry-gelato-cones',
+    name: 'Artisan Summer Berry Gelato Cones',
+    displayName: 'Berry Gelato Cones',
     category: 'Frozen Foods',
     thermalState: 'FROZEN',
     badgeText: '🫐 Frozen -18°C',
     badgeGradient: 'from-[#9333EA] to-[#C084FC]',
-    weight: '400g',
+    weight: '380g',
     price: 9.80,
     eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80',
-    description: 'Organic Amazonian açaí puree blended with banana, topped with chia and berries.',
+    img: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Handcrafted crisp waffle cones with organic strawberry, wild blueberry & mango gelato.',
   },
   {
-    id: 'prod-sparkling-kombucha',
-    name: 'Organic Blood Orange Sparkling Kombucha',
-    displayName: 'Blood Orange Kombucha',
+    id: 'prod-sparkling-citrus',
+    name: 'Sparkling Citrus & Watermelon Cooler',
+    displayName: 'Citrus Watermelon Cooler',
     category: 'Beverages',
     thermalState: 'CHILLED',
     badgeText: '🍊 Chilled 4°C',
@@ -232,13 +232,13 @@ const CULINARY_CATALOG = [
     weight: '330ml',
     price: 4.80,
     eta: '6 mins',
-    img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80',
-    description: 'Naturally fermented sparkling raw probiotic tea with Sicilian blood orange & ginger.',
+    img: 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Chilled sparkling soda with fresh crushed watermelon, lime wheels, mint & crystal ice.',
   },
   {
     id: 'prod-truffle-crisps',
-    name: 'Artisanal Black Truffle & Sea Salt Crisps',
-    displayName: 'Truffle & Sea Salt Crisps',
+    name: 'Artisanal Golden Potato Crisps & Sea Salt',
+    displayName: 'Golden Sea Salt Crisps',
     category: 'Snacks & More',
     thermalState: 'SNACK',
     badgeText: '✨ Gourmet Snack',
@@ -246,8 +246,8 @@ const CULINARY_CATALOG = [
     weight: '150g',
     price: 6.20,
     eta: '6 mins',
-    img: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=800&q=80',
-    description: 'Hand-cooked kettle chips seasoned with aromatic Italian black truffle and sea salt.',
+    img: 'https://images.unsplash.com/photo-1613919113640-25732ec5e61f?auto=format&fit=crop&w=600&h=420&q=80',
+    description: 'Hand-cooked kettle potato chips seasoned with aromatic mineral sea salt & rosemary.',
   },
 ];
 
@@ -836,23 +836,23 @@ export default function CustomerStorefrontPage() {
                       </button>
                     </div>
 
-                    {/* Food Image Asset (Full complete food visible without cropping, object-fit: contain) */}
-                    <div className="relative z-10 h-32 sm:h-36 w-full rounded-xl overflow-hidden mb-2.5 bg-black/25 flex items-center justify-center p-1.5 shrink-0">
+                    {/* Food Image Asset (Fills the box completely edge-to-edge, entire food subject 100% visible) */}
+                    <div className="relative z-10 h-36 sm:h-40 w-full rounded-2xl overflow-hidden mb-3 bg-black/25 shrink-0">
                       <img
                         src={prod.img}
                         alt={prod.name}
                         style={{
                           width: '100%',
                           height: '100%',
-                          objectFit: 'contain',
+                          objectFit: 'cover',
                           objectPosition: 'center',
                         }}
-                        className="w-full h-full object-contain object-center select-none transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-full object-cover object-center select-none transition-transform duration-300 group-hover:scale-105"
                         loading="lazy"
                       />
                       
                       {/* Weight badge pill overlay in bottom-left corner */}
-                      <div className="absolute bottom-1.5 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20 shadow-sm pointer-events-none">
+                      <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20 shadow-sm pointer-events-none">
                         {prod.weight}
                       </div>
                     </div>
