@@ -181,7 +181,16 @@ export default function CustomerLoginPage() {
         <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[85%] h-6 bg-pink-950/25 blur-xl rounded-full pointer-events-none" />
 
         {/* The Card Body */}
-        <div className="w-full bg-white/80 backdrop-blur-2xl border border-white/90 rounded-[32px] p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(255,87,34,0.18),0_15px_35px_-5px_rgba(0,0,0,0.08),inset_0_1px_2px_rgba(255,255,255,0.9)] flex flex-col relative transition-all duration-300">
+        <div 
+          style={{
+            background: 'rgba(255, 255, 255, 0.18)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1.5px solid rgba(255, 255, 255, 0.35)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.18), inset 0 1px 2px rgba(255, 255, 255, 0.45)',
+          }}
+          className="w-full rounded-[32px] p-6 sm:p-8 flex flex-col relative transition-all duration-300"
+        >
           
           {/* Brand Header */}
           <div className="flex flex-col items-center text-center mb-5">
@@ -189,7 +198,7 @@ export default function CustomerLoginPage() {
             <h1 className="text-[22px] sm:text-[24px] font-extrabold text-[#111827] tracking-tight leading-tight">
               LogiRoute AI
             </h1>
-            <p className="text-[12px] font-medium text-slate-500 tracking-wide mt-0.5">
+            <p className="text-[12px] font-medium text-slate-600 tracking-wide mt-0.5">
               Smart 10-Minute Delivery
             </p>
           </div>
@@ -199,7 +208,7 @@ export default function CustomerLoginPage() {
             <h2 className="text-[20px] font-bold text-[#1E293B] tracking-tight">
               Customer Login
             </h2>
-            <p className="text-[13px] text-slate-500 mt-0.5 font-normal">
+            <p className="text-[13px] text-slate-600 mt-0.5 font-medium">
               Shop Smart. Get Fast.
             </p>
           </div>
@@ -225,14 +234,14 @@ export default function CustomerLoginPage() {
             {/* Customer Email or Phone Input */}
             <div>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
+                <User className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Customer Email or Phone"
                   required
-                  className="w-full bg-white/90 border border-slate-200/90 focus:bg-white focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 font-medium transition-all outline-none shadow-xs"
+                  className="w-full bg-white/70 backdrop-blur-sm border border-white/60 focus:bg-white/90 focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-500 font-medium transition-all outline-none shadow-xs"
                 />
               </div>
             </div>
@@ -240,20 +249,20 @@ export default function CustomerLoginPage() {
             {/* Password Input */}
             <div>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
+                <Lock className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   required
-                  className="w-full bg-white/90 border border-slate-200/90 focus:bg-white focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 font-medium transition-all outline-none shadow-xs"
+                  className="w-full bg-white/70 backdrop-blur-sm border border-white/60 focus:bg-white/90 focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder:text-slate-500 font-medium transition-all outline-none shadow-xs"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -271,12 +280,12 @@ export default function CustomerLoginPage() {
                   className={`w-4 h-4 rounded-md flex items-center justify-center transition-all ${
                     keepSignedIn
                       ? 'bg-[#FF5722] border-[#FF5722] text-white shadow-xs'
-                      : 'border border-slate-300 bg-white group-hover:border-slate-400'
+                      : 'border border-slate-300 bg-white/80 group-hover:border-slate-400'
                   }`}
                 >
                   {keepSignedIn && <Check className="w-3 h-3 stroke-[3]" />}
                 </div>
-                <span className="text-xs font-medium text-slate-600 group-hover:text-slate-800 transition-colors">
+                <span className="text-xs font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">
                   Keep me signed in
                 </span>
               </button>
@@ -284,7 +293,7 @@ export default function CustomerLoginPage() {
               <button
                 type="button"
                 onClick={() => setForgotToast(true)}
-                className="text-xs font-semibold text-[#FF5722] hover:text-[#E64A19] transition-colors cursor-pointer"
+                className="text-xs font-bold text-[#FF5722] hover:text-[#E64A19] transition-colors cursor-pointer"
               >
                 Forgot Password?
               </button>
@@ -327,11 +336,11 @@ export default function CustomerLoginPage() {
 
           {/* Divider */}
           <div className="relative flex py-4 items-center">
-            <div className="flex-grow border-t border-slate-200/80"></div>
-            <span className="flex-shrink mx-3 text-slate-400 text-xs font-normal">
+            <div className="flex-grow border-t border-slate-300/60"></div>
+            <span className="flex-shrink mx-3 text-slate-600 text-xs font-medium">
               Or Continue With
             </span>
-            <div className="flex-grow border-t border-slate-200/80"></div>
+            <div className="flex-grow border-t border-slate-300/60"></div>
           </div>
 
           {/* Dual Social Logins: Google & Apple */}
@@ -339,7 +348,7 @@ export default function CustomerLoginPage() {
             <button
               type="button"
               onClick={() => handleSocialAuth('Google')}
-              className="w-full py-2.5 px-3 rounded-2xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-700 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer"
+              className="w-full py-2.5 px-3 rounded-2xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/60 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -353,7 +362,7 @@ export default function CustomerLoginPage() {
             <button
               type="button"
               onClick={() => handleSocialAuth('Apple')}
-              className="w-full py-2.5 px-3 rounded-2xl bg-white/90 hover:bg-white border border-slate-200/90 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer"
+              className="w-full py-2.5 px-3 rounded-2xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/60 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer"
             >
               <svg className="w-4 h-4 fill-current text-slate-900" viewBox="0 0 24 24">
                 <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.76 1.05-1.83.93-2.89-.91.04-2.02.61-2.66 1.36-.57.65-1.07 1.73-.93 2.76 1.02.08 2.04-.51 2.66-1.23z" />
@@ -363,8 +372,8 @@ export default function CustomerLoginPage() {
           </div>
 
           {/* Footer Registration & Guest Links */}
-          <div className="space-y-2 text-center pt-1 border-t border-slate-100/80">
-            <p className="text-xs text-slate-500">
+          <div className="space-y-2 text-center pt-1 border-t border-slate-300/50">
+            <p className="text-xs text-slate-700 font-medium">
               New Customer?{' '}
               <button
                 type="button"

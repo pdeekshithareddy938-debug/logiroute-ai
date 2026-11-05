@@ -148,7 +148,16 @@ export default function AdminLoginPage() {
         <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[85%] h-6 bg-stone-950/25 blur-xl rounded-full pointer-events-none" />
 
         {/* The Card Body */}
-        <div className="w-full bg-white/85 backdrop-blur-2xl border border-white/90 rounded-[32px] p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(255,87,34,0.18),0_15px_35px_-5px_rgba(0,0,0,0.08),inset_0_1px_2px_rgba(255,255,255,0.9)] flex flex-col relative transition-all duration-300">
+        <div 
+          style={{
+            background: 'rgba(255, 255, 255, 0.18)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1.5px solid rgba(255, 255, 255, 0.35)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.18), inset 0 1px 2px rgba(255, 255, 255, 0.45)',
+          }}
+          className="w-full rounded-[32px] p-6 sm:p-8 flex flex-col relative transition-all duration-300"
+        >
           
           {/* Brand Header */}
           <div className="flex flex-col items-center text-center mb-5">
@@ -156,7 +165,7 @@ export default function AdminLoginPage() {
             <h1 className="text-[22px] sm:text-[24px] font-extrabold text-[#111827] tracking-tight leading-tight">
               LogiRoute AI
             </h1>
-            <p className="text-[12px] font-medium text-slate-500 tracking-wide mt-0.5">
+            <p className="text-[12px] font-medium text-slate-600 tracking-wide mt-0.5">
               Smart 10-Minute Delivery
             </p>
           </div>
@@ -166,7 +175,7 @@ export default function AdminLoginPage() {
             <h2 className="text-[20px] font-bold text-[#1E293B] tracking-tight">
               Admin Login
             </h2>
-            <p className="text-[13px] text-slate-500 mt-0.5 font-normal">
+            <p className="text-[13px] text-slate-600 mt-0.5 font-medium">
               Manage. Monitor. Grow.
             </p>
           </div>
@@ -192,14 +201,14 @@ export default function AdminLoginPage() {
             {/* Admin Email or Username Input */}
             <div>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
+                <User className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Admin Email or Username"
                   required
-                  className="w-full bg-white/90 border border-slate-200/90 focus:bg-white focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 font-medium transition-all outline-none shadow-xs"
+                  className="w-full bg-white/70 backdrop-blur-sm border border-white/60 focus:bg-white/90 focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-500 font-medium transition-all outline-none shadow-xs"
                 />
               </div>
             </div>
@@ -207,20 +216,20 @@ export default function AdminLoginPage() {
             {/* Password Input */}
             <div>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
+                <Lock className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   required
-                  className="w-full bg-white/90 border border-slate-200/90 focus:bg-white focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 font-medium transition-all outline-none shadow-xs"
+                  className="w-full bg-white/70 backdrop-blur-sm border border-white/60 focus:bg-white/90 focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder:text-slate-500 font-medium transition-all outline-none shadow-xs"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors p-1"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -228,7 +237,7 @@ export default function AdminLoginPage() {
             </div>
 
             {/* Operational Info Badge */}
-            <div className="flex items-center justify-between px-1 py-1 text-[11px] text-slate-500">
+            <div className="flex items-center justify-between px-1 py-1 text-[11px] text-slate-600 font-medium">
               <span className="flex items-center gap-1.5 font-mono">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 HUB-01 Control Tower
@@ -263,7 +272,7 @@ export default function AdminLoginPage() {
           </form>
 
           {/* Quick Switch Links */}
-          <div className="mt-6 pt-4 border-t border-slate-100/80 flex items-center justify-center gap-3 text-[11px] text-slate-400">
+          <div className="mt-6 pt-4 border-t border-slate-300/50 flex items-center justify-center gap-3 text-[11px] text-slate-600 font-medium">
             <Link to="/customer/login" className="hover:text-emerald-600 transition-colors flex items-center gap-1">
               <ShoppingBag className="w-3 h-3" />
               <span>Customer Store</span>
