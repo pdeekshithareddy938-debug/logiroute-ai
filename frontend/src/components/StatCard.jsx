@@ -9,6 +9,7 @@ export default function StatCard({
   icon: LeftIcon, 
   rightIcon: RightIcon,
   color = 'cyan',
+  onClick,
 }) {
   const colorMap = {
     cyan: {
@@ -58,7 +59,8 @@ export default function StatCard({
 
   return (
     <div 
-      className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 group hover:scale-[1.01]"
+      onClick={onClick}
+      className={`relative rounded-2xl p-5 overflow-hidden transition-all duration-300 group ${onClick ? 'cursor-pointer hover:scale-[1.015]' : ''}`}
       style={{
         background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
         backdropFilter: 'blur(20px)',

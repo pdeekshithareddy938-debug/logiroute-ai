@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { 
   Package, 
   Plus, 
@@ -29,11 +30,12 @@ import DeliveryModal from '../components/DeliveryModal';
 import dispatchAPI from '../services/api';
 
 export default function DeliveriesPage() {
+  const [searchParams] = useSearchParams();
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('ALL');
-  const [priorityFilter, setPriorityFilter] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || 'ALL');
+  const [priorityFilter, setPriorityFilter] = useState(searchParams.get('priority') || 'ALL');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toast, setToast] = useState(null);
