@@ -35,18 +35,21 @@ export default function Sidebar({ isOpen, onClose }) {
         />
       )}
 
-      {/* Sidebar container with Glassmorphism */}
+      {/* Floating Glassmorphic Sidebar (Matching Reference Image) */}
       <aside 
         className={`
-          fixed top-0 bottom-0 left-0 z-50 w-64 text-white flex flex-col transition-transform duration-300 ease-in-out border-r
-          lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          fixed lg:sticky top-0 lg:top-6 left-0 bottom-0 z-40
+          w-64 sm:w-72 lg:w-64 h-full lg:h-[calc(100vh-3rem)]
+          flex flex-col justify-between p-4 sm:p-5 rounded-3xl
+          transition-transform duration-300 ease-in-out border
+          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
         style={{
-          background: 'linear-gradient(180deg, rgba(14, 23, 42, 0.78) 0%, rgba(9, 15, 30, 0.9) 100%)',
+          background: 'linear-gradient(180deg, rgba(14, 23, 42, 0.75) 0%, rgba(9, 15, 30, 0.88) 100%)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          borderColor: 'rgba(56, 189, 248, 0.22)',
-          boxShadow: '4px 0 30px rgba(0, 0, 0, 0.55)',
+          borderColor: 'rgba(56, 189, 248, 0.25)',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1)',
         }}
       >
         {/* Brand Header */}

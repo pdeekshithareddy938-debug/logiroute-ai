@@ -1,4 +1,9 @@
 require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = 'file:./prisma/dev.db';
+}
 const { execSync } = require('child_process');
 const express = require('express');
 const cors = require('cors');
@@ -1422,6 +1427,17 @@ app.get('/api/analytics', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch analytics', details: error.message });
   }
 });
+
+// Serve production frontend build if available (single service Render deployment)
+const fs = require('fs');
+const frontendDistPath = path.join(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+}
 
 // Graceful startup and initial database synchronization
 async function startServer() {

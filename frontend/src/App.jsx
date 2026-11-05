@@ -54,13 +54,16 @@ function AdminCockpitLayout({ children }) {
         />
       </div>
 
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {/* Floating Cockpit Container: Sidebar + Main Content with stationary background visible all around */}
+      <div className="relative z-10 flex min-h-screen p-3 sm:p-4 lg:p-6 gap-4 sm:gap-6 max-w-[1700px] mx-auto">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="lg:pl-64 flex flex-col flex-1 relative z-10">
-        <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} isDarkTheme={true} />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
-          {children}
-        </main>
+        <div className="flex-1 flex flex-col min-w-0 space-y-4">
+          <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} isDarkTheme={true} />
+          <main className="flex-1 w-full">
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );

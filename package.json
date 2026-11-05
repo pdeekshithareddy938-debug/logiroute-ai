@@ -3,13 +3,24 @@
   "version": "1.0.0",
   "description": "LogiRoute AI - Full Stack Delivery Planning & Quick-Commerce Ecosystem",
   "scripts": {
-    "start": "node start-local.js",
+    "start": "node backend/server.js",
     "dev": "node start-local.js",
+    "start:local": "node start-local.js",
     "start:online": "node start-online.js",
     "share": "npx localtunnel --port 5173",
     "backend": "npm --prefix backend start",
     "frontend": "npm --prefix frontend run dev",
-    "build": "npm --prefix frontend run build"
+    "build": "npm --prefix backend install && npx prisma generate && npm --prefix frontend run build"
+  },
+  "prisma": {
+    "schema": "backend/prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3"
+  },
+  "devDependencies": {
+    "prisma": "^6.19.3",
+    "dotenv": "^16.4.5"
   },
   "keywords": [
     "delivery",
