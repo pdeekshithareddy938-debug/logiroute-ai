@@ -27,10 +27,36 @@ function AdminCockpitLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#070d19] text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+    <div className="relative min-h-screen text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden bg-[#070d19]">
+      {/* Stationary Fixed Midnight 3D City Expressway Background */}
+      <div 
+        className="fixed inset-0 pointer-events-none select-none z-0"
+        style={{
+          backgroundImage: 'url(/assets/admin_midnight_bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        {/* Subtle radial ambient blue/cyan/purple glow overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse at 50% 15%, rgba(14, 165, 233, 0.18) 0%, rgba(15, 23, 42, 0.65) 55%, rgba(6, 10, 24, 0.88) 100%)',
+          }}
+        />
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(180deg, rgba(3, 7, 18, 0.4) 0%, rgba(10, 16, 32, 0.6) 50%, rgba(3, 7, 18, 0.85) 100%)',
+          }}
+        />
+      </div>
+
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="lg:pl-64 flex flex-col flex-1">
+      <div className="lg:pl-64 flex flex-col flex-1 relative z-10">
         <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} isDarkTheme={true} />
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
           {children}

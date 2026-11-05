@@ -282,17 +282,26 @@ export default function RoutePlanningPage() {
         </div>
       )}
 
-      {/* Header — Midnight Cyberpunk Cockpit Card with Blue/Cyan Top Accent */}
-      <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-cyan-500/80 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Header — Midnight Glassmorphic Cockpit Card with Blue/Cyan Accent */}
+      <div 
+        className="rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 border transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderColor: 'rgba(56, 189, 248, 0.25)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+        }}
+      >
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-mono font-black text-white tracking-wide">AI ROUTE PLANNER // COCKPIT STUDIO</h1>
-            <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-950/70 text-cyan-400 border border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.3)] flex items-center gap-1.5">
+            <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.3)] flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 text-cyan-400" />
               2-OPT HEURISTIC SOLVER
             </span>
           </div>
-          <p className="text-xs font-mono text-slate-400 mt-1">
+          <p className="text-xs font-mono text-slate-300/80 mt-1">
             Corridor geofence boundary mapping, stop sequencer, and direct EV telemetry dispatch
           </p>
         </div>
@@ -329,8 +338,17 @@ export default function RoutePlanningPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Workbench Panel: High-Contrast Comparison Card + Stop Sequencer */}
         <div className="lg:col-span-5 space-y-4">
-          {/* High-Contrast Route Comparison Card (Baseline vs 2-Opt) with Green/Emerald Top Accent */}
-          <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-emerald-500/80 rounded-2xl p-5 shadow-2xl space-y-4">
+          {/* High-Contrast Route Comparison Card (Baseline vs 2-Opt) with Glassmorphism */}
+          <div 
+            className="rounded-2xl p-5 shadow-2xl space-y-4 border transition-all"
+            style={{
+              background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderColor: 'rgba(56, 189, 248, 0.22)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+            }}
+          >
             <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 font-mono">
               <div>
                 <h3 className="text-sm font-bold text-white tracking-wide">ROUTE EFFICIENCY MATRIX</h3>
@@ -401,8 +419,17 @@ export default function RoutePlanningPage() {
             </div>
           </div>
 
-          {/* Waypoint Sequence List with Glowing Stop Pills and Reordering */}
-          <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-indigo-500/80 rounded-2xl p-5 shadow-2xl space-y-3">
+          {/* Waypoint Sequence List with Glassmorphism */}
+          <div 
+            className="rounded-2xl p-5 shadow-2xl space-y-3 border transition-all"
+            style={{
+              background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderColor: 'rgba(56, 189, 248, 0.22)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+            }}
+          >
             <div className="flex items-center justify-between border-b border-slate-800/80 pb-2.5 font-mono">
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-cyan-400" />
@@ -503,8 +530,17 @@ export default function RoutePlanningPage() {
           </div>
         </div>
 
-        {/* Right Column: Full-Width Leaflet Map Preview with Geofences & Blue/Cyan Top Accent */}
-        <div className="lg:col-span-7 bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-cyan-500/80 rounded-2xl p-5 shadow-2xl space-y-3">
+        {/* Right Column: Full-Width Leaflet Map Preview with Glassmorphism */}
+        <div 
+          className="lg:col-span-7 rounded-2xl p-5 shadow-2xl space-y-3 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(56, 189, 248, 0.22)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+          }}
+        >
           <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 font-mono">
             <div>
               <h2 className="text-base font-bold text-white tracking-wide">

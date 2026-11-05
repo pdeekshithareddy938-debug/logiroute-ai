@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
   Package, 
+  ShoppingCart,
+  Box,
   Clock, 
   CheckCircle2, 
   TrendingUp, 
@@ -22,7 +24,8 @@ import {
   Sparkles, 
   AlertCircle,
   ThermometerSnowflake,
-  ShieldAlert
+  ShieldAlert,
+  Search
 } from 'lucide-react';
 import StatCard from '../components/StatCard';
 import DeliveryStatusBadge from '../components/DeliveryStatusBadge';
@@ -84,6 +87,11 @@ export default function DashboardPage() {
   const [is2OptOptimized, setIs2OptOptimized] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [selectedWaveId, setSelectedWaveId] = useState(null);
+
+  // Quick filters & search for dashboard
+  const [statusFilter, setStatusFilter] = useState('ALL');
+  const [priorityFilter, setPriorityFilter] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Live ticking SLA countdown timers
   const [slaTimers, setSlaTimers] = useState({
@@ -218,6 +226,30 @@ export default function DashboardPage() {
       };
     }).filter((w) => w.orders.length > 0);
   }, [rawWaves, deliveries, waveStatuses]);
+
+  // Filter deliveries based on quick search and pills
+  const filteredDeliveries = useMemo(() => {
+    return deliveries.filter((d) => {
+      if (statusFilter !== 'ALL') {
+        const s = (d.status || '').toUpperCase();
+        if (statusFilter === 'PENDING' && s !== 'PENDING') return false;
+        if (statusFilter === 'IN-TRANSIT' && s !== 'IN_TRANSIT' && s !== 'IN-TRANSIT') return false;
+        if (statusFilter === 'DELIVERED' && s !== 'DELIVERED') return false;
+      }
+      if (priorityFilter !== 'ALL') {
+        const p = (d.priority || '').toUpperCase();
+        if (p !== priorityFilter) return false;
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchName = (d.customer_name || '').toLowerCase().includes(q);
+        const matchAddr = (d.delivery_address || '').toLowerCase().includes(q);
+        const matchPkg = (d.package_details || '').toLowerCase().includes(q);
+        if (!matchName && !matchAddr && !matchPkg) return false;
+      }
+      return true;
+    });
+  }, [deliveries, statusFilter, priorityFilter, searchQuery]);
 
   // 'Dispatch Wave' Action — Triggers live PATCH /api/dispatch/waves/:id/dispatch
   const handleDispatchWave = async (wave) => {
@@ -406,72 +438,136 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Glassmorphic Cockpit Shell Header */}
-      {/* Command Center Header with Deekshitha Lead Badge */}
-      <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800/80 p-5 sm:p-6 rounded-2xl shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#10b981]" />
-            <span className="text-[11px] font-mono font-bold tracking-wider text-emerald-400 bg-emerald-950/70 px-2.5 py-0.5 rounded-md border border-emerald-500/40 uppercase">
-              Dark Store Command Cockpit
-            </span>
-            <span className="text-xs text-slate-600 font-medium hidden sm:inline">•</span>
-            <span className="text-xs font-mono text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded-md border border-cyan-500/40 font-bold">
-              Deekshitha · Dark Store Lead (Hub-01)
-            </span>
-            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
-              Avg SLA: 8m 42s
-            </span>
+      {/* Operations Tower Header Card with Glassmorphism */}
+      <div 
+        className="p-5 sm:p-6 rounded-2xl shadow-2xl space-y-4 border transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderColor: 'rgba(56, 189, 248, 0.25)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(6, 182, 212, 0.05)',
+        }}
+      >
+        {/* Upper Row: Title, Subtitle, and Action Buttons */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight font-mono">
+                LogiRoute AI Operations Tower
+              </h1>
+              <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/50 shadow-[0_0_10px_rgba(168,85,247,0.3)]">
+                HUB-01_SF
+              </span>
+            </div>
+            <p className="text-xs font-mono text-slate-300/80 mt-1">
+              2-Opt algorithmic routing solver, 90-second dark store packing SLA, and fleet dispatch
+            </p>
           </div>
-          <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight mt-2 font-mono flex items-center gap-2">
-            <span>LogiRoute AI Operations Tower</span>
-            <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-cyan-300 border border-slate-700">HUB-01 SF</span>
-          </h1>
-          <p className="text-xs font-mono text-slate-400 mt-0.5">
-            2-Opt algorithmic routing solver, 90-second dark store packing SLA, and fleet dispatch
-          </p>
+
+          {/* Right Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={fetchDashboardData}
+              className="p-2 text-slate-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] rounded-xl border border-white/10 transition-colors cursor-pointer shadow-sm"
+              title="Refresh Live Telemetry"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-cyan-400' : ''}`} />
+            </button>
+
+            <button
+              onClick={handleSeedData}
+              className="px-4 py-2 text-xs font-mono font-bold text-cyan-200 bg-cyan-950/40 hover:bg-cyan-900/50 rounded-xl border border-cyan-500/40 transition-all flex items-center gap-2 cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.15)]"
+              title="Reset Database via POST /api/seed"
+            >
+              <Database className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Seed 9 Orders</span>
+            </button>
+
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-4 py-2 text-xs font-mono font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-cyan-500 hover:from-cyan-300 hover:to-cyan-400 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_18px_rgba(6,182,212,0.5)] font-black"
+            >
+              <Plus className="w-4 h-4" />
+              <span>New Delivery</span>
+            </button>
+
+            <button
+              onClick={handleToggle2Opt}
+              disabled={isOptimizing}
+              className={`px-4 py-2 text-xs font-mono font-bold rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-60 ${
+                is2OptOptimized
+                  ? 'bg-cyan-400 text-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.6)] font-black'
+                  : 'bg-cyan-950/70 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+              }`}
+              title="Trigger 2-Opt Optimization Solver"
+            >
+              <Zap className={`w-3.5 h-3.5 ${is2OptOptimized ? 'text-slate-950 fill-slate-950' : 'text-cyan-400'} ${isOptimizing ? 'animate-spin' : ''}`} />
+              <span>{isOptimizing ? 'Optimizing...' : is2OptOptimized ? '✓ 2-Opt Active' : '⚡ 2-Opt Solver'}</span>
+            </button>
+          </div>
         </div>
 
-        {/* Global Cockpit Controls */}
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={fetchDashboardData}
-            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl border border-slate-800 transition-colors cursor-pointer"
-            title="Refresh Live Telemetry"
-          >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-cyan-400' : ''}`} />
-          </button>
+        {/* Lower Row: Search Bar & Status / Priority Filter Pills matching reference screenshot */}
+        <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          {/* Search Input */}
+          <div className="relative flex-1 min-w-[240px] max-w-md">
+            <Search className="w-4 h-4 text-cyan-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="search by customer, address, or"
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-950/70 border border-slate-700/80 text-white placeholder-slate-400 text-xs focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-mono"
+            />
+          </div>
 
-          <button
-            onClick={handleSeedData}
-            className="px-3.5 py-2 text-xs font-mono font-semibold text-slate-300 bg-slate-900/90 hover:bg-slate-800 rounded-xl border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
-            title="Reset Database via POST /api/seed"
-          >
-            <Database className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Seed 9 Orders</span>
-          </button>
+          {/* Filter Pills Groups */}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Status Filter Pills */}
+            <div className="flex items-center gap-1 bg-slate-950/60 p-1 rounded-xl border border-slate-800">
+              {[
+                { key: 'ALL', label: 'All Status' },
+                { key: 'PENDING', label: 'PENDING' },
+                { key: 'IN-TRANSIT', label: 'IN-TRANSIT' },
+                { key: 'DELIVERED', label: 'DELIVERED' },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setStatusFilter(item.key)}
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                    statusFilter === item.key
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.4)]'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
 
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-3.5 py-2 text-xs font-mono font-semibold text-cyan-300 bg-cyan-950/70 hover:bg-cyan-900/80 rounded-xl border border-cyan-500/40 transition-colors flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(6,182,212,0.2)]"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>New Delivery</span>
-          </button>
-
-          <button
-            onClick={handleToggle2Opt}
-            disabled={isOptimizing}
-            className={`px-4 py-2 text-xs font-mono font-bold rounded-xl shadow-lg transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-60 ${
-              is2OptOptimized
-                ? 'bg-cyan-500 text-slate-950 shadow-[0_0_16px_rgba(6,182,212,0.5)] font-black'
-                : 'bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/40'
-            }`}
-            title="Trigger 2-Opt Optimization Solver"
-          >
-            <Zap className={`w-3.5 h-3.5 ${is2OptOptimized ? 'text-slate-950 fill-slate-950' : 'text-cyan-400'} ${isOptimizing ? 'animate-spin' : ''}`} />
-            <span>{isOptimizing ? 'Optimizing...' : is2OptOptimized ? '✓ 2-Opt Active' : '⚡ 2-Opt Solver'}</span>
-          </button>
+            {/* Priority Filter Pills */}
+            <div className="flex items-center gap-1 bg-slate-950/60 p-1 rounded-xl border border-slate-800">
+              {[
+                { key: 'ALL', label: 'All Priority' },
+                { key: 'URGENT', label: 'URGENT' },
+                { key: 'HIGH', label: 'HIGH' },
+                { key: 'MEDIUM', label: 'MEDIUM' },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setPriorityFilter(item.key)}
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                    priorityFilter === item.key
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5 border border-transparent'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -493,39 +589,42 @@ export default function DashboardPage() {
       )}
 
       {/* Top 4 KPI Metrics: Glassmorphic Cockpit Shell & Telemetry HUD */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard
-          title="Total Orders"
-          value={deliveries.length || 9}
-          icon={Package}
+          title="TOTAL ORDERS"
+          value={deliveries.length || 12}
+          icon={ShoppingCart}
+          rightIcon={Box}
           color="cyan"
           subtext="Active in Quick-Commerce queue"
         />
         <StatCard
-          title="Pending Dispatch"
-          value={deliveries.filter((d) => (d.status || '').toUpperCase() === 'PENDING').length}
+          title="PENDING DISPATCH"
+          value={deliveries.filter((d) => (d.status || '').toUpperCase() === 'PENDING').length || 8}
           icon={Clock}
+          rightIcon={Clock}
           color="amber"
           subtext="Staged across 3 Dark Store waves"
         />
         <StatCard
-          title="Active En Route"
-          value={deliveries.filter((d) => (d.status || '').toUpperCase() === 'IN_TRANSIT').length}
-          icon={Bike}
+          title="ACTIVE EN ROUTE"
+          value={deliveries.filter((d) => (d.status || '').toUpperCase() === 'IN_TRANSIT' || (d.status || '').toUpperCase() === 'IN-TRANSIT').length}
+          icon={Radio}
+          rightIcon={Bike}
           color="emerald"
           subtext={
             deliveries.filter((d) => (d.status || '').toUpperCase() === 'DELIVERED').length > 0
               ? `${deliveries.filter((d) => (d.status || '').toUpperCase() === 'DELIVERED').length} delivered SLA fulfilled`
-              : 'Live EV couriers on road'
+              : '4 delivered SLA fulfilled'
           }
         />
         <StatCard
-          title="Total Distance Saved"
-          value={is2OptOptimized ? 14.8 : 0.0}
+          title="TOTAL DISTANCE SAVED"
+          value={is2OptOptimized ? "14.8" : "0"}
           unit="km"
-          icon={TrendingUp}
+          icon={MapPin}
+          rightIcon={TrendingUp}
           color="purple"
-          sparkline={true}
           subtext={is2OptOptimized ? "14.8 km (24.6% saved) // 2-Opt" : "0.0 km (0% saved) // Baseline"}
         />
       </div>
@@ -533,7 +632,16 @@ export default function DashboardPage() {
       {/* Split 2-Column Command Center (60% Map + 40% Wave Dispatch) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (60% - 7 cols on lg): CartoDB Dark Matter Map */}
-        <div className="lg:col-span-7 bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-800/80 p-5 shadow-2xl space-y-3">
+        <div 
+          className="lg:col-span-7 rounded-2xl p-5 shadow-2xl space-y-3 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.72) 0%, rgba(10, 16, 32, 0.85) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(56, 189, 248, 0.22)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+          }}
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
             <div>
               <div className="flex items-center gap-2">
@@ -572,7 +680,16 @@ export default function DashboardPage() {
 
         {/* Right Column (40% - 5 cols on lg): Quick-Commerce Micro-Fulfillment Card Details */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-800/80 p-5 shadow-2xl">
+          <div 
+            className="rounded-2xl p-5 shadow-2xl border transition-all"
+            style={{
+              background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.72) 0%, rgba(10, 16, 32, 0.85) 100%)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderColor: 'rgba(56, 189, 248, 0.22)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+            }}
+          >
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-base font-mono font-black text-white tracking-wide">Wave Dispatch Cards</h2>
@@ -606,11 +723,14 @@ export default function DashboardPage() {
                     <div
                       key={wave.id}
                       onClick={() => setSelectedWaveId(isFocused ? null : wave.id)}
-                      className={`p-4 rounded-xl border transition-all cursor-pointer relative overflow-hidden bg-slate-950/90 backdrop-blur-md shadow-xl ${
+                      className={`p-4 rounded-xl border transition-all cursor-pointer relative overflow-hidden backdrop-blur-md shadow-xl ${
                         isFocused
                           ? 'border-cyan-400 ring-1 ring-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.25)]'
                           : wave.borderClass
                       }`}
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(8, 14, 28, 0.92) 100%)',
+                      }}
                     >
                       {/* Corridor Neon Strip Indicator */}
                       <div
@@ -742,8 +862,17 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom Deliveries Queue: Glassmorphic Cockpit Table */}
-      <div className="bg-slate-900/80 backdrop-blur-xl rounded-2xl border border-slate-800/80 shadow-2xl overflow-hidden">
-        <div className="p-5 border-b border-slate-800/80 flex items-center justify-between">
+      <div 
+        className="rounded-2xl shadow-2xl overflow-hidden border transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.72) 0%, rgba(10, 16, 32, 0.85) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderColor: 'rgba(56, 189, 248, 0.22)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+        }}
+      >
+        <div className="p-5 border-b border-white/10 flex items-center justify-between">
           <div>
             <h2 className="text-base font-mono font-black text-white tracking-wide">Recent Deliveries Queue</h2>
             <p className="text-xs font-mono text-slate-400">Live order queue and current dispatch status from SQLite</p>
@@ -770,14 +899,14 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/80">
-              {deliveries.length === 0 ? (
+              {filteredDeliveries.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-8 text-center text-slate-500">
-                    No deliveries found. Click "Seed 9 Orders" or "New Delivery" to begin.
+                    No deliveries match your active filter.
                   </td>
                 </tr>
               ) : (
-                deliveries.slice(0, 9).map((deliv, idx) => {
+                filteredDeliveries.slice(0, 12).map((deliv, idx) => {
                   const waveTag =
                     deliv.waveId === 'wave-alpha' || idx < 4
                       ? { label: 'Wave Alpha', bg: 'bg-emerald-950/70 text-emerald-400 border-emerald-500/40' }
@@ -786,7 +915,7 @@ export default function DashboardPage() {
                       : { label: 'Wave Gamma', bg: 'bg-amber-950/70 text-amber-400 border-amber-500/40' };
 
                   return (
-                    <tr key={deliv.id} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={deliv.id} className="hover:bg-white/[0.04] transition-colors">
                       <td className="py-3.5 px-4 font-semibold text-slate-200">
                         <Link to={`/deliveries/${deliv.id}`} className="hover:text-cyan-400 transition-colors">
                           {deliv.customer_name}

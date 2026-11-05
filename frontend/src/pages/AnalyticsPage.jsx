@@ -55,41 +55,59 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Page Header — Midnight Cyberpunk Cockpit Card with Blue/Cyan Top Accent */}
-      <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-cyan-500/80 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Page Header — Midnight Glassmorphic Cockpit Card with Blue/Cyan Accent */}
+      <div 
+        className="rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 border transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderColor: 'rgba(56, 189, 248, 0.25)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+        }}
+      >
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-mono font-black text-white tracking-wide">
               FLEET INTELLIGENCE // ANALYTICS HUD
             </h1>
-            <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-950/70 text-cyan-400 border border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.3)] flex items-center gap-1.5">
+            <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.3)] flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               LIVE TELEMETRY STREAM
             </span>
           </div>
-          <p className="text-xs font-mono text-slate-400 mt-1">
+          <p className="text-xs font-mono text-slate-300/80 mt-1">
             Executive cockpit overview of 10-minute dark store SLAs, cumulative 2-Opt savings, and EV fleet battery curves
           </p>
         </div>
 
         <button
           onClick={fetchAnalytics}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-cyan-400 hover:border-cyan-500/50 text-xs font-mono font-bold shadow-md transition-all cursor-pointer self-start md:self-auto"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.06] hover:bg-white/[0.12] text-slate-200 hover:text-cyan-400 hover:border-cyan-500/50 text-xs font-mono font-bold shadow-md transition-all cursor-pointer self-start md:self-auto"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
           <span>REFRESH TELEMETRY</span>
         </button>
       </div>
 
-      {/* Top 4 KPI Executive Metric Cards with Top Accent Lines */}
+      {/* Top 4 KPI Executive Metric Cards with Glassmorphism */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: 10-Min SLA Adherence (Green/Emerald Accent) */}
-        <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-emerald-500/80 rounded-2xl p-5 shadow-2xl space-y-2">
+        <div 
+          className="rounded-2xl p-5 shadow-2xl space-y-2 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(16, 185, 129, 0.6)',
+            boxShadow: '0 0 24px rgba(16, 185, 129, 0.25), inset 0 0 16px rgba(16, 185, 129, 0.08)',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               10-Min SLA Adherence
             </span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-950/70 text-emerald-400 flex items-center justify-center border border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-400/40 shadow-[0_0_8px_rgba(16,185,129,0.3)]">
               <Clock className="w-4 h-4" />
             </div>
           </div>
@@ -102,16 +120,25 @@ export default function AnalyticsPage() {
               {summary.slaAdherenceDelta}
             </span>
           </div>
-          <p className="text-[11px] font-mono text-slate-500">Target: ≥92% threshold</p>
+          <p className="text-[11px] font-mono text-slate-400">Target: ≥92% threshold</p>
         </div>
 
         {/* Card 2: Cumulative TSP Savings (Blue/Cyan Accent) */}
-        <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-cyan-500/80 rounded-2xl p-5 shadow-2xl space-y-2">
+        <div 
+          className="rounded-2xl p-5 shadow-2xl space-y-2 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(6, 182, 212, 0.6)',
+            boxShadow: '0 0 24px rgba(6, 182, 212, 0.25), inset 0 0 16px rgba(6, 182, 212, 0.08)',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               Cumulative TSP Savings
             </span>
-            <div className="w-8 h-8 rounded-xl bg-cyan-950/70 text-cyan-400 flex items-center justify-center border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.3)]">
+            <div className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center border border-cyan-400/40 shadow-[0_0_8px_rgba(6,182,212,0.3)]">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
@@ -123,16 +150,25 @@ export default function AnalyticsPage() {
               -{summary.distanceSavedPct}% cut
             </span>
           </div>
-          <p className="text-[11px] font-mono text-slate-500">2-Opt heuristic edge reduction</p>
+          <p className="text-[11px] font-mono text-slate-400">2-Opt heuristic edge reduction</p>
         </div>
 
         {/* Card 3: EV Fleet Battery Efficiency (Orange/Amber Accent) */}
-        <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-amber-500/80 rounded-2xl p-5 shadow-2xl space-y-2">
+        <div 
+          className="rounded-2xl p-5 shadow-2xl space-y-2 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(245, 158, 11, 0.6)',
+            boxShadow: '0 0 24px rgba(245, 158, 11, 0.25), inset 0 0 16px rgba(245, 158, 11, 0.08)',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider">
               EV Battery Efficiency
             </span>
-            <div className="w-8 h-8 rounded-xl bg-amber-950/70 text-amber-400 flex items-center justify-center border border-amber-500/40 shadow-[0_0_8px_rgba(245,158,11,0.3)]">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-400/40 shadow-[0_0_8px_rgba(245,158,11,0.3)]">
               <BatteryCharging className="w-4 h-4" />
             </div>
           </div>
@@ -144,11 +180,20 @@ export default function AnalyticsPage() {
               {summary.fleetBatteryHealthPct}% health
             </span>
           </div>
-          <p className="text-[11px] font-mono text-slate-500">Discharge rate per corridor km</p>
+          <p className="text-[11px] font-mono text-slate-400">Discharge rate per corridor km</p>
         </div>
 
         {/* Card 4: CO2 Offset (Violet/Purple Accent) */}
-        <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-indigo-500/80 rounded-2xl p-5 shadow-2xl space-y-2">
+        <div 
+          className="rounded-2xl p-5 shadow-2xl space-y-2 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(168, 85, 247, 0.6)',
+            boxShadow: '0 0 24px rgba(168, 85, 247, 0.25), inset 0 0 16px rgba(168, 85, 247, 0.08)',
+          }}
+        >
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
               CO2 Carbon Offset
@@ -169,11 +214,20 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* Styled Dark-Theme Charts Grid (Neon Gradients & Glowing Gridlines) */}
+      {/* Styled Glassmorphic Charts Grid (Neon Gradients & Glowing Gridlines) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Chart 1: Daily Delivery Volume Bar Chart with Blue/Cyan Top Accent */}
-        <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-cyan-500/80 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 font-mono">
+        {/* Chart 1: Daily Delivery Volume Bar Chart with Glassmorphism */}
+        <div 
+          className="rounded-2xl p-6 shadow-2xl space-y-4 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(56, 189, 248, 0.22)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+          }}
+        >
+          <div className="flex items-center justify-between border-b border-white/10 pb-3 font-mono">
             <div>
               <h2 className="text-base font-bold text-white tracking-wide">DAILY DELIVERY VOLUME</h2>
               <p className="text-xs text-slate-400 mt-0.5">Dispatched packages vs on-time SLA fulfilled over past 7 days</p>
@@ -236,9 +290,18 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Chart 2: Hourly Order Distribution Peak Graph with Emerald Top Accent */}
-        <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-emerald-500/80 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800/80 pb-3 font-mono">
+        {/* Chart 2: Hourly Order Distribution Peak Graph with Glassmorphism */}
+        <div 
+          className="rounded-2xl p-6 shadow-2xl space-y-4 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(56, 189, 248, 0.22)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+          }}
+        >
+          <div className="flex items-center justify-between border-b border-white/10 pb-3 font-mono">
             <div>
               <h2 className="text-base font-bold text-white tracking-wide">HOURLY SURGE DISTRIBUTION</h2>
               <p className="text-xs text-slate-400 mt-0.5">Quick-commerce peak analysis: Lunch Sprint & Evening Dinner Rush</p>
@@ -317,9 +380,18 @@ export default function AnalyticsPage() {
 
       {/* Corridor Breakdown & Courier Leaderboard */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Corridor Volume & SLA Performance (5 cols) with Amber Top Accent */}
-        <div className="lg:col-span-5 bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-amber-500/80 rounded-2xl p-6 shadow-2xl space-y-4">
-          <div className="border-b border-slate-800/80 pb-3 font-mono">
+        {/* Corridor Volume & SLA Performance (5 cols) with Glassmorphism */}
+        <div 
+          className="lg:col-span-5 rounded-2xl p-6 shadow-2xl space-y-4 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(56, 189, 248, 0.22)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+          }}
+        >
+          <div className="border-b border-white/10 pb-3 font-mono">
             <h3 className="text-base font-bold text-white tracking-wide">CORRIDOR SLA BREAKDOWN</h3>
             <p className="text-xs text-slate-400 mt-0.5">Fulfillment telemetry divided by micro-hub sector</p>
           </div>
@@ -360,8 +432,17 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* Courier Performance Leaderboard (7 cols) with Purple Top Accent */}
-        <div className="lg:col-span-7 bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-indigo-500/80 rounded-2xl p-6 shadow-2xl space-y-4">
+        {/* Courier Performance Leaderboard (7 cols) with Glassmorphism */}
+        <div 
+          className="lg:col-span-7 rounded-2xl p-6 shadow-2xl space-y-4 border transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            borderColor: 'rgba(56, 189, 248, 0.22)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+          }}
+        >
           <div className="border-b border-slate-800/80 pb-3 font-mono">
             <div className="flex items-center gap-2">
               <Award className="w-5 h-5 text-amber-400" />

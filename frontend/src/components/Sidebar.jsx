@@ -8,8 +8,10 @@ import {
   BarChart3, 
   Sparkles,
   Truck,
+  LogOut,
   X
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
   { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
@@ -21,31 +23,41 @@ const NAV_ITEMS = [
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
+  const { logout } = useAuth();
 
   return (
     <>
       {/* Mobile backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden" 
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-md z-40 lg:hidden" 
           onClick={onClose} 
         />
       )}
 
-      {/* Sidebar container */}
-      <aside className={`
-        fixed top-0 bottom-0 left-0 z-50 w-64 bg-[#090f1d] text-white flex flex-col transition-transform duration-300 ease-in-out border-r border-slate-800/80
-        lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-      `}>
+      {/* Sidebar container with Glassmorphism */}
+      <aside 
+        className={`
+          fixed top-0 bottom-0 left-0 z-50 w-64 text-white flex flex-col transition-transform duration-300 ease-in-out border-r
+          lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}
+        style={{
+          background: 'linear-gradient(180deg, rgba(14, 23, 42, 0.78) 0%, rgba(9, 15, 30, 0.9) 100%)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderColor: 'rgba(56, 189, 248, 0.22)',
+          boxShadow: '4px 0 30px rgba(0, 0, 0, 0.55)',
+        }}
+      >
         {/* Brand Header */}
-        <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800">
+        <div className="h-18 flex items-center justify-between px-6 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/30">
-              <Truck className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/40 shrink-0">
+              <Truck className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="font-bold text-base tracking-tight text-white block">LogiRoute AI</span>
-              <span className="text-[10px] text-blue-400 font-medium tracking-wide uppercase">Dark Store Cockpit</span>
+              <span className="font-extrabold text-base tracking-tight text-white block">LogiRoute AI</span>
+              <span className="text-[10px] text-orange-300/90 font-medium tracking-wide">Dark Store Cockpit</span>
             </div>
           </div>
           <button 
@@ -57,7 +69,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
 
         {/* Navigation links */}
-        <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
+        <nav className="flex-1 px-3.5 py-5 space-y-2 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const isMatch = item.path === '/admin' 
@@ -70,19 +82,27 @@ export default function Sidebar({ isOpen, onClose }) {
                 to={item.path}
                 onClick={onClose}
                 className={`
-                  flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-mono font-medium transition-all
+                  flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-mono font-medium transition-all duration-200 border
                   ${isMatch 
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 font-semibold' 
-                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
+                    ? 'text-white font-bold border-orange-400/50' 
+                    : 'text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/10 border-transparent hover:border-white/10'
                   }
                 `}
+                style={isMatch ? {
+                  background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                  boxShadow: '0 4px 18px rgba(255, 107, 74, 0.45)',
+                } : {}}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className="w-4 h-4" />
+                  <Icon className={`w-4 h-4 ${isMatch ? 'text-white' : 'text-slate-300'}`} />
                   <span>{item.name}</span>
                 </div>
                 {item.badge && (
-                  <span className="px-1.5 py-0.5 text-[10px] font-bold rounded bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center gap-1">
+                  <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full flex items-center gap-1 ${
+                    isMatch 
+                      ? 'bg-white/20 text-white' 
+                      : 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30'
+                  }`}>
                     <Sparkles className="w-2.5 h-2.5" />
                     {item.badge}
                   </span>
@@ -92,15 +112,33 @@ export default function Sidebar({ isOpen, onClose }) {
           })}
         </nav>
 
-        {/* Footer info box */}
-        <div className="p-4 m-3 rounded-2xl bg-slate-900/80 border border-slate-800 text-xs text-slate-400 font-mono">
-          <div className="flex items-center gap-2 text-slate-300 font-semibold mb-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>2-Opt Heuristic Core</span>
+        {/* Courier Graphic & Logout in Bottom Sidebar Area */}
+        <div className="px-4 pb-4 pt-2 mt-auto flex flex-col items-center">
+          {/* Rider Silhouette Graphic */}
+          <div className="w-full relative rounded-2xl overflow-hidden border border-white/10 shadow-lg group bg-slate-950/40">
+            <img 
+              src="/assets/sidebar_rider.png" 
+              alt="LogiRoute Courier" 
+              className="w-full h-26 object-cover object-top opacity-95 group-hover:opacity-100 transition-opacity"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[10px] font-mono font-semibold text-slate-300 pointer-events-none">
+              <span className="flex items-center gap-1 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Active Fleet
+              </span>
+              <span className="text-slate-400">2-Opt Synced</span>
+            </div>
           </div>
-          <p className="text-[11px] leading-relaxed text-slate-400">
-            Real-time corridor solver & dark store dispatch synchronized.
-          </p>
+
+          {/* Logout Button */}
+          <button 
+            onClick={logout}
+            className="w-full mt-3 flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-mono font-medium text-slate-300 hover:text-white bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/20 transition-all backdrop-blur-md shadow-sm cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5 text-orange-400" />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
     </>

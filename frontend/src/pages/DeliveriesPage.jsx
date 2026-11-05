@@ -121,17 +121,26 @@ export default function DeliveriesPage() {
         </div>
       )}
 
-      {/* Page Header — Midnight Cyberpunk Cockpit Card with Blue/Cyan Top Accent */}
-      <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 border-t-2 border-t-cyan-500/80 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Page Header — Midnight Glassmorphic Cockpit Card with Blue/Cyan Accent */}
+      <div 
+        className="rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 border transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          borderColor: 'rgba(56, 189, 248, 0.25)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+        }}
+      >
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-mono font-black text-white tracking-wide">DELIVERIES MASTER QUEUE</h1>
-            <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-950/70 text-cyan-400 border border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.3)] flex items-center gap-1.5">
+            <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.3)] flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               {orders.length} ACTIVE NODES
             </span>
           </div>
-          <p className="text-xs font-mono text-slate-400 mt-1">
+          <p className="text-xs font-mono text-slate-300/80 mt-1">
             Real-time telemetry stream across San Francisco micro-fulfillment corridors
           </p>
         </div>
@@ -139,14 +148,14 @@ export default function DeliveriesPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={fetchOrders}
-            className="p-2.5 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all cursor-pointer shadow-md"
+            className="p-2.5 rounded-xl border border-white/10 bg-white/[0.06] text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-all cursor-pointer shadow-md"
             title="Refresh Orders"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)] border border-blue-400/40 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono text-xs font-black shadow-[0_0_16px_rgba(6,182,212,0.5)] border border-cyan-400/60 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>CREATE ORDER</span>
@@ -155,7 +164,16 @@ export default function DeliveriesPage() {
       </div>
 
       {/* Search & Filter Toolbar with Glowing Chips */}
-      <div className="bg-[#0b1220]/90 backdrop-blur-xl border border-slate-800/80 rounded-2xl p-4 shadow-2xl flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+      <div 
+        className="rounded-2xl p-4 shadow-2xl flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between border transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.72) 0%, rgba(10, 16, 32, 0.85) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderColor: 'rgba(56, 189, 248, 0.22)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+        }}
+      >
         <form onSubmit={handleSearchSubmit} className="relative flex-1">
           <Search className="w-4 h-4 text-cyan-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -204,8 +222,17 @@ export default function DeliveriesPage() {
         </div>
       </div>
 
-      {/* Master Order Table — Dark Rows with Neon Glow */}
-      <div className="bg-[#0b1220]/90 backdrop-blur-xl rounded-2xl border border-slate-800/80 shadow-2xl overflow-hidden">
+      {/* Master Order Table — Glassmorphic Table with Neon Glow */}
+      <div 
+        className="rounded-2xl shadow-2xl overflow-hidden border transition-all"
+        style={{
+          background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.72) 0%, rgba(10, 16, 32, 0.85) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderColor: 'rgba(56, 189, 248, 0.22)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+        }}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>

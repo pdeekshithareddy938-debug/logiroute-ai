@@ -101,7 +101,7 @@ export default function DeliveryDetailPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <button
           onClick={() => navigate('/deliveries')}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Deliveries</span>
@@ -111,7 +111,7 @@ export default function DeliveryDetailPage() {
           <select
             value={delivery.status}
             onChange={(e) => handleStatusChange(e.target.value)}
-            className="px-3 py-2 text-xs font-medium border border-slate-200 rounded-lg bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 text-xs font-mono font-medium border border-slate-700 rounded-xl bg-slate-950/80 text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500"
           >
             <option value="PENDING">Status: Pending</option>
             <option value="SCHEDULED">Status: Scheduled</option>
@@ -122,7 +122,7 @@ export default function DeliveryDetailPage() {
 
           <button
             onClick={() => setIsEditModalOpen(true)}
-            className="px-3 py-2 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg shadow-sm flex items-center gap-1.5"
+            className="px-3.5 py-2 text-xs font-mono font-semibold text-slate-200 bg-white/[0.08] hover:bg-white/15 border border-white/15 rounded-xl shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Edit Order</span>
@@ -134,15 +134,24 @@ export default function DeliveryDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Details Cards (2 cols) */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
+          <div 
+            className="rounded-2xl p-6 shadow-2xl border transition-all"
+            style={{
+              background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderColor: 'rgba(56, 189, 248, 0.22)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+            }}
+          >
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[11px] font-mono text-blue-600 font-bold uppercase tracking-wider">
+                <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase tracking-wider">
                   ORDER #{delivery.id}
                 </span>
-                <h1 className="text-xl font-bold text-slate-900 mt-1">{delivery.customer_name}</h1>
-                <p className="text-xs text-slate-500 flex items-center gap-1.5 mt-1">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                <h1 className="text-xl font-bold text-white mt-1">{delivery.customer_name}</h1>
+                <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-1">
+                  <MapPin className="w-3.5 h-3.5 text-cyan-400" />
                   <span>{delivery.delivery_address}</span>
                 </p>
               </div>
@@ -153,17 +162,17 @@ export default function DeliveryDetailPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-slate-100 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-white/10 text-xs font-mono">
               <div className="space-y-3">
-                <div className="flex items-center gap-2.5 text-slate-700">
+                <div className="flex items-center gap-2.5 text-slate-300">
                   <Phone className="w-4 h-4 text-slate-400" />
                   <span>{delivery.customer_phone || 'No phone provided'}</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-slate-700">
+                <div className="flex items-center gap-2.5 text-slate-300">
                   <Mail className="w-4 h-4 text-slate-400" />
                   <span>{delivery.customer_email || 'No email provided'}</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-slate-700">
+                <div className="flex items-center gap-2.5 text-slate-300">
                   <Clock className="w-4 h-4 text-slate-400" />
                   <span>
                     Window: {delivery.time_window_start || '09:00'} - {delivery.time_window_end || '17:00'}
@@ -172,17 +181,17 @@ export default function DeliveryDetailPage() {
               </div>
 
               <div className="space-y-3">
-                <div className="flex items-center gap-2.5 text-slate-700">
+                <div className="flex items-center gap-2.5 text-slate-300">
                   <Package className="w-4 h-4 text-slate-400" />
                   <span>{delivery.package_details || 'Standard Parcel'} ({delivery.weight_kg} kg)</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-slate-700">
+                <div className="flex items-center gap-2.5 text-slate-300">
                   <MapPin className="w-4 h-4 text-slate-400" />
                   <span className="font-mono">
                     Lat: {delivery.latitude.toFixed(5)}, Lon: {delivery.longitude.toFixed(5)}
                   </span>
                 </div>
-                <div className="flex items-center gap-2.5 text-slate-700">
+                <div className="flex items-center gap-2.5 text-slate-300">
                   <Calendar className="w-4 h-4 text-slate-400" />
                   <span>Created: {new Date(delivery.created_at).toLocaleString()}</span>
                 </div>
@@ -190,11 +199,11 @@ export default function DeliveryDetailPage() {
             </div>
 
             {delivery.notes && (
-              <div className="mt-6 pt-4 border-t border-slate-100">
-                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <div className="mt-6 pt-4 border-t border-white/10">
+                <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1 font-mono">
                   Delivery Notes & Instructions
                 </h4>
-                <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 leading-relaxed">
+                <p className="text-xs text-slate-300 bg-slate-950/60 p-3 rounded-xl border border-slate-800 leading-relaxed font-mono">
                   {delivery.notes}
                 </p>
               </div>
@@ -202,8 +211,17 @@ export default function DeliveryDetailPage() {
           </div>
 
           {/* Single Stop Location Map */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
-            <h3 className="text-sm font-bold text-slate-800 mb-3">Destination Coordinates</h3>
+          <div 
+            className="rounded-2xl p-5 shadow-2xl border transition-all"
+            style={{
+              background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderColor: 'rgba(56, 189, 248, 0.22)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+            }}
+          >
+            <h3 className="text-sm font-bold text-white mb-3 font-mono">Destination Coordinates</h3>
             <RouteMap
               stops={mapStop}
               center={[delivery.latitude, delivery.longitude]}
@@ -215,26 +233,35 @@ export default function DeliveryDetailPage() {
 
         {/* Right Column: Routing & Dispatch Status (1 col) */}
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm">
-            <h3 className="text-sm font-bold text-slate-800 mb-3">Route Dispatch Context</h3>
+          <div 
+            className="rounded-2xl p-5 shadow-2xl border transition-all"
+            style={{
+              background: 'linear-gradient(135deg, rgba(14, 23, 42, 0.75) 0%, rgba(10, 16, 32, 0.88) 100%)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderColor: 'rgba(56, 189, 248, 0.22)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+            }}
+          >
+            <h3 className="text-sm font-bold text-white mb-3 font-mono">Route Dispatch Context</h3>
             
-            <div className="space-y-3 text-xs">
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
+            <div className="space-y-3 text-xs font-mono">
+              <div className="p-3 bg-slate-950/70 rounded-xl border border-slate-800">
                 <span className="text-slate-400 block text-[11px]">Primary Dispatch Hub</span>
-                <span className="font-semibold text-slate-800 block mt-0.5">Central Distribution Hub</span>
-                <span className="text-slate-500 block text-[11px]">100 Market St, San Francisco, CA</span>
+                <span className="font-semibold text-white block mt-0.5">Central Distribution Hub</span>
+                <span className="text-slate-400 block text-[11px]">100 Market St, San Francisco, CA</span>
               </div>
 
-              <div className="p-3 bg-blue-50 rounded-xl border border-blue-100">
-                <span className="text-blue-600 block text-[11px] font-semibold">AI Routing Eligibility</span>
-                <p className="text-slate-600 text-[11px] mt-0.5 leading-relaxed">
+              <div className="p-3 bg-cyan-950/40 rounded-xl border border-cyan-500/30">
+                <span className="text-cyan-400 block text-[11px] font-semibold">AI Routing Eligibility</span>
+                <p className="text-slate-300 text-[11px] mt-0.5 leading-relaxed">
                   This parcel has valid geocoded coordinates and can be added directly into the multi-stop 2-Opt TSP solver.
                 </p>
               </div>
 
               <button
-                onClick={() => navigate('/routes/planner', { state: { preSelectedIds: [delivery.id] } })}
-                className="w-full py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-sm transition-colors text-center"
+                onClick={() => navigate('/route-planner', { state: { preSelectedIds: [delivery.id] } })}
+                className="w-full py-2.5 px-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold rounded-xl shadow-lg transition-all text-center cursor-pointer font-black"
               >
                 Plan Route for This Delivery
               </button>
