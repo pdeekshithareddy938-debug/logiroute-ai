@@ -349,7 +349,7 @@ export default function CustomerLoginPage() {
                 className="w-full text-white font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer shadow-lg"
               >
                 <Zap className="w-4 h-4 text-amber-200 fill-amber-200" />
-                <span>Quick Demo Access (Bypass Backend)</span>
+                <span>Quick Demo</span>
               </button>
             </div>
           </form>

@@ -10,9 +10,7 @@ import {
   Zap,
   BarChart3,
   Mail,
-  ShieldCheck,
-  PlayCircle,
-  ArrowRight
+  ShieldCheck
 } from 'lucide-react';
 
 // Dedicated SVG Icon for 3D Shopping Bag matching the reference image
@@ -306,60 +304,6 @@ export default function LoginPage() {
         </div>
 
         {/* ==================================================================== */}
-        {/* PROMINENT DEMO MODE / INSTANT PRESENTATION ACCESS BANNER              */}
-        {/* ==================================================================== */}
-        <div 
-          style={{
-            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.92) 100%)',
-            backdropFilter: 'blur(20px)',
-            border: '1.5px solid rgba(56, 189, 248, 0.45)',
-            boxShadow: '0 16px 40px -10px rgba(0, 0, 0, 0.45), 0 0 25px rgba(14, 165, 233, 0.2)',
-          }}
-          className="mb-8 p-4 sm:p-5 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-4 text-white"
-        >
-          <div className="flex items-center gap-3.5 text-center lg:text-left">
-            <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
-              <Zap className="w-6 h-6 animate-pulse" />
-            </div>
-            <div>
-              <div className="text-sm sm:text-base font-extrabold flex items-center justify-center lg:justify-start gap-2 flex-wrap">
-                <span>Instant Presentation Mode (Bypass Backend)</span>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-xs">
-                  OFFLINE READY
-                </span>
-              </div>
-              <div className="text-xs text-slate-300 mt-1 leading-relaxed">
-                Backend connection delayed? Launch a 100% interactive live demo immediately with preloaded routes, active couriers, and 2-Opt solver metrics.
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2.5 w-full lg:w-auto shrink-0 justify-center">
-            <button
-              onClick={() => handleQuickDemoAccess('ADMIN')}
-              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 active:scale-[0.98] transition-all cursor-pointer"
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-              <span>Admin Demo</span>
-            </button>
-            <button
-              onClick={() => handleQuickDemoAccess('RIDER')}
-              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30 active:scale-[0.98] transition-all cursor-pointer"
-            >
-              <Bike className="w-3.5 h-3.5" />
-              <span>Rider HUD</span>
-            </button>
-            <button
-              onClick={() => handleQuickDemoAccess('CUSTOMER')}
-              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"
-            >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Customer</span>
-            </button>
-          </div>
-        </div>
-
-        {/* ==================================================================== */}
         {/* 3 TRANSLUCENT 3D GLASSMORPHISM CARDS (With Specular Highlights)      */}
         {/* ==================================================================== */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 mb-6">
@@ -472,7 +416,7 @@ export default function LoginPage() {
                       className="w-full text-white font-bold text-xs tracking-wide flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer relative overflow-hidden group/demobtn"
                     >
                       <Zap className="w-3.5 h-3.5 z-10 text-amber-200 fill-amber-200" />
-                      <span className="z-10">Quick Demo Access (Bypass Backend)</span>
+                      <span className="z-10">Quick Demo</span>
                     </button>
 
                     {/* 3D Glossy Orange-to-Red Standard Login Button */}
