@@ -17,7 +17,8 @@ import {
   Zap,
   Phone,
   ThermometerSnowflake,
-  Lock
+  Lock,
+  Navigation
 } from 'lucide-react';
 
 // Fix Leaflet Default Icon in Webpack/Vite
@@ -327,6 +328,13 @@ export default function CustomerStorefrontPage() {
     });
   };
 
+  // View All: Show all available food products (Separate from Live Tracker)
+  const handleViewAll = () => {
+    setIsTrackingActive(false);
+    setSelectedCategory('All Items');
+    triggerToast('Showing all available food products');
+  };
+
   // Cart Calculations
   const cartItemCount = useMemo(() => {
     return Object.values(cart).reduce((a, b) => a + b, 0);
@@ -425,8 +433,34 @@ export default function CustomerStorefrontPage() {
           </div>
         </div>
 
-        {/* Right Actions: Frosted Glass Cart Button & Logout */}
+        {/* Right Actions: Live Tracker, Frosted Glass Cart Button & Logout */}
         <div className="flex items-center gap-2.5">
+          {/* Live Tracker Navbar Button */}
+          <button
+            onClick={() => setIsTrackingActive((prev) => !prev)}
+            style={{
+              background: isTrackingActive
+                ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.75), rgba(5, 150, 105, 0.85))'
+                : 'rgba(25, 75, 45, 0.48)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: isTrackingActive ? '1.5px solid #8DFFD0' : '1.5px solid rgba(255, 255, 255, 0.55)',
+              boxShadow: isTrackingActive
+                ? '0 0 20px rgba(141, 255, 208, 0.65), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)'
+                : '0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1.5px 2px rgba(255, 255, 255, 0.70)',
+            }}
+            className="relative w-12 h-12 rounded-2xl flex items-center justify-center text-white hover:border-[#8DFFD0] transition-all cursor-pointer shadow-md group"
+            title="Live Tracker: Assigned Rider Location, Route, ETA & Status"
+          >
+            <Navigation className="w-5 h-5 text-[#8DFFD0] group-hover:scale-110 transition-transform" />
+            
+            {/* Live pulsing beacon */}
+            <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8DFFD0] opacity-80"></span>
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#8DFFD0] border-2 border-[#163323]"></span>
+            </span>
+          </button>
+
           {/* View Cart Button */}
           <button
             onClick={() => setIsCartDrawerOpen(true)}
@@ -688,7 +722,7 @@ export default function CustomerStorefrontPage() {
                 {filteredProducts.length} ITEMS
               </span>
               <button
-                onClick={() => setIsTrackingActive(true)}
+                onClick={handleViewAll}
                 style={{
                   background: 'rgba(25, 75, 45, 0.45)',
                   backdropFilter: 'blur(14px)',
@@ -696,6 +730,7 @@ export default function CustomerStorefrontPage() {
                   border: '1.5px solid rgba(255, 255, 255, 0.45)',
                 }}
                 className="px-3.5 py-1.5 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+                title="View all available food products"
               >
                 <span>View All</span>
                 <span className="text-[#FFD52A]">→</span>
