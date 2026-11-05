@@ -111,9 +111,9 @@ const PORTALS = [
       border: '1.5px solid rgba(255, 255, 255, 0.88)',
       boxShadow: '0 8px 24px -4px rgba(239, 68, 68, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(239, 68, 68, 0.18)',
     },
-    // Premium Translucent Warm Peach Glass
+    // Premium Soft Cream Fading to Warm Coral
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(255, 245, 238, 0.52) 0%, rgba(255, 225, 215, 0.34) 45%, rgba(255, 195, 180, 0.42) 100%)',
+      background: 'linear-gradient(180deg, #FFF0E6 0%, #FFD4C4 50%, #FFAAA6 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
       border: '1.5px solid rgba(255, 255, 255, 0.82)',
@@ -127,7 +127,7 @@ const PORTALS = [
       boxShadow: '0 4px 15px rgba(239, 68, 68, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(239, 68, 68, 0.35) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(255, 170, 166, 0.45) 0%, transparent 100%)',
     },
     iconBg: 'bg-white/80 backdrop-blur-md text-[#FF5722] border border-white/90',
   },
@@ -163,9 +163,9 @@ const PORTALS = [
       border: '1.5px solid rgba(255, 255, 255, 0.88)',
       boxShadow: '0 8px 24px -4px rgba(255, 61, 0, 0.32), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(255, 61, 0, 0.20)',
     },
-    // Premium Translucent Warm Coral Glass
+    // Premium Light Lavender Fading to Soft Purple-Pink
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(255, 240, 230, 0.52) 0%, rgba(255, 215, 200, 0.34) 45%, rgba(255, 180, 160, 0.42) 100%)',
+      background: 'linear-gradient(180deg, #F0E8FF 0%, #D8B4FE 50%, #F472B6 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
       border: '1.5px solid rgba(255, 255, 255, 0.82)',
@@ -179,7 +179,7 @@ const PORTALS = [
       boxShadow: '0 4px 15px rgba(255, 61, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(255, 61, 0, 0.35) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(244, 114, 182, 0.45) 0%, transparent 100%)',
     },
     iconBg: 'bg-white/80 backdrop-blur-md text-[#FF3D00] border border-white/90',
   },
@@ -215,9 +215,9 @@ const PORTALS = [
       border: '1.5px solid rgba(255, 255, 255, 0.88)',
       boxShadow: '0 8px 24px -4px rgba(249, 115, 22, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(249, 115, 22, 0.18)',
     },
-    // Premium Translucent Warm Amber / Orange Glass
+    // Premium Golden Yellow Fading to Warm Orange-Pink
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(255, 242, 208, 0.50) 0%, rgba(255, 218, 155, 0.32) 45%, rgba(255, 178, 115, 0.40) 100%)',
+      background: 'linear-gradient(180deg, #FEF08A 0%, #FDE047 40%, #FB923C 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
       border: '1.5px solid rgba(255, 255, 255, 0.80)',
@@ -231,7 +231,7 @@ const PORTALS = [
       boxShadow: '0 4px 15px rgba(249, 115, 22, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(249, 115, 22, 0.35) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(251, 146, 60, 0.45) 0%, transparent 100%)',
     },
     iconBg: 'bg-white/80 backdrop-blur-md text-[#EA580C] border border-white/90',
   }
