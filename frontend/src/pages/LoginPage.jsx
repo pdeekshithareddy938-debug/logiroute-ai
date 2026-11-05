@@ -12,6 +12,24 @@ import {
   ShieldCheck
 } from 'lucide-react';
 
+// Dedicated SVG Icon for 3D Shopping Bag matching the reference image
+function ShoppingBagIcon3D({ className = "w-6 h-6" }) {
+  return (
+    <svg className={className} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bagGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#FF7A45" />
+          <stop offset="100%" stopColor="#FF3D00" />
+        </linearGradient>
+      </defs>
+      {/* Bag Body */}
+      <rect x="6" y="10" width="24" height="21" rx="5" fill="none" stroke="url(#bagGrad)" strokeWidth="3" />
+      {/* Bag Handle */}
+      <path d="M13 12V7C13 4.8 14.8 3 17 3H19C21.2 3 23 4.8 23 7V12" stroke="url(#bagGrad)" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 // Dedicated SVG Icon for 3D Delivery Scooter matching the reference image
 function ScooterIcon3D({ className = "w-6 h-6" }) {
   return (
@@ -37,6 +55,27 @@ function ScooterIcon3D({ className = "w-6 h-6" }) {
   );
 }
 
+// Dedicated SVG Icon for 3D Bar Chart matching the reference image
+function BarChartIcon3D({ className = "w-6 h-6" }) {
+  return (
+    <svg className={className} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#FFA040" />
+          <stop offset="40%" stopColor="#FF6F22" />
+          <stop offset="100%" stopColor="#E63900" />
+        </linearGradient>
+      </defs>
+      {/* Bar 1 (Short) */}
+      <rect x="6" y="19" width="6" height="13" rx="3" fill="url(#barGrad)" stroke="#FFFFFF" strokeWidth="1.2" />
+      {/* Bar 2 (Medium) */}
+      <rect x="15" y="11" width="6" height="21" rx="3" fill="url(#barGrad)" stroke="#FFFFFF" strokeWidth="1.2" />
+      {/* Bar 3 (Tall) */}
+      <rect x="24" y="4" width="6" height="28" rx="3" fill="url(#barGrad)" stroke="#FFFFFF" strokeWidth="1.2" />
+    </svg>
+  );
+}
+
 // 3 Distinct Transparent 3D Glassmorphism Cards Config
 const PORTALS = [
   {
@@ -46,7 +85,7 @@ const PORTALS = [
     role: 'CUSTOMER',
     path: '/customer/login',
     buttonText: 'Customer Login →',
-    icon: ShoppingBag,
+    icon: ShoppingBagIcon3D,
     badgeText: 'Grocery & 3D Catalog',
     badgeIcon: ShoppingBag,
     badgeIconColor: '#00B86B',
@@ -62,6 +101,14 @@ const PORTALS = [
     mailIconColor: '#EF4444',
     subtitleColor: '#C2410C',
     desc: 'Browse instant quick-commerce grocery catalog, temperature badges, and real-time live 3D order tracking.',
+    // Luminous Frosted Glass Squircle for Symbol
+    luminousGlassStyle: {
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 235, 225, 0.38) 50%, rgba(255, 215, 200, 0.48) 100%)',
+      backdropFilter: 'blur(12px) saturate(180%)',
+      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.88)',
+      boxShadow: '0 8px 24px -4px rgba(255, 87, 34, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(255, 87, 34, 0.18)',
+    },
     // Premium Translucent Peach/Coral Glass
     cardStyle: {
       background: 'linear-gradient(145deg, rgba(255, 222, 208, 0.46) 0%, rgba(255, 178, 158, 0.28) 45%, rgba(255, 142, 108, 0.40) 100%)',
@@ -105,6 +152,14 @@ const PORTALS = [
     mailIconColor: '#6366F1',
     subtitleColor: '#BE123C',
     desc: 'Turn-by-turn routing navigation, cold-chain SLA telemetry, dispatch wave acceptance, and shift manager.',
+    // Luminous Frosted Glass Squircle for Symbol
+    luminousGlassStyle: {
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(235, 225, 255, 0.38) 50%, rgba(220, 205, 255, 0.48) 100%)',
+      backdropFilter: 'blur(12px) saturate(180%)',
+      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.88)',
+      boxShadow: '0 8px 24px -4px rgba(168, 85, 247, 0.25), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(168, 85, 247, 0.18)',
+    },
     // Premium Translucent Soft Lavender / Pink Glass
     cardStyle: {
       background: 'linear-gradient(145deg, rgba(236, 226, 255, 0.48) 0%, rgba(212, 198, 255, 0.30) 45%, rgba(198, 218, 255, 0.40) 100%)',
@@ -132,7 +187,7 @@ const PORTALS = [
     role: 'ADMIN',
     path: '/admin/login',
     buttonText: 'Admin Login →',
-    icon: BarChart3,
+    icon: BarChartIcon3D,
     badgeText: 'Hub Operations',
     badgeIcon: Building2,
     badgeIconColor: '#963BDB',
@@ -148,6 +203,14 @@ const PORTALS = [
     mailIconColor: '#EA580C',
     subtitleColor: '#B45309',
     desc: 'GIS live fleet radar, multi-order wave dispatching, TSP route optimization, and dark store inventory sync.',
+    // Luminous Frosted Glass Squircle for Symbol
+    luminousGlassStyle: {
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 240, 215, 0.38) 50%, rgba(255, 215, 175, 0.48) 100%)',
+      backdropFilter: 'blur(12px) saturate(180%)',
+      WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.88)',
+      boxShadow: '0 8px 24px -4px rgba(249, 115, 22, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(249, 115, 22, 0.18)',
+    },
     // Premium Translucent Warm Amber / Orange Glass
     cardStyle: {
       background: 'linear-gradient(145deg, rgba(255, 242, 208, 0.50) 0%, rgba(255, 218, 155, 0.32) 45%, rgba(255, 178, 115, 0.40) 100%)',
@@ -262,9 +325,23 @@ export default function LoginPage() {
                     {/* Top Row: Icon & Category Badge */}
                     <div className="flex items-center justify-between mb-4">
                       
-                      {/* Rounded Square Icon Box with Soft Inner Depth */}
-                      <div className={`w-12 h-12 rounded-2xl ${portal.iconBg} shadow-xs flex items-center justify-center group-hover:scale-105 transition-transform`}>
-                        <IconComponent className="w-6 h-6 stroke-[2.2]" />
+                      {/* Luminous Glass Symbol Box matching reference image */}
+                      <div 
+                        style={portal.luminousGlassStyle}
+                        className="w-13 h-13 rounded-[20px] flex items-center justify-center relative overflow-hidden group-hover:scale-105 group-hover:-translate-y-0.5 transition-all duration-300 select-none shadow-xs"
+                      >
+                        {/* Specular Diagonal/Top Glass Glare Highlight */}
+                        <div 
+                          className="absolute top-0 inset-x-0 h-[48%] rounded-t-[20px] pointer-events-none"
+                          style={{
+                            background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.15) 60%, transparent 100%)',
+                          }}
+                        />
+                        
+                        {/* The 3D Luminous Symbol */}
+                        <div className="relative z-10 flex items-center justify-center">
+                          <IconComponent className="w-7 h-7" />
+                        </div>
                       </div>
 
                       {/* Translucent Glass Pill Badge */}
