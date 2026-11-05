@@ -180,18 +180,74 @@ const CULINARY_CATALOG = [
     description: 'Slow-churned Hokkaido milk with stone-ground toasted black sesame.',
   },
   {
-    id: 'prod-matcha-latte',
-    name: 'Uji Ceremonial Matcha',
-    displayName: 'Uji Ceremonial Matcha',
+    id: 'prod-avocado-sourdough',
+    name: 'Hass Avocado Sourdough Tartine',
+    displayName: 'Avocado Sourdough Tartine',
+    category: 'Gourmet Hot Eats',
+    thermalState: 'FRESH',
+    badgeText: '🥑 Chef’s Pick',
+    badgeGradient: 'from-[#16A34A] to-[#22C55E]',
+    weight: '310g',
+    price: 11.50,
+    eta: '8 mins',
+    img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80',
+    description: 'Hand-mashed Hass avocado, microgreens, dukkah spice on toasted artisan sourdough.',
+  },
+  {
+    id: 'prod-salmon-sushi-box',
+    name: 'Wild Salmon & Nigiri Bento Box',
+    displayName: 'Salmon Nigiri Bento Box',
+    category: 'Cold Chain & Dairy',
+    thermalState: 'CHILLED',
+    badgeText: '🍣 Chilled 4°C',
+    badgeGradient: 'from-[#0284C7] to-[#38BDF8]',
+    weight: '360g',
+    price: 15.90,
+    eta: '8 mins',
+    img: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
+    description: 'Sashimi-grade Norwegian Atlantic salmon nigiri, avocado maki, pickled ginger.',
+  },
+  {
+    id: 'prod-berry-acai-bowl',
+    name: 'Wild Berry & Dragonfruit Açaí Bowl',
+    displayName: 'Berry Dragonfruit Açaí',
+    category: 'Frozen Foods',
+    thermalState: 'FROZEN',
+    badgeText: '🫐 Frozen -18°C',
+    badgeGradient: 'from-[#9333EA] to-[#C084FC]',
+    weight: '400g',
+    price: 9.80,
+    eta: '8 mins',
+    img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=800&q=80',
+    description: 'Organic Amazonian açaí puree blended with banana, topped with chia and berries.',
+  },
+  {
+    id: 'prod-sparkling-kombucha',
+    name: 'Organic Blood Orange Sparkling Kombucha',
+    displayName: 'Blood Orange Kombucha',
     category: 'Beverages',
     thermalState: 'CHILLED',
-    badgeText: '❄️ Chilled 4°C',
-    badgeGradient: 'from-[#0284C7] to-[#38BDF8]',
-    weight: '320ml',
-    price: 5.80,
-    eta: '8 mins',
-    img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=800&q=80',
-    description: 'First-harvest Kyoto ceremonial green tea whisked over cold oat milk.',
+    badgeText: '🍊 Chilled 4°C',
+    badgeGradient: 'from-[#EA580C] to-[#FB923C]',
+    weight: '330ml',
+    price: 4.80,
+    eta: '6 mins',
+    img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80',
+    description: 'Naturally fermented sparkling raw probiotic tea with Sicilian blood orange & ginger.',
+  },
+  {
+    id: 'prod-truffle-crisps',
+    name: 'Artisanal Black Truffle & Sea Salt Crisps',
+    displayName: 'Truffle & Sea Salt Crisps',
+    category: 'Snacks & More',
+    thermalState: 'SNACK',
+    badgeText: '✨ Gourmet Snack',
+    badgeGradient: 'from-[#D97706] to-[#FBBF24]',
+    weight: '150g',
+    price: 6.20,
+    eta: '6 mins',
+    img: 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=800&q=80',
+    description: 'Hand-cooked kettle chips seasoned with aromatic Italian black truffle and sea salt.',
   },
 ];
 
@@ -780,25 +836,23 @@ export default function CustomerStorefrontPage() {
                       </button>
                     </div>
 
-                    {/* Food Image Asset (Rounded corner container with weight overlay tag in bottom-left) */}
-                    <div className="relative z-10 h-32 sm:h-36 w-full rounded-xl overflow-hidden mb-2.5 bg-black/20 shrink-0">
+                    {/* Food Image Asset (Full complete food visible without cropping, object-fit: contain) */}
+                    <div className="relative z-10 h-32 sm:h-36 w-full rounded-xl overflow-hidden mb-2.5 bg-black/25 flex items-center justify-center p-1.5 shrink-0">
                       <img
                         src={prod.img}
                         alt={prod.name}
                         style={{
                           width: '100%',
                           height: '100%',
-                          objectFit: 'cover',
+                          objectFit: 'contain',
                           objectPosition: 'center',
                         }}
-                        className="w-full h-full object-cover object-center select-none"
+                        className="w-full h-full object-contain object-center select-none transition-transform duration-300 group-hover:scale-105"
                         loading="lazy"
                       />
-                      {/* Subtle bottom gradient overlay for contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
                       
                       {/* Weight badge pill overlay in bottom-left corner */}
-                      <div className="absolute bottom-1.5 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20 shadow-sm">
+                      <div className="absolute bottom-1.5 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20 shadow-sm pointer-events-none">
                         {prod.weight}
                       </div>
                     </div>
