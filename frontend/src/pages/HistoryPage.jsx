@@ -68,6 +68,8 @@ export default function HistoryPage() {
 
   useEffect(() => {
     fetchHistory();
+    const interval = setInterval(fetchHistory, 3500);
+    return () => clearInterval(interval);
   }, []);
 
   // Export CSV handler

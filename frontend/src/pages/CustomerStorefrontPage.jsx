@@ -242,6 +242,11 @@ export default function CustomerStorefrontPage() {
   const [orderStage, setOrderStage] = useState(2);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
+  // Active Order ID tracked across tabs and reloads
+  const [activeOrderId, setActiveOrderId] = useState(() => {
+    return localStorage.getItem('active_customer_order_id') || 'LOGI-8492';
+  });
+
   // Active Order Details
   const [activeOrderInfo, setActiveOrderInfo] = useState({
     orderId: '#LOGI-8492',
@@ -252,10 +257,11 @@ export default function CustomerStorefrontPage() {
     address: '100 Market St, Financial Pod',
     status: 'Out for Delivery',
     courierName: 'Rahul (Ather 450X)',
+    deliveredTime: null,
   });
 
   // Past Orders History
-  const [pastOrders] = useState([
+  const [pastOrders, setPastOrders] = useState([
     {
       id: '#LOGI-7814',
       date: 'Yesterday, 8:15 PM',
@@ -271,6 +277,88 @@ export default function CustomerStorefrontPage() {
       status: 'Delivered',
     },
   ]);
+
+  // Sync active order state from backend in real-time
+  const syncActiveOrderFromBackend = async () => {
+    try {
+      const order = await dispatchAPI.getCustomerActiveOrder(activeOrderId);
+      if (order && order.id) {
+        const orderCleanId = order.id.startsWith('#') ? order.id.slice(1) : order.id;
+        setActiveOrderId(orderCleanId);
+        localStorage.setItem('active_customer_order_id', orderCleanId);
+
+        const st = (order.status || 'pending').toLowerCase();
+        let stage = 0;
+        let statusLabel = 'Order Placed';
+
+        if (st === 'delivered') {
+          stage = 3;
+          statusLabel = 'Delivered';
+        } else if (st === 'in-transit' || st === 'packed') {
+          stage = 2;
+          statusLabel = 'Out for Delivery';
+        } else if (st === 'preparing') {
+          stage = 1;
+          statusLabel = 'Preparing Food';
+        } else {
+          stage = 0;
+          statusLabel = 'Order Placed';
+        }
+
+        setOrderStage(stage);
+
+        const parsedItems = order.packageDesc
+          ? order.packageDesc.split(',').map((s) => s.trim())
+          : ['1x Classic Burger', '1x Cold Coffee', '1x French Fries'];
+
+        const deliveryTimeStr = order.updatedAt
+          ? new Date(order.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          : '10:45 AM';
+
+        setActiveOrderInfo((prev) => ({
+          ...prev,
+          orderId: `#${orderCleanId}`,
+          status: statusLabel,
+          items: parsedItems.length > 0 ? parsedItems : prev.items,
+          address: order.address || prev.address,
+          deliveredTime: st === 'delivered' ? (prev.deliveredTime || deliveryTimeStr) : prev.deliveredTime,
+          estDelivery: prev.estDelivery || '10:45 AM',
+          courierName: order.courier?.name
+            ? `${order.courier.name} (${order.courier.vehicle || 'EV'})`
+            : 'Rahul (Ather 450X)',
+        }));
+
+        // If delivered, append to past orders if not already present
+        if (st === 'delivered') {
+          setPastOrders((prevPast) => {
+            const exists = prevPast.some((p) => p.id === `#${orderCleanId}`);
+            if (!exists) {
+              return [
+                {
+                  id: `#${orderCleanId}`,
+                  date: 'Today, ' + deliveryTimeStr,
+                  items: order.packageDesc || '1x Classic Burger, 1x Cold Coffee, 1x French Fries',
+                  amount: 237,
+                  status: 'Delivered',
+                },
+                ...prevPast,
+              ];
+            }
+            return prevPast;
+          });
+        }
+      }
+    } catch (e) {
+      // Keep existing state if offline or transient network notice
+    }
+  };
+
+  // Real-time synchronization polling every 2 seconds
+  useEffect(() => {
+    syncActiveOrderFromBackend();
+    const syncInterval = setInterval(syncActiveOrderFromBackend, 2000);
+    return () => clearInterval(syncInterval);
+  }, [activeOrderId]);
 
   // Animate Rider Movement periodically to simulate live telemetry
   useEffect(() => {
@@ -363,7 +451,10 @@ export default function CustomerStorefrontPage() {
     setIsPlacingOrder(true);
     try {
       const desc = cartItemsList.map((it) => `${it.qty}x ${it.name}`).join(', ');
+      const newOrderId = `LOGI-${Math.floor(1000 + Math.random() * 9000)}`;
+
       const newOrder = await dispatchAPI.createOrder({
+        id: newOrderId,
         customer: userName,
         address: '100 Market St, Financial Pod',
         packageDesc: desc,
@@ -371,26 +462,33 @@ export default function CustomerStorefrontPage() {
         priority: 'HIGH',
         waveId: 'wave-alpha',
       });
-      const orderIdFormatted = `#LOGI-${(newOrder.id || '9120').slice(0, 4).toUpperCase()}`;
+
+      const cleanId = newOrder?.id || newOrderId;
+      setActiveOrderId(cleanId);
+      localStorage.setItem('active_customer_order_id', cleanId);
+
       setActiveOrderInfo({
-        orderId: orderIdFormatted,
+        orderId: `#${cleanId}`,
         placedTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         estDelivery: '10:45 AM',
         items: cartItemsList.map((it) => `${it.qty}x ${it.name}`),
         amount: totalCartPrice,
         address: '100 Market St, Financial Pod',
-        status: 'Out for Delivery',
+        status: 'Order Placed',
         courierName: 'Rahul (Ather 450X)',
+        deliveredTime: null,
       });
-      setOrderStage(1);
+
+      setOrderStage(0);
       triggerToast('🎉 Order placed successfully! Switched to My Orders.');
-      setTimeout(() => {
-        setOrderStage(2);
-        setActiveNav('My Orders');
-      }, 1000);
+      setActiveNav('My Orders');
+      syncActiveOrderFromBackend();
     } catch (err) {
       console.warn('Backend order notice:', err.message);
-      setOrderStage(2);
+      const fallbackId = `LOGI-${Math.floor(1000 + Math.random() * 9000)}`;
+      setActiveOrderId(fallbackId);
+      localStorage.setItem('active_customer_order_id', fallbackId);
+      setOrderStage(0);
       setActiveNav('My Orders');
       triggerToast('🎉 Order confirmed! Viewing live order status.');
     } finally {
@@ -1550,8 +1648,14 @@ export default function CustomerStorefrontPage() {
                     </div>
                   </div>
 
-                  <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-700 flex items-center gap-1.5 shadow-xs">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className={`px-3 py-1 rounded-full text-xs font-mono font-bold flex items-center gap-1.5 shadow-xs ${
+                    orderStage >= 3
+                      ? 'bg-emerald-100 text-emerald-700 border border-emerald-300'
+                      : orderStage >= 2
+                      ? 'bg-purple-100 text-[#7C3AED] border border-purple-200'
+                      : 'bg-amber-100 text-amber-700 border border-amber-200'
+                  }`}>
+                    <span className={`w-2 h-2 rounded-full ${orderStage >= 3 ? 'bg-emerald-500' : 'bg-emerald-500 animate-pulse'}`} />
                     <span>{activeOrderInfo.status}</span>
                   </span>
                 </div>
@@ -1569,7 +1673,9 @@ export default function CustomerStorefrontPage() {
                       Live Delivery Progress
                     </span>
                     <span className="text-xs font-mono font-bold text-[#7C3AED]">
-                      Est. Arrival {activeOrderInfo.estDelivery}
+                      {orderStage >= 3
+                        ? `Delivered at ${activeOrderInfo.deliveredTime || '10:45 AM'}`
+                        : `Est. Arrival ${activeOrderInfo.estDelivery}`}
                     </span>
                   </div>
 
@@ -1578,8 +1684,9 @@ export default function CustomerStorefrontPage() {
                     <div className="relative flex items-center justify-between mb-4">
                       <div className="absolute top-1/2 left-4 right-4 h-1 -translate-y-1/2 bg-slate-200 z-0">
                         <div
-                          className="h-full bg-[#7C3AED] transition-all duration-500"
+                          className="h-full transition-all duration-500"
                           style={{
+                            background: orderStage >= 3 ? 'linear-gradient(90deg, #7C3AED, #10B981)' : '#7C3AED',
                             width:
                               orderStage === 0
                                 ? '0%'
@@ -1625,7 +1732,9 @@ export default function CustomerStorefrontPage() {
                       {/* Step 3: Out for Delivery */}
                       <div className="relative z-10 flex flex-col items-center">
                         <div
-                          className="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold ring-4 ring-[#7C3AED]/25"
+                          className={`w-9 h-9 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold ${
+                            orderStage === 2 ? 'ring-4 ring-[#7C3AED]/25' : ''
+                          }`}
                           style={{
                             background:
                               orderStage >= 2
@@ -1640,13 +1749,14 @@ export default function CustomerStorefrontPage() {
                       {/* Step 4: Delivered */}
                       <div className="relative z-10 flex flex-col items-center">
                         <div
-                          className="w-9 h-9 rounded-full flex items-center justify-center shadow-md text-xs font-bold"
+                          className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md text-xs font-bold ${
+                            orderStage >= 3 ? 'ring-4 ring-emerald-400/30 text-white' : 'text-slate-400'
+                          }`}
                           style={{
                             background:
                               orderStage >= 3
                                 ? 'linear-gradient(135deg, #10B981, #059669)'
                                 : '#E2E8F0',
-                            color: orderStage >= 3 ? '#FFFFFF' : '#94A3B8',
                           }}
                         >
                           <CheckCircle2 className="w-4 h-4" />
@@ -1661,31 +1771,31 @@ export default function CustomerStorefrontPage() {
                           Order Placed
                         </span>
                         <span className="text-[10px] text-slate-400 block mt-0.5">
-                          10:20 AM
+                          {activeOrderInfo.placedTime || '10:20 AM'}
                         </span>
                       </div>
                       <div>
-                        <span className="text-[11px] font-bold text-[#2E1065] block leading-tight font-sans">
+                        <span className={`text-[11px] font-bold block leading-tight font-sans ${orderStage >= 1 ? 'text-[#2E1065]' : 'text-slate-400'}`}>
                           Preparing Food
                         </span>
                         <span className="text-[10px] text-slate-400 block mt-0.5">
-                          10:28 AM
+                          {orderStage >= 1 ? '10:28 AM' : '--:--'}
                         </span>
                       </div>
                       <div>
-                        <span className="text-[11px] font-bold text-[#7C3AED] block leading-tight font-sans">
+                        <span className={`text-[11px] font-bold block leading-tight font-sans ${orderStage === 2 ? 'text-[#7C3AED]' : orderStage > 2 ? 'text-[#2E1065]' : 'text-slate-400'}`}>
                           Out for Delivery
                         </span>
                         <span className="text-[10px] text-slate-400 block mt-0.5">
-                          10:40 AM
+                          {orderStage >= 2 ? '10:40 AM' : '--:--'}
                         </span>
                       </div>
                       <div>
-                        <span className="text-[11px] font-bold text-slate-400 block leading-tight font-sans">
+                        <span className={`text-[11px] font-bold block leading-tight font-sans ${orderStage >= 3 ? 'text-emerald-600' : 'text-slate-400'}`}>
                           Delivered
                         </span>
                         <span className="text-[10px] text-slate-400 block mt-0.5">
-                          --:--
+                          {orderStage >= 3 ? (activeOrderInfo.deliveredTime || '10:45 AM') : '--:--'}
                         </span>
                       </div>
                     </div>
@@ -1695,14 +1805,16 @@ export default function CustomerStorefrontPage() {
                   <div
                     className="p-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-xs"
                     style={{
-                      background: 'rgba(255, 255, 255, 0.75)',
-                      border: '1px solid rgba(255, 255, 255, 0.85)',
+                      background: orderStage >= 3 ? 'rgba(236, 253, 245, 0.85)' : 'rgba(255, 255, 255, 0.75)',
+                      border: orderStage >= 3 ? '1.5px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(255, 255, 255, 0.85)',
                     }}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Sparkles className="w-4 h-4 text-[#7C3AED]" />
-                      <span className="text-xs font-bold text-[#2E1065]">
-                        Your food was packed in an insulated multi-temp thermal seal bag!
+                      <Sparkles className={`w-4 h-4 ${orderStage >= 3 ? 'text-emerald-600' : 'text-[#7C3AED]'}`} />
+                      <span className={`text-xs font-bold ${orderStage >= 3 ? 'text-emerald-900' : 'text-[#2E1065]'}`}>
+                        {orderStage >= 3
+                          ? '🎉 Your order has been delivered! Enjoy your meal.'
+                          : 'Your food was packed in an insulated multi-temp thermal seal bag!'}
                       </span>
                     </div>
 

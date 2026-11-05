@@ -65,6 +65,8 @@ export default function DeliveriesPage() {
 
   useEffect(() => {
     fetchOrders();
+    const interval = setInterval(fetchOrders, 3000);
+    return () => clearInterval(interval);
   }, [statusFilter, priorityFilter]);
 
   const handleSearchSubmit = (e) => {

@@ -326,19 +326,20 @@ export default function RiderPortalPage() {
       const data = await dispatchAPI.getCourierActiveTrip('courier-c1');
       if (data) {
         setCourier(data.courier);
+
         if (data.activeTrip) {
           setActiveTrip(data.activeTrip);
-        }
-        if (data.completedOrdersCount) {
-          setCompletedCount(data.completedOrdersCount);
+          setIncomingOrder(null);
+        } else {
+          setActiveTrip(null);
+          if (data.incomingOrder) {
+            setIncomingOrder(data.incomingOrder);
+            setAcceptTimer((prev) => (incomingOrder?.id !== data.incomingOrder.id ? 30 : prev));
+          }
         }
 
-        if (data.incomingOrder && !data.activeTrip) {
-          if (!incomingOrder || incomingOrder.id !== data.incomingOrder.id) {
-            setIncomingOrder(data.incomingOrder);
-            setAcceptTimer(30);
-            playAudiblePing();
-          }
+        if (data.completedOrdersCount !== undefined) {
+          setCompletedCount(data.completedOrdersCount);
         }
       }
     } catch (err) {
@@ -350,7 +351,7 @@ export default function RiderPortalPage() {
     fetchRiderState();
     const interval = setInterval(fetchRiderState, 2000);
     return () => clearInterval(interval);
-  }, [incomingOrder?.id]);
+  }, []);
 
   // Acceptance Countdown Timer for incoming order
   useEffect(() => {
@@ -366,7 +367,7 @@ export default function RiderPortalPage() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [incomingOrder, activeTrip]);
+  }, [incomingOrder?.id, activeTrip]);
 
   // Simulated GPS Movement along polyline when in-transit
   useEffect(() => {
@@ -392,19 +393,22 @@ export default function RiderPortalPage() {
   const handleAcceptOrder = async () => {
     if (!incomingOrder) return;
     setIsAccepting(true);
+    const orderToAccept = incomingOrder;
     try {
-      if (incomingOrder.id !== 'ord-broadcast-demo') {
-        const res = await dispatchAPI.acceptOrder(incomingOrder.id);
-        setActiveTrip(res.order || { ...incomingOrder, status: 'packed' });
-      } else {
-        setActiveTrip({ ...incomingOrder, status: 'packed' });
-      }
-      setToastMsg('Order accepted! Proceed to Dark Store Bay B-02 for bag pickup.');
+      const res = await dispatchAPI.acceptOrder(orderToAccept.id);
+      setActiveTrip(res.order || { ...orderToAccept, status: 'in-transit' });
+      setIncomingOrder(null);
+      setToastMsg(`Order #${orderToAccept.id} accepted! Live navigation active.`);
       setTimeout(() => setToastMsg(''), 4000);
       fetchRiderState();
     } catch (err) {
       console.error('Accept order error:', err);
-      setActiveTrip({ ...incomingOrder, status: 'packed' });
+      try {
+        await dispatchAPI.updateOrderStatus(orderToAccept.id, 'in-transit');
+      } catch (e) {}
+      setActiveTrip({ ...orderToAccept, status: 'in-transit' });
+      setIncomingOrder(null);
+      fetchRiderState();
     } finally {
       setIsAccepting(false);
     }
@@ -414,9 +418,7 @@ export default function RiderPortalPage() {
   const handleDeclineOrder = async () => {
     if (!incomingOrder) return;
     try {
-      if (incomingOrder.id !== 'ord-broadcast-demo') {
-        await dispatchAPI.declineOrder(incomingOrder.id);
-      }
+      await dispatchAPI.declineOrder(incomingOrder.id);
     } catch (err) {
       console.warn('Decline order notice:', err.message);
     }
@@ -445,12 +447,8 @@ export default function RiderPortalPage() {
     if (!activeTrip) return;
     setIsPickingUp(true);
     try {
-      if (activeTrip.id !== 'ord-broadcast-demo') {
-        const res = await dispatchAPI.pickupOrder(activeTrip.id);
-        setActiveTrip(res.order || { ...activeTrip, status: 'in-transit' });
-      } else {
-        setActiveTrip({ ...activeTrip, status: 'in-transit' });
-      }
+      const res = await dispatchAPI.pickupOrder(activeTrip.id);
+      setActiveTrip(res.order || { ...activeTrip, status: 'in-transit' });
       setToastMsg('Bag pickup confirmed! Live GPS navigation started.');
       setTimeout(() => setToastMsg(''), 4000);
       fetchRiderState();
@@ -466,32 +464,38 @@ export default function RiderPortalPage() {
   const handleMarkDelivered = async () => {
     if (!activeTrip) return;
     setIsDelivering(true);
+    const deliveredTrip = activeTrip;
     try {
-      if (activeTrip.id !== 'ord-broadcast-demo') {
-        await dispatchAPI.deliverOrder(activeTrip.id);
-      }
+      await dispatchAPI.deliverOrder(deliveredTrip.id);
       setPayoutCelebration({
         payout: '+$4.50',
         tipBonus: '+$1.50 Rapid Bonus',
-        customer: activeTrip.customer,
-        address: activeTrip.address,
+        customer: deliveredTrip.customer,
+        address: deliveredTrip.address,
+        distance: '3.5 km',
+        savedPct: '24.6%'
+      });
+      setActiveTrip(null);
+      setCompletedCount((c) => c + 1);
+      setToastMsg(`Order #${deliveredTrip.id} marked as Delivered!`);
+      setTimeout(() => setToastMsg(''), 4000);
+      fetchRiderState();
+    } catch (err) {
+      console.error('Deliver error:', err);
+      try {
+        await dispatchAPI.updateOrderStatus(deliveredTrip.id, 'delivered');
+      } catch (e) {}
+      setPayoutCelebration({
+        payout: '+$4.50',
+        tipBonus: '+$1.50 Rapid Bonus',
+        customer: deliveredTrip.customer,
+        address: deliveredTrip.address,
         distance: '3.5 km',
         savedPct: '24.6%'
       });
       setActiveTrip(null);
       setCompletedCount((c) => c + 1);
       fetchRiderState();
-    } catch (err) {
-      console.error('Deliver error:', err);
-      setPayoutCelebration({
-        payout: '+$4.50',
-        tipBonus: '+$1.50 Rapid Bonus',
-        customer: activeTrip.customer,
-        address: activeTrip.address,
-        distance: '3.5 km',
-        savedPct: '24.6%'
-      });
-      setActiveTrip(null);
     } finally {
       setIsDelivering(false);
     }
@@ -1023,9 +1027,16 @@ export default function RiderPortalPage() {
                   <Package className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg sm:text-xl font-black text-[#1E1B4B] tracking-tight leading-tight">
-                    New Delivery Request
-                  </h2>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-lg sm:text-xl font-black text-[#1E1B4B] tracking-tight leading-tight">
+                      New Delivery Request
+                    </h2>
+                    {(incomingOrder?.id || activeTrip?.id) && (
+                      <span className="px-2 py-0.5 rounded-lg text-xs font-mono font-bold bg-[#FF6B4A]/15 text-[#FF6B4A] border border-[#FF6B4A]/30">
+                        #{incomingOrder?.id || activeTrip?.id}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-slate-500 font-medium">
                     Corridor Alpha · Auto-dispatched by 2-Opt Solver
                   </p>
@@ -1252,7 +1263,7 @@ export default function RiderPortalPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-xs font-black text-[#1E1B4B] uppercase tracking-wide block">
-                          Phase 2: Delivering to {activeTrip.customer || 'Customer'}
+                          Phase 2: Delivering Order #{activeTrip.id} to {activeTrip.customer || 'Customer'}
                         </span>
                         <span className="text-xs text-slate-500">{activeTrip.address || '100 Market St, SF'}</span>
                       </div>
@@ -1269,7 +1280,7 @@ export default function RiderPortalPage() {
                     <button
                       onClick={handleMarkDelivered}
                       disabled={isDelivering}
-                      className="w-full py-3.5 rounded-xl text-white font-black text-xs tracking-wider uppercase shadow-md flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50"
+                      className="w-full py-3.5 rounded-xl text-white font-black text-xs tracking-wider uppercase shadow-md flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 cursor-pointer"
                       style={{
                         background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                       }}
@@ -1279,7 +1290,7 @@ export default function RiderPortalPage() {
                       ) : (
                         <>
                           <CheckCircle2 className="w-4 h-4" />
-                          <span>✓ Arrived & Mark Delivered</span>
+                          <span>✓ Order Delivered</span>
                         </>
                       )}
                     </button>

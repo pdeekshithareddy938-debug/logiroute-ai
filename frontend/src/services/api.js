@@ -117,8 +117,16 @@ export const dispatchAPI = {
   },
 
   // GET /api/customer/orders/active — Returns latest active order for customer
-  getCustomerActiveOrder: async () => {
-    const response = await apiClient.get('/customer/orders/active');
+  getCustomerActiveOrder: async (orderId = null) => {
+    const response = await apiClient.get('/customer/orders/active', {
+      params: orderId ? { orderId } : {}
+    });
+    return response.data;
+  },
+
+  // GET /api/orders/:id — Direct order lookup by ID
+  getOrder: async (orderId) => {
+    const response = await apiClient.get(`/orders/${orderId}`);
     return response.data;
   },
 

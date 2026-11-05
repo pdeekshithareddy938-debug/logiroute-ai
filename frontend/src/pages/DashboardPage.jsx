@@ -68,6 +68,8 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchDashboardData();
+    const interval = setInterval(fetchDashboardData, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   // 'Seed 9 Orders' Button — Triggers live POST /api/seed
