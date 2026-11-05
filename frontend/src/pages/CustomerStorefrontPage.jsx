@@ -672,7 +672,7 @@ export default function CustomerStorefrontPage() {
           {/* ================================================================ */}
           {/* CATEGORY NAVIGATION PILLS (Translucent Green Glass + Gold Active) */}
           {/* ================================================================ */}
-          <div className="py-3 flex items-center gap-2.5 overflow-x-auto no-scrollbar">
+          <div className="py-3 flex items-center gap-2.5 overflow-x-auto no-scrollbar max-w-5xl mx-auto">
             {CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat;
               return (
@@ -709,7 +709,7 @@ export default function CustomerStorefrontPage() {
           {/* ================================================================ */}
           {/* SECTION HEADER: "Artisanal Cold-Chain & Hot Picks" + 8 ITEMS     */}
           {/* ================================================================ */}
-          <div className="pt-4 pb-3 flex items-center justify-between">
+          <div className="pt-4 pb-3 flex items-center justify-between max-w-5xl mx-auto">
             <div className="flex items-center gap-2.5">
               <span className="w-3 h-3 rounded-full bg-[#FFC928] shadow-[0_0_12px_#FFC928]" />
               <h2 className="font-extrabold text-base sm:text-lg md:text-xl text-white tracking-tight drop-shadow-md">
@@ -739,9 +739,9 @@ export default function CustomerStorefrontPage() {
           </div>
 
           {/* ================================================================ */}
-          {/* 4-COLUMN DESKTOP PRODUCT GRID (Genuine 3D Transparent Glass)     */}
+          {/* 4-COLUMN DESKTOP PRODUCT GRID (Compact Width, 3D Transparent Glass) */}
           {/* ================================================================ */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {filteredProducts.map((prod, index) => {
               const qty = cart[prod.id] || 0;
               const isSaved = !!wishlist[prod.id];
@@ -753,7 +753,7 @@ export default function CustomerStorefrontPage() {
                   {/* Floating Transparent 3D Glass Product Card (Compact & Professionally Aligned) */}
                   <div
                     style={tint.cardStyle}
-                    className="rounded-[22px] p-3 sm:p-3.5 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.01] relative z-10 min-h-[290px] sm:min-h-[305px] overflow-hidden"
+                    className="rounded-[22px] p-3 sm:p-3.5 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.01] relative z-10 min-h-[315px] sm:min-h-[330px] overflow-hidden"
                   >
                     {/* Glossy Diagonal Specular Glare Reflection */}
                     <div 
@@ -780,23 +780,25 @@ export default function CustomerStorefrontPage() {
                       </button>
                     </div>
 
-                    {/* Food Image Asset (Small, Centered, Fully Visible with Object-Fit Contain) */}
-                    <div className="relative z-10 h-24 sm:h-26 w-full rounded-xl overflow-hidden mb-2 bg-black/25 flex items-center justify-center p-1.5">
+                    {/* Food Image Asset (Fills entire container with width: 100%, height: 100%, object-fit: cover, no gaps) */}
+                    <div className="relative z-10 h-32 sm:h-34 w-full rounded-xl overflow-hidden mb-2.5 bg-black/20">
                       <img
                         src={prod.img}
                         alt={prod.name}
                         style={{
-                          objectFit: 'contain',
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
                           objectPosition: 'center',
-                          maxHeight: '100%',
-                          maxWidth: '100%',
                         }}
-                        className="w-auto h-auto max-h-full max-w-full drop-shadow-sm select-none pointer-events-none"
+                        className="w-full h-full object-cover object-center select-none"
                         loading="lazy"
                       />
+                      {/* Subtle bottom gradient overlay for contrast */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
                       
                       {/* Weight badge pill overlay */}
-                      <div className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[9px] font-mono font-bold text-white border border-white/20">
+                      <div className="absolute bottom-1.5 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20">
                         {prod.weight}
                       </div>
                     </div>
