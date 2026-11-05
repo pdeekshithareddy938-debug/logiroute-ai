@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { dispatchAPI } from '../services/api';
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
@@ -31,7 +31,15 @@ import {
   Menu,
   X,
   ChefHat,
-  ShoppingCart
+  ShoppingCart,
+  CreditCard,
+  ShieldCheck,
+  Check,
+  PackageCheck,
+  ArrowLeft,
+  Phone,
+  Calendar,
+  RefreshCw
 } from 'lucide-react';
 
 // Fix Leaflet default marker icons for Vite
@@ -84,7 +92,7 @@ const ROUTE_WAYPOINTS = [
   [37.7745, -122.4195], // Customer Doorstep
 ];
 
-// Completely New, Attractive, Realistic Food Items matching reference image & prompt
+// Food Items Catalog matching reference image
 const FOOD_CATALOG = [
   {
     id: 'prod-classic-burger',
@@ -194,16 +202,16 @@ export default function CustomerStorefrontPage() {
   const { user, logout } = useAuth();
   const userName = user?.name || 'Deekshitha';
 
-  // Navigation State
+  // Section Display Navigation State (Dashboard / Browse Menu = Food Menu, Live Tracker, My Orders, Wishlist, Profile)
   const [activeNav, setActiveNav] = useState('Dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Search & Filtering State
+  // Search & Filtering State (For Menu)
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedTempFilter, setSelectedTempFilter] = useState(null); // 'HOT', 'CHILLED', 'FROZEN', 'FRESH'
 
-  // Cart State (Pre-populated with ₹237 total matching reference image!)
+  // Cart State (Pre-populated with ₹237 total matching reference image)
   const [cart, setCart] = useState({
     'prod-classic-burger': 1,
     'prod-cold-coffee': 1,
@@ -230,9 +238,39 @@ export default function CustomerStorefrontPage() {
     setTimeout(() => setToastMessage(''), 3000);
   };
 
-  // Order Progress State (Order Placed -> Preparing -> Out for Delivery -> Delivered)
-  const [orderStage, setOrderStage] = useState(2); // 0=Placed, 1=Prep, 2=OutForDelivery, 3=Delivered
+  // Order Progress State (0=Placed, 1=Prep, 2=OutForDelivery, 3=Delivered)
+  const [orderStage, setOrderStage] = useState(2);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+
+  // Active Order Details
+  const [activeOrderInfo, setActiveOrderInfo] = useState({
+    orderId: '#LOGI-8492',
+    placedTime: '10:20 AM',
+    estDelivery: '10:45 AM',
+    items: ['1x Classic Burger', '1x Cold Coffee', '1x French Fries'],
+    amount: 237,
+    address: '100 Market St, Financial Pod',
+    status: 'Out for Delivery',
+    courierName: 'Rahul (Ather 450X)',
+  });
+
+  // Past Orders History
+  const [pastOrders] = useState([
+    {
+      id: '#LOGI-7814',
+      date: 'Yesterday, 8:15 PM',
+      items: '1x Margherita Pizza, 1x Mango Gelato Cup',
+      amount: 238,
+      status: 'Delivered',
+    },
+    {
+      id: '#LOGI-7102',
+      date: '02 Nov 2026, 1:40 PM',
+      items: '1x White Sauce Pasta, 1x Veg Sandwich',
+      amount: 218,
+      status: 'Delivered',
+    },
+  ]);
 
   // Animate Rider Movement periodically to simulate live telemetry
   useEffect(() => {
@@ -268,6 +306,14 @@ export default function CustomerStorefrontPage() {
   const totalCartPrice = useMemo(() => {
     return cartItemsList.reduce((sum, item) => sum + item.price * item.qty, 0);
   }, [cartItemsList]);
+
+  // Wishlist Items
+  const wishlistItemsList = useMemo(() => {
+    return Object.entries(wishlist)
+      .filter(([_, isFav]) => isFav)
+      .map(([pId]) => FOOD_CATALOG.find((p) => p.id === pId))
+      .filter(Boolean);
+  }, [wishlist]);
 
   // Cart Handlers
   const handleAddToCart = (productId) => {
@@ -317,7 +363,7 @@ export default function CustomerStorefrontPage() {
     setIsPlacingOrder(true);
     try {
       const desc = cartItemsList.map((it) => `${it.qty}x ${it.name}`).join(', ');
-      await dispatchAPI.createOrder({
+      const newOrder = await dispatchAPI.createOrder({
         customer: userName,
         address: '100 Market St, Financial Pod',
         packageDesc: desc,
@@ -325,27 +371,48 @@ export default function CustomerStorefrontPage() {
         priority: 'HIGH',
         waveId: 'wave-alpha',
       });
+      const orderIdFormatted = `#LOGI-${(newOrder.id || '9120').slice(0, 4).toUpperCase()}`;
+      setActiveOrderInfo({
+        orderId: orderIdFormatted,
+        placedTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        estDelivery: '10:45 AM',
+        items: cartItemsList.map((it) => `${it.qty}x ${it.name}`),
+        amount: totalCartPrice,
+        address: '100 Market St, Financial Pod',
+        status: 'Out for Delivery',
+        courierName: 'Rahul (Ather 450X)',
+      });
       setOrderStage(1);
-      triggerToast('🎉 Order placed successfully! Rahul is on the way.');
-      setTimeout(() => setOrderStage(2), 2000);
+      triggerToast('🎉 Order placed successfully! Switched to My Orders.');
+      setTimeout(() => {
+        setOrderStage(2);
+        setActiveNav('My Orders');
+      }, 1000);
     } catch (err) {
       console.warn('Backend order notice:', err.message);
       setOrderStage(2);
-      triggerToast('🎉 Order confirmed! Rider Rahul is en route.');
+      setActiveNav('My Orders');
+      triggerToast('🎉 Order confirmed! Viewing live order status.');
     } finally {
       setIsPlacingOrder(false);
     }
   };
 
-  // Scroll to section helper
-  const scrollToMenu = () => {
-    setActiveNav('Browse Menu');
-    document.getElementById('our-menu-section')?.scrollIntoView({ behavior: 'smooth' });
+  // Switch navigation helper
+  const navigateTo = (navName) => {
+    setActiveNav(navName);
+    setIsMobileMenuOpen(false);
   };
 
-  const scrollToTracker = () => {
-    setActiveNav('Live Tracker');
-    document.getElementById('live-tracker-section')?.scrollIntoView({ behavior: 'smooth' });
+  // Reusable Glass Panel Styles
+  const glassPanelStyle = {
+    background:
+      'linear-gradient(180deg, rgba(255, 245, 248, 0.72) 0%, rgba(255, 230, 240, 0.55) 100%)',
+    backdropFilter: 'blur(26px)',
+    WebkitBackdropFilter: 'blur(26px)',
+    border: '1.5px solid rgba(255, 255, 255, 0.75)',
+    boxShadow:
+      '0 20px 45px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
   };
 
   return (
@@ -362,7 +429,7 @@ export default function CustomerStorefrontPage() {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        {/* Soft Sunset Peach-Pink Ambience Overlay ensuring crisp contrast */}
+        {/* Soft Sunset Peach-Pink Ambience Overlay */}
         <div
           className="absolute inset-0"
           style={{
@@ -390,12 +457,12 @@ export default function CustomerStorefrontPage() {
       )}
 
       {/* ==================================================================== */}
-      {/* MAIN COCKPIT CONTAINER (SIDEBAR + MAIN CONTENT AREA)                 */}
+      {/* MAIN COCKPIT CONTAINER (SIDEBAR + ACTIVE SECTION)                    */}
       {/* ==================================================================== */}
       <div className="relative z-10 flex min-h-screen p-3 sm:p-5 lg:p-6 gap-4 sm:gap-6 max-w-[1600px] mx-auto">
         
         {/* ==================================================================== */}
-        {/* 2. LEFT SIDEBAR (Matching Reference Image)                           */}
+        {/* 2. PERMANENT LEFT SIDEBAR WITH ALL 7 NAVIGATION ITEMS                */}
         {/* ==================================================================== */}
         <aside
           className={`
@@ -449,12 +516,9 @@ export default function CustomerStorefrontPage() {
 
             {/* Navigation Menu List */}
             <nav className="flex flex-col gap-1.5">
-              {/* 1. Dashboard (Active Orange Pill) */}
+              {/* 1. Dashboard */}
               <button
-                onClick={() => {
-                  setActiveNav('Dashboard');
-                  setIsMobileMenuOpen(false);
-                }}
+                onClick={() => navigateTo('Dashboard')}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm transition-all duration-200 ${
                   activeNav === 'Dashboard'
                     ? 'text-white shadow-lg shadow-orange-500/35'
@@ -475,84 +539,106 @@ export default function CustomerStorefrontPage() {
 
               {/* 2. Browse Menu */}
               <button
-                onClick={() => {
-                  scrollToMenu();
-                  setIsMobileMenuOpen(false);
-                }}
+                onClick={() => navigateTo('Browse Menu')}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                   activeNav === 'Browse Menu'
-                    ? 'bg-[#7C3AED] text-white shadow-lg shadow-purple-500/30'
+                    ? 'text-white shadow-lg shadow-orange-500/35'
                     : 'text-[#4C1D95] hover:bg-white/50'
                 }`}
+                style={
+                  activeNav === 'Browse Menu'
+                    ? {
+                        background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                        boxShadow: '0 8px 20px rgba(255, 107, 74, 0.4)',
+                      }
+                    : {}
+                }
               >
-                <UtensilsCrossed className="w-5 h-5 text-[#FF6B4A] shrink-0" />
+                <UtensilsCrossed className="w-5 h-5 shrink-0" />
                 <span>Browse Menu</span>
               </button>
 
               {/* 3. My Orders */}
               <button
-                onClick={() => {
-                  setActiveNav('My Orders');
-                  setIsMobileMenuOpen(false);
-                  triggerToast('Displaying Active Order #LOGI-8492');
-                }}
+                onClick={() => navigateTo('My Orders')}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                   activeNav === 'My Orders'
-                    ? 'bg-[#7C3AED] text-white shadow-lg shadow-purple-500/30'
+                    ? 'text-white shadow-lg shadow-orange-500/35'
                     : 'text-[#4C1D95] hover:bg-white/50'
                 }`}
+                style={
+                  activeNav === 'My Orders'
+                    ? {
+                        background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                        boxShadow: '0 8px 20px rgba(255, 107, 74, 0.4)',
+                      }
+                    : {}
+                }
               >
-                <ShoppingBag className="w-5 h-5 text-[#FF6B4A] shrink-0" />
+                <ShoppingBag className="w-5 h-5 shrink-0" />
                 <span>My Orders</span>
               </button>
 
               {/* 4. Live Tracker */}
               <button
-                onClick={() => {
-                  scrollToTracker();
-                  setIsMobileMenuOpen(false);
-                }}
+                onClick={() => navigateTo('Live Tracker')}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                   activeNav === 'Live Tracker'
-                    ? 'bg-[#7C3AED] text-white shadow-lg shadow-purple-500/30'
+                    ? 'text-white shadow-lg shadow-orange-500/35'
                     : 'text-[#4C1D95] hover:bg-white/50'
                 }`}
+                style={
+                  activeNav === 'Live Tracker'
+                    ? {
+                        background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                        boxShadow: '0 8px 20px rgba(255, 107, 74, 0.4)',
+                      }
+                    : {}
+                }
               >
-                <MapPin className="w-5 h-5 text-[#FF6B4A] shrink-0" />
+                <MapPin className="w-5 h-5 shrink-0" />
                 <span>Live Tracker</span>
               </button>
 
               {/* 5. Wishlist */}
               <button
-                onClick={() => {
-                  setActiveNav('Wishlist');
-                  setIsMobileMenuOpen(false);
-                  triggerToast(`You have ${Object.keys(wishlist).length} saved items in Wishlist`);
-                }}
+                onClick={() => navigateTo('Wishlist')}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                   activeNav === 'Wishlist'
-                    ? 'bg-[#7C3AED] text-white shadow-lg shadow-purple-500/30'
+                    ? 'text-white shadow-lg shadow-orange-500/35'
                     : 'text-[#4C1D95] hover:bg-white/50'
                 }`}
+                style={
+                  activeNav === 'Wishlist'
+                    ? {
+                        background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                        boxShadow: '0 8px 20px rgba(255, 107, 74, 0.4)',
+                      }
+                    : {}
+                }
               >
-                <Heart className="w-5 h-5 text-[#FF6B4A] shrink-0" />
+                <Heart className="w-5 h-5 shrink-0" />
                 <span>Wishlist</span>
               </button>
 
               {/* 6. Profile */}
               <button
-                onClick={() => {
-                  setActiveNav('Profile');
-                  setIsMobileMenuOpen(false);
-                  triggerToast(`Customer Profile: ${userName} (Financial Pod)`);
-                }}
+                onClick={() => navigateTo('Profile')}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${
                   activeNav === 'Profile'
-                    ? 'bg-[#7C3AED] text-white shadow-lg shadow-purple-500/30'
+                    ? 'text-white shadow-lg shadow-orange-500/35'
                     : 'text-[#4C1D95] hover:bg-white/50'
                 }`}
+                style={
+                  activeNav === 'Profile'
+                    ? {
+                        background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                        boxShadow: '0 8px 20px rgba(255, 107, 74, 0.4)',
+                      }
+                    : {}
+                }
               >
-                <User className="w-5 h-5 text-[#FF6B4A] shrink-0" />
+                <User className="w-5 h-5 shrink-0" />
                 <span>Profile</span>
               </button>
 
@@ -567,7 +653,7 @@ export default function CustomerStorefrontPage() {
             </nav>
           </div>
 
-          {/* Bottom Rider on Scooter Silhouette/Card (Visible through glass as in reference image) */}
+          {/* Bottom Rider on Scooter Silhouette/Card (Visible through glass) */}
           <div
             className="p-3 rounded-2xl mt-4 flex items-center gap-3"
             style={{
@@ -604,24 +690,16 @@ export default function CustomerStorefrontPage() {
         )}
 
         {/* ==================================================================== */}
-        {/* MAIN BODY AREA (TOP HEADER + TEMPERATURE CARDS + 2-COLUMN GRID)      */}
+        {/* MAIN BODY AREA (TOP HEADER + SELECTIVE ACTIVE SECTION)                */}
         {/* ==================================================================== */}
         <div className="flex-1 flex flex-col gap-4 sm:gap-6 min-w-0">
           
           {/* ==================================================================== */}
-          {/* 3. CUSTOMER HEADER WITH WELCOME, NOTIFICATIONS & PROFILE            */}
+          {/* CUSTOMER HEADER (WELCOME, NOTIFICATIONS & PROFILE)                  */}
           {/* ==================================================================== */}
           <header
             className="w-full p-4 sm:px-6 sm:py-4 rounded-3xl flex items-center justify-between shadow-xl transition-all"
-            style={{
-              background:
-                'linear-gradient(180deg, rgba(255, 245, 248, 0.72) 0%, rgba(255, 230, 240, 0.55) 100%)',
-              backdropFilter: 'blur(26px)',
-              WebkitBackdropFilter: 'blur(26px)',
-              border: '1.5px solid rgba(255, 255, 255, 0.75)',
-              boxShadow:
-                '0 15px 35px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
-            }}
+            style={glassPanelStyle}
           >
             {/* Left: Hamburger (mobile) + User Greeting */}
             <div className="flex items-center gap-3">
@@ -633,7 +711,8 @@ export default function CustomerStorefrontPage() {
               </button>
 
               <div
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-white shadow-md shrink-0"
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center text-white shadow-md shrink-0 cursor-pointer"
+                onClick={() => navigateTo('Profile')}
                 style={{
                   background: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 100%)',
                   boxShadow: '0 6px 16px rgba(124, 58, 237, 0.35)',
@@ -657,7 +736,10 @@ export default function CustomerStorefrontPage() {
             <div className="flex items-center gap-3">
               {/* Notification Bell with Red Badge */}
               <button
-                onClick={() => triggerToast('You have 2 delivery updates active')}
+                onClick={() => {
+                  triggerToast('You have 2 active updates on order #LOGI-8492');
+                  navigateTo('My Orders');
+                }}
                 className="relative w-10 h-10 rounded-full flex items-center justify-center text-[#2E1065] transition-all hover:scale-105 active:scale-95"
                 style={{
                   background: 'rgba(255, 255, 255, 0.65)',
@@ -672,8 +754,12 @@ export default function CustomerStorefrontPage() {
                 </span>
               </button>
 
-              {/* Profile Avatar */}
-              <div className="relative">
+              {/* Profile Avatar (Clicks to Profile Section) */}
+              <div 
+                onClick={() => navigateTo('Profile')}
+                className="relative cursor-pointer transition-transform hover:scale-105"
+                title="View Customer Profile"
+              >
                 <img
                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
                   alt="Profile"
@@ -685,911 +771,1380 @@ export default function CustomerStorefrontPage() {
           </header>
 
           {/* ==================================================================== */}
-          {/* 4. TEMPERATURE BADGES BAR (HOT & FRESH, CHILLED, FROZEN, FRESH)     */}
+          {/* SECTION 1: FOOD MENU & CART (DASHBOARD & BROWSE MENU)                */}
           {/* ==================================================================== */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            {/* Card 1: Hot & Fresh (≥ 60°C) */}
-            <div
-              onClick={() =>
-                setSelectedTempFilter((prev) => (prev === 'HOT' ? null : 'HOT'))
-              }
-              className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
-                selectedTempFilter === 'HOT' ? 'ring-2 ring-orange-500 scale-[1.02]' : 'hover:scale-[1.01]'
-              }`}
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(255, 237, 213, 0.85) 0%, rgba(254, 215, 170, 0.65) 100%)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.8)',
-                boxShadow: '0 8px 22px rgba(249, 115, 22, 0.16)',
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
-                style={{
-                  background: 'linear-gradient(135deg, #FF6B4A, #FF8C42)',
-                }}
-              >
-                <Flame className="w-5 h-5 fill-white stroke-[2]" />
-              </div>
-              <div>
-                <span className="text-xs sm:text-sm font-black text-[#7C2D12] block leading-tight">
-                  Hot & Fresh
-                </span>
-                <span className="text-[11px] font-bold text-[#C2410C]">
-                  (≥ 60°C)
-                </span>
-              </div>
-            </div>
-
-            {/* Card 2: Chilled (4°C) */}
-            <div
-              onClick={() =>
-                setSelectedTempFilter((prev) => (prev === 'CHILLED' ? null : 'CHILLED'))
-              }
-              className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
-                selectedTempFilter === 'CHILLED' ? 'ring-2 ring-sky-500 scale-[1.02]' : 'hover:scale-[1.01]'
-              }`}
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(224, 242, 254, 0.85) 0%, rgba(186, 230, 253, 0.65) 100%)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.8)',
-                boxShadow: '0 8px 22px rgba(14, 165, 233, 0.16)',
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
-                style={{
-                  background: 'linear-gradient(135deg, #0284C7, #38BDF8)',
-                }}
-              >
-                <Snowflake className="w-5 h-5 stroke-[2.2]" />
-              </div>
-              <div>
-                <span className="text-xs sm:text-sm font-black text-[#0369A1] block leading-tight">
-                  Chilled
-                </span>
-                <span className="text-[11px] font-bold text-[#0284C7]">
-                  (4°C)
-                </span>
-              </div>
-            </div>
-
-            {/* Card 3: Frozen (-18°C) */}
-            <div
-              onClick={() =>
-                setSelectedTempFilter((prev) => (prev === 'FROZEN' ? null : 'FROZEN'))
-              }
-              className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
-                selectedTempFilter === 'FROZEN' ? 'ring-2 ring-purple-500 scale-[1.02]' : 'hover:scale-[1.01]'
-              }`}
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(243, 232, 255, 0.85) 0%, rgba(233, 213, 255, 0.65) 100%)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.8)',
-                boxShadow: '0 8px 22px rgba(168, 85, 247, 0.16)',
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
-                style={{
-                  background: 'linear-gradient(135deg, #7C3AED, #A855F7)',
-                }}
-              >
-                <Box className="w-5 h-5 stroke-[2.2]" />
-              </div>
-              <div>
-                <span className="text-xs sm:text-sm font-black text-[#6B21A8] block leading-tight">
-                  Frozen
-                </span>
-                <span className="text-[11px] font-bold text-[#7E22CE]">
-                  (-18°C)
-                </span>
-              </div>
-            </div>
-
-            {/* Card 4: Fresh (Natural) */}
-            <div
-              onClick={() =>
-                setSelectedTempFilter((prev) => (prev === 'FRESH' ? null : 'FRESH'))
-              }
-              className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
-                selectedTempFilter === 'FRESH' ? 'ring-2 ring-emerald-500 scale-[1.02]' : 'hover:scale-[1.01]'
-              }`}
-              style={{
-                background:
-                  'linear-gradient(135deg, rgba(236, 253, 245, 0.85) 0%, rgba(209, 250, 229, 0.65) 100%)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.8)',
-                boxShadow: '0 8px 22px rgba(34, 197, 94, 0.16)',
-              }}
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
-                style={{
-                  background: 'linear-gradient(135deg, #10B981, #34D399)',
-                }}
-              >
-                <Leaf className="w-5 h-5 fill-white stroke-[2]" />
-              </div>
-              <div>
-                <span className="text-xs sm:text-sm font-black text-[#14532D] block leading-tight">
-                  Fresh
-                </span>
-                <span className="text-[11px] font-bold text-[#15803D]">
-                  (Natural)
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* ==================================================================== */}
-          {/* 5. MAIN SECTION: OUR MENU (LEFT) + YOUR CART (RIGHT)                 */}
-          {/* ==================================================================== */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
-            
-            {/* ================================================================== */}
-            {/* OUR MENU (8 COLS ON DESKTOP)                                       */}
-            {/* ================================================================== */}
-            <section
-              id="our-menu-section"
-              className="lg:col-span-8 p-4 sm:p-6 rounded-3xl flex flex-col gap-5 shadow-2xl transition-all"
-              style={{
-                background:
-                  'linear-gradient(180deg, rgba(255, 245, 248, 0.72) 0%, rgba(255, 230, 240, 0.55) 100%)',
-                backdropFilter: 'blur(26px)',
-                WebkitBackdropFilter: 'blur(26px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.75)',
-                boxShadow:
-                  '0 20px 45px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
-              }}
-            >
-              {/* Menu Header with Search and Categories Dropdown */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <UtensilsCrossed className="w-6 h-6 text-[#FF6B4A]" />
-                  <h2 className="text-xl font-black text-[#2E1065] tracking-tight">
-                    Our Menu
-                  </h2>
+          {(activeNav === 'Dashboard' || activeNav === 'Browse Menu') && (
+            <div className="flex flex-col gap-4 sm:gap-6 animate-fade-in transition-all duration-300">
+              
+              {/* Temperature Badges Bar (Hot & Fresh, Chilled, Frozen, Fresh) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                {/* Hot & Fresh */}
+                <div
+                  onClick={() =>
+                    setSelectedTempFilter((prev) => (prev === 'HOT' ? null : 'HOT'))
+                  }
+                  className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
+                    selectedTempFilter === 'HOT' ? 'ring-2 ring-orange-500 scale-[1.02]' : 'hover:scale-[1.01]'
+                  }`}
+                  style={{
+                    background:
+                      'linear-gradient(135deg, rgba(255, 237, 213, 0.85) 0%, rgba(254, 215, 170, 0.65) 100%)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.8)',
+                    boxShadow: '0 8px 22px rgba(249, 115, 22, 0.16)',
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
+                    style={{ background: 'linear-gradient(135deg, #FF6B4A, #FF8C42)' }}
+                  >
+                    <Flame className="w-5 h-5 fill-white stroke-[2]" />
+                  </div>
+                  <div>
+                    <span className="text-xs sm:text-sm font-black text-[#7C2D12] block leading-tight">
+                      Hot & Fresh
+                    </span>
+                    <span className="text-[11px] font-bold text-[#C2410C]">
+                      (≥ 60°C)
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-2.5 flex-1 sm:flex-initial">
-                  {/* Search Food Bar */}
+                {/* Chilled */}
+                <div
+                  onClick={() =>
+                    setSelectedTempFilter((prev) => (prev === 'CHILLED' ? null : 'CHILLED'))
+                  }
+                  className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
+                    selectedTempFilter === 'CHILLED' ? 'ring-2 ring-sky-500 scale-[1.02]' : 'hover:scale-[1.01]'
+                  }`}
+                  style={{
+                    background:
+                      'linear-gradient(135deg, rgba(224, 242, 254, 0.85) 0%, rgba(186, 230, 253, 0.65) 100%)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.8)',
+                    boxShadow: '0 8px 22px rgba(14, 165, 233, 0.16)',
+                  }}
+                >
                   <div
-                    className="flex-1 sm:w-56 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-inner"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.65)',
-                      border: '1px solid rgba(255, 255, 255, 0.8)',
-                    }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
+                    style={{ background: 'linear-gradient(135deg, #0284C7, #38BDF8)' }}
                   >
-                    <Search className="w-4 h-4 text-slate-400 shrink-0" />
-                    <input
-                      type="text"
-                      placeholder="Search food..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-transparent border-none outline-none text-xs text-[#2E1065] placeholder-slate-400 font-medium"
-                    />
-                    {searchQuery && (
-                      <button
-                        onClick={() => setSearchQuery('')}
-                        className="text-slate-400 hover:text-slate-600"
+                    <Snowflake className="w-5 h-5 stroke-[2.2]" />
+                  </div>
+                  <div>
+                    <span className="text-xs sm:text-sm font-black text-[#0369A1] block leading-tight">
+                      Chilled
+                    </span>
+                    <span className="text-[11px] font-bold text-[#0284C7]">
+                      (4°C)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Frozen */}
+                <div
+                  onClick={() =>
+                    setSelectedTempFilter((prev) => (prev === 'FROZEN' ? null : 'FROZEN'))
+                  }
+                  className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
+                    selectedTempFilter === 'FROZEN' ? 'ring-2 ring-purple-500 scale-[1.02]' : 'hover:scale-[1.01]'
+                  }`}
+                  style={{
+                    background:
+                      'linear-gradient(135deg, rgba(243, 232, 255, 0.85) 0%, rgba(233, 213, 255, 0.65) 100%)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.8)',
+                    boxShadow: '0 8px 22px rgba(168, 85, 247, 0.16)',
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
+                    style={{ background: 'linear-gradient(135deg, #7C3AED, #A855F7)' }}
+                  >
+                    <Box className="w-5 h-5 stroke-[2.2]" />
+                  </div>
+                  <div>
+                    <span className="text-xs sm:text-sm font-black text-[#6B21A8] block leading-tight">
+                      Frozen
+                    </span>
+                    <span className="text-[11px] font-bold text-[#7E22CE]">
+                      (-18°C)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Fresh */}
+                <div
+                  onClick={() =>
+                    setSelectedTempFilter((prev) => (prev === 'FRESH' ? null : 'FRESH'))
+                  }
+                  className={`p-3 sm:p-4 rounded-2xl flex items-center gap-3 cursor-pointer transition-all duration-200 active:scale-[0.98] ${
+                    selectedTempFilter === 'FRESH' ? 'ring-2 ring-emerald-500 scale-[1.02]' : 'hover:scale-[1.01]'
+                  }`}
+                  style={{
+                    background:
+                      'linear-gradient(135deg, rgba(236, 253, 245, 0.85) 0%, rgba(209, 250, 229, 0.65) 100%)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.8)',
+                    boxShadow: '0 8px 22px rgba(34, 197, 94, 0.16)',
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-md"
+                    style={{ background: 'linear-gradient(135deg, #10B981, #34D399)' }}
+                  >
+                    <Leaf className="w-5 h-5 fill-white stroke-[2]" />
+                  </div>
+                  <div>
+                    <span className="text-xs sm:text-sm font-black text-[#14532D] block leading-tight">
+                      Fresh
+                    </span>
+                    <span className="text-[11px] font-bold text-[#15803D]">
+                      (Natural)
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid: Our Menu (Left 8 Cols) + Your Cart (Right 4 Cols) */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
+                
+                {/* OUR MENU */}
+                <section
+                  className="lg:col-span-8 p-4 sm:p-6 rounded-3xl flex flex-col gap-5 shadow-2xl transition-all"
+                  style={glassPanelStyle}
+                >
+                  {/* Menu Header with Search and Categories Dropdown */}
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <UtensilsCrossed className="w-6 h-6 text-[#FF6B4A]" />
+                      <h2 className="text-xl font-black text-[#2E1065] tracking-tight">
+                        Our Menu
+                      </h2>
+                    </div>
+
+                    <div className="flex items-center gap-2.5 flex-1 sm:flex-initial">
+                      {/* Search Food Bar */}
+                      <div
+                        className="flex-1 sm:w-56 px-3.5 py-2 rounded-2xl flex items-center gap-2 shadow-inner"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.65)',
+                          border: '1px solid rgba(255, 255, 255, 0.8)',
+                        }}
                       >
-                        <X className="w-3.5 h-3.5" />
+                        <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                        <input
+                          type="text"
+                          placeholder="Search food..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="w-full bg-transparent border-none outline-none text-xs text-[#2E1065] placeholder-slate-400 font-medium"
+                        />
+                        {searchQuery && (
+                          <button
+                            onClick={() => setSearchQuery('')}
+                            className="text-slate-400 hover:text-slate-600"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Category Dropdown Pill */}
+                      <div className="relative">
+                        <select
+                          value={selectedCategory}
+                          onChange={(e) => setSelectedCategory(e.target.value)}
+                          className="appearance-none px-3.5 py-2 pr-8 rounded-2xl text-xs font-bold text-[#2E1065] cursor-pointer outline-none shadow-sm"
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.65)',
+                            border: '1px solid rgba(255, 255, 255, 0.8)',
+                          }}
+                        >
+                          <option value="All">All Categories</option>
+                          {CATEGORIES.filter((c) => c !== 'All').map((c) => (
+                            <option key={c} value={c}>
+                              {c}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown className="w-3.5 h-3.5 text-[#2E1065] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Category Pills Strip */}
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                    {CATEGORIES.map((cat) => {
+                      const isActive = selectedCategory.toLowerCase() === cat.toLowerCase();
+                      return (
+                        <button
+                          key={cat}
+                          onClick={() => setSelectedCategory(cat)}
+                          className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 duration-200 ${
+                            isActive
+                              ? 'text-white shadow-md shadow-purple-500/30'
+                              : 'text-[#4C1D95] hover:bg-white/60'
+                          }`}
+                          style={
+                            isActive
+                              ? {
+                                  background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
+                                }
+                              : {
+                                  background: 'rgba(255, 255, 255, 0.55)',
+                                  border: '1px solid rgba(255, 255, 255, 0.7)',
+                                }
+                          }
+                        >
+                          {cat}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Food Cards Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    {filteredProducts.map((item) => {
+                      const inCartQty = cart[item.id] || 0;
+                      const isFav = wishlist[item.id];
+
+                      return (
+                        <div
+                          key={item.id}
+                          className="rounded-3xl p-3 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 shadow-lg group relative overflow-hidden"
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.68)',
+                            backdropFilter: 'blur(16px)',
+                            WebkitBackdropFilter: 'blur(16px)',
+                            border: '1.5px solid rgba(255, 255, 255, 0.9)',
+                            boxShadow:
+                              '0 10px 25px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)',
+                          }}
+                        >
+                          {/* Top Action Row */}
+                          <div className="flex items-center justify-between mb-2">
+                            <button
+                              onClick={() => handleToggleWishlist(item.id)}
+                              className="p-1.5 rounded-full bg-white/70 text-slate-400 hover:text-rose-500 transition-colors shadow-xs"
+                              title="Save to Wishlist"
+                            >
+                              <Heart
+                                className={`w-3.5 h-3.5 ${
+                                  isFav ? 'fill-rose-500 text-rose-500' : ''
+                                }`}
+                              />
+                            </button>
+
+                            <span
+                              className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full shadow-xs ${
+                                item.thermalState === 'HOT'
+                                  ? 'bg-orange-500 text-white shadow-orange-500/30'
+                                  : item.thermalState === 'CHILLED'
+                                  ? 'bg-sky-500 text-white shadow-sky-500/30'
+                                  : item.thermalState === 'FROZEN'
+                                  ? 'bg-purple-500 text-white shadow-purple-500/30'
+                                  : 'bg-emerald-500 text-white shadow-emerald-500/30'
+                              }`}
+                            >
+                              {item.badgeText}
+                            </span>
+                          </div>
+
+                          {/* Food Image Container */}
+                          <div className="w-full h-32 rounded-2xl overflow-hidden mb-2.5 bg-slate-100 flex items-center justify-center shadow-inner relative">
+                            <img
+                              src={item.img}
+                              alt={item.name}
+                              loading="lazy"
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                          </div>
+
+                          {/* Content */}
+                          <div className="mb-3">
+                            <h3 className="text-sm font-black text-[#2E1065] leading-tight truncate">
+                              {item.name}
+                            </h3>
+                            <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                              {item.description}
+                            </p>
+                          </div>
+
+                          {/* Bottom Row: Price & Add / Quantity Button */}
+                          <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/50">
+                            <span className="text-base font-black text-[#2E1065] font-mono">
+                              ₹{item.price}
+                            </span>
+
+                            {inCartQty === 0 ? (
+                              <button
+                                onClick={() => handleAddToCart(item.id)}
+                                className="px-3.5 py-1.5 rounded-full text-white text-xs font-bold flex items-center gap-1 shadow-md transition-all duration-150 active:scale-95"
+                                style={{
+                                  background:
+                                    'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
+                                  boxShadow: '0 4px 12px rgba(124, 58, 237, 0.35)',
+                                }}
+                              >
+                                <span>Add</span>
+                                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                              </button>
+                            ) : (
+                              <div
+                                className="flex items-center rounded-full p-0.5 shadow-sm text-white text-xs font-bold"
+                                style={{
+                                  background:
+                                    'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
+                                }}
+                              >
+                                <button
+                                  onClick={() => handleDecreaseQuantity(item.id)}
+                                  className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                                >
+                                  <Minus className="w-3 h-3 stroke-[3]" />
+                                </button>
+                                <span className="px-2 font-mono font-black">
+                                  {inCartQty}
+                                </span>
+                                <button
+                                  onClick={() => handleAddToCart(item.id)}
+                                  className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                                >
+                                  <Plus className="w-3 h-3 stroke-[3]" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {filteredProducts.length === 0 && (
+                    <div className="text-center py-12">
+                      <UtensilsCrossed className="w-12 h-12 text-[#FF6B4A]/50 mx-auto mb-3" />
+                      <h4 className="text-base font-bold text-[#2E1065]">
+                        No food items found
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-1">
+                        Try searching for another dish or reset your category filter.
+                      </p>
+                    </div>
+                  )}
+                </section>
+
+                {/* YOUR CART */}
+                <section
+                  className="lg:col-span-4 p-4 sm:p-5 rounded-3xl flex flex-col gap-4 shadow-2xl transition-all"
+                  style={glassPanelStyle}
+                >
+                  <div className="flex items-center justify-between pb-3 border-b border-white/50">
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className="w-8 h-8 rounded-xl flex items-center justify-center text-white shadow-md"
+                        style={{
+                          background: 'linear-gradient(135deg, #FF6B4A, #FF8C42)',
+                        }}
+                      >
+                        <ShoppingBag className="w-4 h-4" />
+                      </div>
+                      <h2 className="text-base sm:text-lg font-black text-[#2E1065] tracking-tight">
+                        Your Cart
+                      </h2>
+                    </div>
+
+                    {cartItemsList.length > 0 && (
+                      <button
+                        onClick={() => {
+                          setCart({});
+                          triggerToast('Cart cleared');
+                        }}
+                        className="p-1 rounded-lg text-slate-400 hover:text-rose-500"
+                        title="Clear Cart"
+                      >
+                        <X className="w-4 h-4" />
                       </button>
                     )}
                   </div>
 
-                  {/* Category Dropdown Pill */}
-                  <div className="relative">
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="appearance-none px-3.5 py-2 pr-8 rounded-2xl text-xs font-bold text-[#2E1065] cursor-pointer outline-none shadow-sm"
+                  {/* Cart Items List */}
+                  <div className="flex flex-col gap-3 max-h-[360px] overflow-y-auto pr-1">
+                    {cartItemsList.map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-2.5 rounded-2xl flex items-center justify-between gap-3 shadow-xs"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.65)',
+                          border: '1px solid rgba(255, 255, 255, 0.8)',
+                        }}
+                      >
+                        <img
+                          src={item.img}
+                          alt={item.name}
+                          className="w-11 h-11 rounded-xl object-cover shadow-inner shrink-0"
+                        />
+
+                        <div className="flex-1 min-w-0">
+                          <span className="text-xs font-black text-[#2E1065] block truncate">
+                            {item.name}
+                          </span>
+                          <span className="text-xs font-mono font-bold text-[#FF6B4A]">
+                            ₹{item.price}
+                          </span>
+                        </div>
+
+                        {/* Quantity Controls Pill */}
+                        <div
+                          className="flex items-center rounded-full p-0.5 shadow-sm text-white text-xs font-bold shrink-0"
+                          style={{
+                            background:
+                              'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
+                          }}
+                        >
+                          <button
+                            onClick={() => handleDecreaseQuantity(item.id)}
+                            className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                          >
+                            <Minus className="w-2.5 h-2.5 stroke-[3]" />
+                          </button>
+                          <span className="px-2 font-mono font-black text-[11px]">
+                            {item.qty}
+                          </span>
+                          <button
+                            onClick={() => handleAddToCart(item.id)}
+                            className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                          >
+                            <Plus className="w-2.5 h-2.5 stroke-[3]" />
+                          </button>
+                        </div>
+
+                        <button
+                          onClick={() => handleRemoveFromCart(item.id)}
+                          className="p-1 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 transition-colors shrink-0"
+                          title="Remove Item"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+
+                    {cartItemsList.length === 0 && (
+                      <div className="text-center py-8">
+                        <ShoppingBag className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+                        <p className="text-xs font-bold text-slate-500">
+                          Your cart is empty
+                        </p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          Add delicious meals from our menu!
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Total & Checkout */}
+                  <div className="pt-3 border-t border-white/60 flex items-center justify-between gap-3">
+                    <div>
+                      <span className="text-[11px] text-slate-500 block font-semibold">
+                        Total
+                      </span>
+                      <span className="text-xl font-black text-[#2E1065] font-mono leading-tight">
+                        ₹{totalCartPrice}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={handlePlaceOrder}
+                      disabled={isPlacingOrder || cartItemsList.length === 0}
+                      className="px-5 py-3 rounded-2xl text-white font-black text-xs shadow-lg flex items-center gap-1.5 transition-all duration-200 active:scale-95 disabled:opacity-50"
+                      style={{
+                        background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                        boxShadow: '0 8px 20px rgba(255, 107, 74, 0.4)',
+                      }}
+                    >
+                      {isPlacingOrder ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <>
+                          <span>Place Order</span>
+                          <span className="text-sm">➔</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </section>
+              </div>
+            </div>
+          )}
+
+          {/* ==================================================================== */}
+          {/* SECTION 2: SEPARATE LIVE RIDER TRACKER PAGE                          */}
+          {/* ==================================================================== */}
+          {activeNav === 'Live Tracker' && (
+            <div className="flex flex-col gap-5 animate-fade-in transition-all duration-300">
+              <section className="p-4 sm:p-6 rounded-3xl flex flex-col gap-5 shadow-2xl" style={glassPanelStyle}>
+                
+                {/* Tracker Section Header */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/50">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md"
+                      style={{ background: 'linear-gradient(135deg, #FF6B4A, #FF8C42)' }}
+                    >
+                      <MapPin className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-black text-[#2E1065] tracking-tight">
+                        Live Rider Tracker
+                      </h2>
+                      <p className="text-xs text-slate-500 font-medium">
+                        Live GPS corridor telemetry for order <strong className="text-[#7C3AED]">{activeOrderInfo.orderId}</strong>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Switch Map Layer & Return to Menu Button */}
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="flex items-center p-1 rounded-xl text-xs font-bold shadow-inner"
                       style={{
                         background: 'rgba(255, 255, 255, 0.65)',
                         border: '1px solid rgba(255, 255, 255, 0.8)',
                       }}
                     >
-                      <option value="All">All Categories</option>
-                      {CATEGORIES.filter((c) => c !== 'All').map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="w-3.5 h-3.5 text-[#2E1065] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <button
+                        onClick={() => setMapLayerType('map')}
+                        className={`px-3 py-1 rounded-lg transition-all ${
+                          mapLayerType === 'map'
+                            ? 'bg-white text-[#2E1065] shadow-xs'
+                            : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                      >
+                        Map
+                      </button>
+                      <button
+                        onClick={() => setMapLayerType('satellite')}
+                        className={`px-3 py-1 rounded-lg transition-all ${
+                          mapLayerType === 'satellite'
+                            ? 'bg-white text-[#2E1065] shadow-xs'
+                            : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                      >
+                        Satellite
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={() => navigateTo('Browse Menu')}
+                      className="px-3.5 py-1.5 rounded-xl bg-white/70 hover:bg-white text-[#2E1065] font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all"
+                    >
+                      <UtensilsCrossed className="w-3.5 h-3.5 text-[#FF6B4A]" />
+                      <span>Back to Menu</span>
+                    </button>
                   </div>
                 </div>
-              </div>
 
-              {/* Category Pills Strip */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                {CATEGORIES.map((cat) => {
-                  const isActive = selectedCategory.toLowerCase() === cat.toLowerCase();
-                  return (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all shrink-0 duration-200 ${
-                        isActive
-                          ? 'text-white shadow-md shadow-purple-500/30'
-                          : 'text-[#4C1D95] hover:bg-white/60'
-                      }`}
-                      style={
-                        isActive
-                          ? {
-                              background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
-                            }
-                          : {
-                              background: 'rgba(255, 255, 255, 0.55)',
-                              border: '1px solid rgba(255, 255, 255, 0.7)',
-                            }
-                      }
+                {/* Main Interactive Map & Telemetry Details */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                  
+                  {/* High Resolution Leaflet Map */}
+                  <div className="lg:col-span-8 h-[380px] sm:h-[420px] rounded-3xl overflow-hidden border border-white/80 shadow-2xl relative z-0">
+                    <MapContainer
+                      center={[37.7815, -122.4105]}
+                      zoom={14}
+                      scrollWheelZoom={false}
+                      className="h-full w-full"
+                      attributionControl={false}
                     >
-                      {cat}
-                    </button>
-                  );
-                })}
-              </div>
+                      <TileLayer
+                        url={
+                          mapLayerType === 'satellite'
+                            ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+                            : 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                        }
+                        maxZoom={19}
+                      />
 
-              {/* Food Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                {filteredProducts.map((item) => {
-                  const inCartQty = cart[item.id] || 0;
-                  const isFav = wishlist[item.id];
+                      {/* Route Polyline */}
+                      <Polyline
+                        positions={ROUTE_WAYPOINTS}
+                        pathOptions={{
+                          color: '#3B82F6',
+                          weight: 5,
+                          opacity: 0.9,
+                          lineJoin: 'round',
+                        }}
+                      />
 
-                  return (
+                      {/* Animated Delivery Rider Beacon */}
+                      <Marker position={riderPosition} icon={riderScooterIcon}>
+                        <Popup>
+                          <div className="text-xs font-sans">
+                            <strong>Rahul (Ather 450X)</strong>
+                            <br />
+                            Speed: 28 km/h · On the way
+                          </div>
+                        </Popup>
+                      </Marker>
+
+                      {/* Customer Destination Home Marker */}
+                      <Marker
+                        position={ROUTE_WAYPOINTS[ROUTE_WAYPOINTS.length - 1]}
+                        icon={customerHomeIcon}
+                      >
+                        <Popup>
+                          <div className="text-xs font-sans">
+                            <strong>{userName}'s Doorstep</strong>
+                            <br />
+                            {activeOrderInfo.address}
+                          </div>
+                        </Popup>
+                      </Marker>
+                    </MapContainer>
+                  </div>
+
+                  {/* Right Telemetry & Rider Profile Panel */}
+                  <div className="lg:col-span-4 flex flex-col justify-between gap-4">
+                    
+                    {/* Rider Info Card */}
                     <div
-                      key={item.id}
-                      className="rounded-3xl p-3 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 shadow-lg group relative overflow-hidden"
+                      className="p-5 rounded-3xl shadow-lg flex flex-col gap-4"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.68)',
-                        backdropFilter: 'blur(16px)',
-                        WebkitBackdropFilter: 'blur(16px)',
-                        border: '1.5px solid rgba(255, 255, 255, 0.9)',
-                        boxShadow:
-                          '0 10px 25px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.95)',
+                        background: 'rgba(255, 255, 255, 0.65)',
+                        border: '1.5px solid rgba(255, 255, 255, 0.85)',
                       }}
                     >
-                      {/* Top Action Row: Temperature Badge & Wishlist Heart */}
-                      <div className="flex items-center justify-between mb-2">
-                        <button
-                          onClick={() => handleToggleWishlist(item.id)}
-                          className="p-1.5 rounded-full bg-white/70 text-slate-400 hover:text-rose-500 transition-colors shadow-xs"
-                          title="Save to Wishlist"
-                        >
-                          <Heart
-                            className={`w-3.5 h-3.5 ${
-                              isFav ? 'fill-rose-500 text-rose-500' : ''
-                            }`}
-                          />
-                        </button>
-
-                        {/* Temperature Badge */}
-                        <span
-                          className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full shadow-xs ${
-                            item.thermalState === 'HOT'
-                              ? 'bg-orange-500 text-white shadow-orange-500/30'
-                              : item.thermalState === 'CHILLED'
-                              ? 'bg-sky-500 text-white shadow-sky-500/30'
-                              : item.thermalState === 'FROZEN'
-                              ? 'bg-purple-500 text-white shadow-purple-500/30'
-                              : 'bg-emerald-500 text-white shadow-emerald-500/30'
-                          }`}
-                        >
-                          {item.badgeText}
-                        </span>
+                      <div className="flex items-center gap-3.5">
+                        <img
+                          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
+                          alt="Rahul"
+                          className="w-14 h-14 rounded-full object-cover ring-2 ring-[#FF6B4A] shadow-md shrink-0"
+                        />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-base font-black text-[#2E1065]">
+                              Rahul Kumar
+                            </h3>
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                              Top Rated
+                            </span>
+                          </div>
+                          <span className="text-xs font-bold text-emerald-600 flex items-center gap-1.5 mt-0.5">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            On the Way to Your Doorstep
+                          </span>
+                          <span className="text-[11px] font-mono text-slate-500 block mt-0.5">
+                            Ather 450X (EV-Fleet #DP-402)
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Food Image Container */}
-                      <div className="w-full h-32 rounded-2xl overflow-hidden mb-2.5 bg-slate-100 flex items-center justify-center shadow-inner relative">
-                        <img
-                          src={item.img}
-                          alt={item.name}
-                          loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      {/* Telemetry Metrics Grid */}
+                      <div className="grid grid-cols-3 gap-2 text-center pt-3 border-t border-slate-200/60 font-mono">
+                        <div className="p-2.5 rounded-2xl bg-white/70">
+                          <span className="text-[10px] text-slate-400 block font-sans uppercase">
+                            Distance
+                          </span>
+                          <span className="text-sm font-black text-[#2E1065]">
+                            2.8 km
+                          </span>
+                        </div>
+                        <div className="p-2.5 rounded-2xl bg-white/70">
+                          <span className="text-[10px] text-slate-400 block font-sans uppercase">
+                            ETA
+                          </span>
+                          <span className="text-sm font-black text-emerald-600">
+                            10:45 AM
+                          </span>
+                        </div>
+                        <div className="p-2.5 rounded-2xl bg-white/70">
+                          <span className="text-[10px] text-slate-400 block font-sans uppercase">
+                            Speed
+                          </span>
+                          <span className="text-sm font-black text-[#7C3AED]">
+                            28 km/h
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Live Call Rider & Security Pin */}
+                      <div className="flex items-center gap-2 pt-2">
+                        <a
+                          href="tel:+14155550199"
+                          className="flex-1 py-3 rounded-2xl text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
+                          style={{
+                            background: 'linear-gradient(135deg, #10B981, #059669)',
+                          }}
+                        >
+                          <Phone className="w-4 h-4" />
+                          <span>Call Rider Rahul</span>
+                        </a>
+
+                        <div className="p-3 rounded-2xl bg-white/70 text-center font-mono shrink-0">
+                          <span className="text-[9px] text-slate-400 block uppercase font-sans">
+                            Delivery PIN
+                          </span>
+                          <span className="text-xs font-black text-[#FF6B4A]">
+                            8492
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Destination Address Pill */}
+                    <div
+                      className="p-4 rounded-3xl flex items-center gap-3 shadow-md"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.65)',
+                        border: '1px solid rgba(255, 255, 255, 0.85)',
+                      }}
+                    >
+                      <div className="w-10 h-10 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center shrink-0">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div className="overflow-hidden">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                          Delivering To Doorstep:
+                        </span>
+                        <span className="text-xs font-bold text-[#2E1065] block truncate">
+                          {activeOrderInfo.address}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* ==================================================================== */}
+          {/* SECTION 3: SEPARATE MY ORDERS & ORDER PROGRESS PAGE                  */}
+          {/* ==================================================================== */}
+          {activeNav === 'My Orders' && (
+            <div className="flex flex-col gap-5 animate-fade-in transition-all duration-300">
+              
+              {/* Active Order with Embedded Progress Stepper */}
+              <section className="p-4 sm:p-6 rounded-3xl flex flex-col gap-5 shadow-2xl" style={glassPanelStyle}>
+                
+                {/* Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-white/50">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md"
+                      style={{ background: 'linear-gradient(135deg, #7C3AED, #6D28D9)' }}
+                    >
+                      <ShoppingBag className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-black text-[#2E1065] tracking-tight">
+                        Active Order Tracking
+                      </h2>
+                      <p className="text-xs text-slate-500 font-medium">
+                        Order ID: <strong className="text-[#FF6B4A]">{activeOrderInfo.orderId}</strong> · Placed at {activeOrderInfo.placedTime}
+                      </p>
+                    </div>
+                  </div>
+
+                  <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-100 text-emerald-700 flex items-center gap-1.5 shadow-xs">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>{activeOrderInfo.status}</span>
+                  </span>
+                </div>
+
+                {/* Order Progress 4-Step Stepper */}
+                <div
+                  className="p-5 rounded-3xl flex flex-col gap-4 shadow-sm"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.65)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                      Live Delivery Progress
+                    </span>
+                    <span className="text-xs font-mono font-bold text-[#7C3AED]">
+                      Est. Arrival {activeOrderInfo.estDelivery}
+                    </span>
+                  </div>
+
+                  {/* Connected Stepper Line */}
+                  <div className="py-2">
+                    <div className="relative flex items-center justify-between mb-4">
+                      <div className="absolute top-1/2 left-4 right-4 h-1 -translate-y-1/2 bg-slate-200 z-0">
+                        <div
+                          className="h-full bg-[#7C3AED] transition-all duration-500"
+                          style={{
+                            width:
+                              orderStage === 0
+                                ? '0%'
+                                : orderStage === 1
+                                ? '33%'
+                                : orderStage === 2
+                                ? '66%'
+                                : '100%',
+                          }}
                         />
                       </div>
 
-                      {/* Content: Title & Short Description */}
-                      <div className="mb-3">
-                        <h3 className="text-sm font-black text-[#2E1065] leading-tight truncate">
-                          {item.name}
-                        </h3>
-                        <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
-                          {item.description}
-                        </p>
+                      {/* Step 1: Placed */}
+                      <div className="relative z-10 flex flex-col items-center">
+                        <div
+                          className="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold"
+                          style={{
+                            background:
+                              orderStage >= 0
+                                ? 'linear-gradient(135deg, #7C3AED, #6D28D9)'
+                                : '#E2E8F0',
+                          }}
+                        >
+                          <ShoppingCart className="w-4 h-4" />
+                        </div>
                       </div>
 
-                      {/* Bottom Row: Price & Add / Quantity Button */}
-                      <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/50">
-                        <span className="text-base font-black text-[#2E1065] font-mono">
-                          ₹{item.price}
-                        </span>
+                      {/* Step 2: Preparing */}
+                      <div className="relative z-10 flex flex-col items-center">
+                        <div
+                          className="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold"
+                          style={{
+                            background:
+                              orderStage >= 1
+                                ? 'linear-gradient(135deg, #7C3AED, #6D28D9)'
+                                : '#E2E8F0',
+                          }}
+                        >
+                          <ChefHat className="w-4 h-4" />
+                        </div>
+                      </div>
 
-                        {inCartQty === 0 ? (
-                          <button
-                            onClick={() => handleAddToCart(item.id)}
-                            className="px-3.5 py-1.5 rounded-full text-white text-xs font-bold flex items-center gap-1 shadow-md transition-all duration-150 active:scale-95"
-                            style={{
-                              background:
-                                'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
-                              boxShadow: '0 4px 12px rgba(124, 58, 237, 0.35)',
-                            }}
-                          >
-                            <span>Add</span>
-                            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-                          </button>
-                        ) : (
-                          <div
-                            className="flex items-center rounded-full p-0.5 shadow-sm text-white text-xs font-bold"
-                            style={{
-                              background:
-                                'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
-                            }}
-                          >
-                            <button
-                              onClick={() => handleDecreaseQuantity(item.id)}
-                              className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                            >
-                              <Minus className="w-3 h-3 stroke-[3]" />
-                            </button>
-                            <span className="px-2 font-mono font-black">
-                              {inCartQty}
-                            </span>
-                            <button
-                              onClick={() => handleAddToCart(item.id)}
-                              className="w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                            >
-                              <Plus className="w-3 h-3 stroke-[3]" />
-                            </button>
-                          </div>
-                        )}
+                      {/* Step 3: Out for Delivery */}
+                      <div className="relative z-10 flex flex-col items-center">
+                        <div
+                          className="w-9 h-9 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold ring-4 ring-[#7C3AED]/25"
+                          style={{
+                            background:
+                              orderStage >= 2
+                                ? 'linear-gradient(135deg, #7C3AED, #6D28D9)'
+                                : '#E2E8F0',
+                          }}
+                        >
+                          <Bike className="w-4 h-4" />
+                        </div>
+                      </div>
+
+                      {/* Step 4: Delivered */}
+                      <div className="relative z-10 flex flex-col items-center">
+                        <div
+                          className="w-9 h-9 rounded-full flex items-center justify-center shadow-md text-xs font-bold"
+                          style={{
+                            background:
+                              orderStage >= 3
+                                ? 'linear-gradient(135deg, #10B981, #059669)'
+                                : '#E2E8F0',
+                            color: orderStage >= 3 ? '#FFFFFF' : '#94A3B8',
+                          }}
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                        </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
 
-              {filteredProducts.length === 0 && (
-                <div className="text-center py-12">
-                  <UtensilsCrossed className="w-12 h-12 text-[#FF6B4A]/50 mx-auto mb-3" />
-                  <h4 className="text-base font-bold text-[#2E1065]">
-                    No food items found
-                  </h4>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Try searching for another dish or reset your category filter.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setSearchQuery('');
-                      setSelectedCategory('All');
-                      setSelectedTempFilter(null);
-                    }}
-                    className="mt-3 px-4 py-1.5 rounded-full bg-[#7C3AED] text-white text-xs font-bold shadow-md"
-                  >
-                    Reset Filters
-                  </button>
-                </div>
-              )}
-            </section>
-
-            {/* ================================================================== */}
-            {/* YOUR CART (4 COLS ON DESKTOP)                                      */}
-            {/* ================================================================== */}
-            <section
-              className="lg:col-span-4 p-4 sm:p-5 rounded-3xl flex flex-col gap-4 shadow-2xl transition-all"
-              style={{
-                background:
-                  'linear-gradient(180deg, rgba(255, 245, 248, 0.72) 0%, rgba(255, 230, 240, 0.55) 100%)',
-                backdropFilter: 'blur(26px)',
-                WebkitBackdropFilter: 'blur(26px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.75)',
-                boxShadow:
-                  '0 20px 45px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
-              }}
-            >
-              {/* Cart Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-white/50">
-                <div className="flex items-center gap-2.5">
-                  <div
-                    className="w-8 h-8 rounded-xl flex items-center justify-center text-white shadow-md"
-                    style={{
-                      background: 'linear-gradient(135deg, #FF6B4A, #FF8C42)',
-                    }}
-                  >
-                    <ShoppingBag className="w-4 h-4" />
+                    {/* Step Labels */}
+                    <div className="grid grid-cols-4 gap-1 text-center font-mono">
+                      <div>
+                        <span className="text-[11px] font-bold text-[#2E1065] block leading-tight font-sans">
+                          Order Placed
+                        </span>
+                        <span className="text-[10px] text-slate-400 block mt-0.5">
+                          10:20 AM
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-bold text-[#2E1065] block leading-tight font-sans">
+                          Preparing Food
+                        </span>
+                        <span className="text-[10px] text-slate-400 block mt-0.5">
+                          10:28 AM
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-bold text-[#7C3AED] block leading-tight font-sans">
+                          Out for Delivery
+                        </span>
+                        <span className="text-[10px] text-slate-400 block mt-0.5">
+                          10:40 AM
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-bold text-slate-400 block leading-tight font-sans">
+                          Delivered
+                        </span>
+                        <span className="text-[10px] text-slate-400 block mt-0.5">
+                          --:--
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <h2 className="text-base sm:text-lg font-black text-[#2E1065] tracking-tight">
-                    Your Cart
-                  </h2>
+
+                  {/* Status Banner */}
+                  <div
+                    className="p-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-xs"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.75)',
+                      border: '1px solid rgba(255, 255, 255, 0.85)',
+                    }}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Sparkles className="w-4 h-4 text-[#7C3AED]" />
+                      <span className="text-xs font-bold text-[#2E1065]">
+                        Your food was packed in an insulated multi-temp thermal seal bag!
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => navigateTo('Live Tracker')}
+                      className="px-4 py-2 rounded-xl text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition-all active:scale-95 shrink-0"
+                      style={{
+                        background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
+                      }}
+                    >
+                      <span>Track on Live Map</span>
+                      <span>➔</span>
+                    </button>
+                  </div>
                 </div>
 
-                {cartItemsList.length > 0 && (
-                  <button
-                    onClick={() => {
-                      setCart({});
-                      triggerToast('Cart cleared');
-                    }}
-                    className="p-1 rounded-lg text-slate-400 hover:text-rose-500"
-                    title="Clear Cart"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              {/* Cart Items List */}
-              <div className="flex flex-col gap-3 max-h-[360px] overflow-y-auto pr-1">
-                {cartItemsList.map((item) => (
+                {/* Order Itemized Summary Card */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div
-                    key={item.id}
-                    className="p-2.5 rounded-2xl flex items-center justify-between gap-3 shadow-xs"
+                    className="p-4 rounded-3xl flex flex-col gap-2.5"
                     style={{
                       background: 'rgba(255, 255, 255, 0.65)',
                       border: '1px solid rgba(255, 255, 255, 0.8)',
                     }}
                   >
-                    {/* Thumbnail */}
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      className="w-11 h-11 rounded-xl object-cover shadow-inner shrink-0"
-                    />
-
-                    {/* Title & Price */}
-                    <div className="flex-1 min-w-0">
-                      <span className="text-xs font-black text-[#2E1065] block truncate">
-                        {item.name}
-                      </span>
-                      <span className="text-xs font-mono font-bold text-[#FF6B4A]">
-                        ₹{item.price}
-                      </span>
-                    </div>
-
-                    {/* Quantity Controls Pill */}
-                    <div
-                      className="flex items-center rounded-full p-0.5 shadow-sm text-white text-xs font-bold shrink-0"
-                      style={{
-                        background:
-                          'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
-                      }}
-                    >
-                      <button
-                        onClick={() => handleDecreaseQuantity(item.id)}
-                        className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                      >
-                        <Minus className="w-2.5 h-2.5 stroke-[3]" />
-                      </button>
-                      <span className="px-2 font-mono font-black text-[11px]">
-                        {item.qty}
-                      </span>
-                      <button
-                        onClick={() => handleAddToCart(item.id)}
-                        className="w-5 h-5 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
-                      >
-                        <Plus className="w-2.5 h-2.5 stroke-[3]" />
-                      </button>
-                    </div>
-
-                    {/* Trash Delete Icon */}
-                    <button
-                      onClick={() => handleRemoveFromCart(item.id)}
-                      className="p-1 rounded-lg text-rose-500 hover:text-rose-700 hover:bg-rose-50 transition-colors shrink-0"
-                      title="Remove Item"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-
-                {cartItemsList.length === 0 && (
-                  <div className="text-center py-8">
-                    <ShoppingBag className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-                    <p className="text-xs font-bold text-slate-500">
-                      Your cart is empty
-                    </p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      Add delicious meals from our menu!
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Total Price & View Cart Action Button */}
-              <div className="pt-3 border-t border-white/60 flex items-center justify-between gap-3">
-                <div>
-                  <span className="text-[11px] text-slate-500 block font-semibold">
-                    Total
-                  </span>
-                  <span className="text-xl font-black text-[#2E1065] font-mono leading-tight">
-                    ₹{totalCartPrice}
-                  </span>
-                </div>
-
-                <button
-                  onClick={handlePlaceOrder}
-                  disabled={isPlacingOrder || cartItemsList.length === 0}
-                  className="px-5 py-3 rounded-2xl text-white font-black text-xs shadow-lg flex items-center gap-1.5 transition-all duration-200 active:scale-95 disabled:opacity-50"
-                  style={{
-                    background: 'linear-gradient(135deg, #FF6B4A 0%, #FF8C42 100%)',
-                    boxShadow: '0 8px 20px rgba(255, 107, 74, 0.4)',
-                  }}
-                >
-                  {isPlacingOrder ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <span>View Cart</span>
-                      <span className="text-sm">➔</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </section>
-          </div>
-
-          {/* ==================================================================== */}
-          {/* 6. BOTTOM ROW: LIVE RIDER TRACKER (LEFT) + ORDER PROGRESS (RIGHT)    */}
-          {/* ==================================================================== */}
-          <div
-            id="live-tracker-section"
-            className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-stretch pb-12"
-          >
-            {/* ================================================================== */}
-            {/* LIVE RIDER TRACKER MAP (8 COLS ON DESKTOP)                         */}
-            {/* ================================================================== */}
-            <div
-              className="lg:col-span-8 p-4 sm:p-5 rounded-3xl flex flex-col gap-4 shadow-2xl transition-all"
-              style={{
-                background:
-                  'linear-gradient(180deg, rgba(255, 245, 248, 0.72) 0%, rgba(255, 230, 240, 0.55) 100%)',
-                backdropFilter: 'blur(26px)',
-                WebkitBackdropFilter: 'blur(26px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.75)',
-                boxShadow:
-                  '0 20px 45px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
-              }}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-[#FF6B4A]" />
-                  <h3 className="text-base sm:text-lg font-black text-[#2E1065] tracking-tight">
-                    Live Rider Tracker
-                  </h3>
-                </div>
-
-                {/* Map Type Switcher Pills */}
-                <div
-                  className="flex items-center p-1 rounded-xl text-xs font-bold shadow-inner"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.65)',
-                    border: '1px solid rgba(255, 255, 255, 0.8)',
-                  }}
-                >
-                  <button
-                    onClick={() => setMapLayerType('map')}
-                    className={`px-3 py-1 rounded-lg transition-all ${
-                      mapLayerType === 'map'
-                        ? 'bg-white text-[#2E1065] shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    Map
-                  </button>
-                  <button
-                    onClick={() => setMapLayerType('satellite')}
-                    className={`px-3 py-1 rounded-lg transition-all ${
-                      mapLayerType === 'satellite'
-                        ? 'bg-white text-[#2E1065] shadow-xs'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    Satellite
-                  </button>
-                </div>
-              </div>
-
-              {/* Map Canvas + Telemetry Box Split */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                
-                {/* Leaflet Map Canvas */}
-                <div className="md:col-span-8 h-56 sm:h-64 rounded-2xl overflow-hidden border border-white/60 shadow-inner relative z-0">
-                  <MapContainer
-                    center={[37.7815, -122.4105]}
-                    zoom={14}
-                    scrollWheelZoom={false}
-                    className="h-full w-full"
-                    attributionControl={false}
-                  >
-                    {/* Dynamic Map Tile Layer */}
-                    <TileLayer
-                      url={
-                        mapLayerType === 'satellite'
-                          ? 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                          : 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                      }
-                      maxZoom={19}
-                    />
-
-                    {/* Route Corridor Vector Polyline */}
-                    <Polyline
-                      positions={ROUTE_WAYPOINTS}
-                      pathOptions={{
-                        color: '#3B82F6',
-                        weight: 4,
-                        opacity: 0.9,
-                        lineJoin: 'round',
-                      }}
-                    />
-
-                    {/* Animated Delivery Rider Beacon */}
-                    <Marker position={riderPosition} icon={riderScooterIcon}>
-                      <Popup>
-                        <div className="text-xs font-sans">
-                          <strong>Rahul (Ather 450X)</strong>
-                          <br />
-                          Speed: 28 km/h · On the way
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                      Items Ordered
+                    </span>
+                    <div className="space-y-1.5">
+                      {activeOrderInfo.items.map((it, idx) => (
+                        <div key={idx} className="flex items-center justify-between text-xs font-semibold text-[#2E1065]">
+                          <span>{it}</span>
+                          <span className="font-mono text-emerald-600">Verified</span>
                         </div>
-                      </Popup>
-                    </Marker>
-
-                    {/* Customer Destination Home Marker */}
-                    <Marker
-                      position={ROUTE_WAYPOINTS[ROUTE_WAYPOINTS.length - 1]}
-                      icon={customerHomeIcon}
-                    >
-                      <Popup>
-                        <div className="text-xs font-sans">
-                          <strong>Your Delivery Location</strong>
-                          <br />
-                          100 Market St, Financial Pod
-                        </div>
-                      </Popup>
-                    </Marker>
-                  </MapContainer>
-                </div>
-
-                {/* Rider Telemetry Card */}
-                <div
-                  className="md:col-span-4 p-4 rounded-2xl flex flex-col justify-between gap-3 shadow-md"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.65)',
-                    backdropFilter: 'blur(16px)',
-                    border: '1px solid rgba(255, 255, 255, 0.85)',
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <img
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
-                      alt="Rider Rahul"
-                      className="w-12 h-12 rounded-full object-cover ring-2 ring-orange-500 shadow-md shrink-0"
-                    />
-                    <div>
-                      <h4 className="text-sm font-black text-[#2E1065] leading-tight">
-                        Rahul
-                      </h4>
-                      <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1.5 mt-0.5">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        On the Way
-                      </span>
+                      ))}
+                    </div>
+                    <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-sm font-black text-[#2E1065]">
+                      <span>Total Paid</span>
+                      <span className="font-mono text-[#FF6B4A]">₹{activeOrderInfo.amount}</span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-center pt-2 border-t border-slate-200/60 font-mono">
-                    <div className="p-2 rounded-xl bg-white/60">
-                      <span className="text-[10px] text-slate-500 block uppercase font-sans">
-                        Distance
-                      </span>
-                      <span className="text-xs font-black text-[#2E1065]">
-                        2.8 km
-                      </span>
-                    </div>
-
-                    <div className="p-2 rounded-xl bg-white/60">
-                      <span className="text-[10px] text-slate-500 block uppercase font-sans">
-                        ETA
-                      </span>
-                      <span className="text-xs font-black text-emerald-600">
-                        10:45 AM
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() =>
-                      triggerToast('Live GPS Navigation Synced with Courier Telemetry')
-                    }
-                    className="w-full py-2.5 px-3 rounded-xl text-white font-black text-xs shadow-md flex items-center justify-center gap-1.5 transition-all active:scale-95"
+                  <div
+                    className="p-4 rounded-3xl flex flex-col justify-between gap-2.5"
                     style={{
-                      background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
-                      boxShadow: '0 4px 14px rgba(124, 58, 237, 0.3)',
+                      background: 'rgba(255, 255, 255, 0.65)',
+                      border: '1px solid rgba(255, 255, 255, 0.8)',
                     }}
                   >
-                    <span>View Live Map</span>
-                    <span className="text-sm">➔</span>
+                    <div>
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                        Delivery Address
+                      </span>
+                      <p className="text-xs font-bold text-[#2E1065] mt-1">
+                        {activeOrderInfo.address}
+                      </p>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Handover: Ring doorbell and leave at door
+                      </p>
+                    </div>
+
+                    <div className="text-[11px] text-slate-500 flex items-center justify-between pt-2 border-t border-slate-200/60">
+                      <span>Assigned Rider:</span>
+                      <strong className="text-[#2E1065]">{activeOrderInfo.courierName}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Past Orders History List */}
+                <div className="mt-2 pt-4 border-t border-white/50">
+                  <h3 className="text-sm font-black text-[#2E1065] uppercase tracking-wider mb-3">
+                    Past Orders History
+                  </h3>
+                  <div className="space-y-2.5">
+                    {pastOrders.map((po) => (
+                      <div
+                        key={po.id}
+                        className="p-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-xs"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.65)',
+                          border: '1px solid rgba(255, 255, 255, 0.8)',
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-xl bg-purple-100 text-[#7C3AED] flex items-center justify-center font-bold text-xs">
+                            ✓
+                          </div>
+                          <div>
+                            <span className="text-xs font-bold text-[#2E1065] block leading-tight">
+                              {po.items}
+                            </span>
+                            <span className="text-[11px] text-slate-400 font-mono">
+                              {po.id} · {po.date}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs font-mono font-black text-[#2E1065]">
+                            ₹{po.amount}
+                          </span>
+                          <button
+                            onClick={() => {
+                              triggerToast(`Reordered ${po.items}`);
+                              navigateTo('Browse Menu');
+                            }}
+                            className="px-3 py-1 rounded-xl bg-[#7C3AED]/10 hover:bg-[#7C3AED]/20 text-[#7C3AED] font-bold text-xs flex items-center gap-1 transition-all"
+                          >
+                            <RefreshCw className="w-3 h-3" />
+                            <span>Reorder</span>
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* ==================================================================== */}
+          {/* SECTION 4: SEPARATE WISHLIST PAGE                                    */}
+          {/* ==================================================================== */}
+          {activeNav === 'Wishlist' && (
+            <div className="flex flex-col gap-5 animate-fade-in transition-all duration-300">
+              <section className="p-4 sm:p-6 rounded-3xl flex flex-col gap-5 shadow-2xl" style={glassPanelStyle}>
+                
+                {/* Header */}
+                <div className="flex items-center justify-between pb-4 border-b border-white/50">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md"
+                      style={{ background: 'linear-gradient(135deg, #FF6B4A, #FF8C42)' }}
+                    >
+                      <Heart className="w-5 h-5 fill-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-black text-[#2E1065] tracking-tight">
+                        My Culinary Wishlist
+                      </h2>
+                      <p className="text-xs text-slate-500 font-medium">
+                        {wishlistItemsList.length} saved favorites ready to add to your bag
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => navigateTo('Browse Menu')}
+                    className="px-3.5 py-1.5 rounded-xl bg-white/70 hover:bg-white text-[#2E1065] font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all"
+                  >
+                    <UtensilsCrossed className="w-3.5 h-3.5 text-[#FF6B4A]" />
+                    <span>Browse All Items</span>
                   </button>
                 </div>
-              </div>
+
+                {/* Wishlist Items Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {wishlistItemsList.map((item) => (
+                    <div
+                      key={item.id}
+                      className="rounded-3xl p-3 flex flex-col justify-between shadow-md relative"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.68)',
+                        border: '1.5px solid rgba(255, 255, 255, 0.9)',
+                      }}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-orange-500 text-white">
+                          {item.badgeText}
+                        </span>
+                        <button
+                          onClick={() => handleToggleWishlist(item.id)}
+                          className="p-1 rounded-full text-rose-500 hover:text-rose-700"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="w-full h-32 rounded-2xl overflow-hidden mb-2.5 bg-slate-100">
+                        <img
+                          src={item.img}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+
+                      <div className="mb-2">
+                        <h4 className="text-sm font-black text-[#2E1065] truncate">
+                          {item.name}
+                        </h4>
+                        <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-200/50">
+                        <span className="text-base font-black text-[#2E1065] font-mono">
+                          ₹{item.price}
+                        </span>
+                        <button
+                          onClick={() => handleAddToCart(item.id)}
+                          className="px-3.5 py-1.5 rounded-full text-white text-xs font-bold flex items-center gap-1 shadow-md transition-all active:scale-95"
+                          style={{
+                            background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
+                          }}
+                        >
+                          <span>Add to Cart</span>
+                          <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {wishlistItemsList.length === 0 && (
+                  <div className="text-center py-12">
+                    <Heart className="w-12 h-12 text-[#FF6B4A]/40 mx-auto mb-2" />
+                    <h3 className="text-base font-bold text-[#2E1065]">
+                      Your wishlist is empty
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Tap the heart icon on any dish in the menu to save it here!
+                    </p>
+                    <button
+                      onClick={() => navigateTo('Browse Menu')}
+                      className="mt-3 px-4 py-2 rounded-2xl bg-[#7C3AED] text-white font-bold text-xs shadow-md"
+                    >
+                      Browse Menu
+                    </button>
+                  </div>
+                )}
+              </section>
             </div>
+          )}
 
-            {/* ================================================================== */}
-            {/* ORDER PROGRESS TIMELINE (4 COLS ON DESKTOP)                        */}
-            {/* ================================================================== */}
-            <div
-              className="lg:col-span-4 p-4 sm:p-5 rounded-3xl flex flex-col justify-between gap-4 shadow-2xl transition-all"
-              style={{
-                background:
-                  'linear-gradient(180deg, rgba(255, 245, 248, 0.72) 0%, rgba(255, 230, 240, 0.55) 100%)',
-                backdropFilter: 'blur(26px)',
-                WebkitBackdropFilter: 'blur(26px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.75)',
-                boxShadow:
-                  '0 20px 45px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
-              }}
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-white/50">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-100" />
-                  <h3 className="text-base sm:text-lg font-black text-[#2E1065] tracking-tight">
-                    Order Progress
-                  </h3>
+          {/* ==================================================================== */}
+          {/* SECTION 5: SEPARATE PROFILE PAGE (NOT ALL IN ONE)                    */}
+          {/* ==================================================================== */}
+          {activeNav === 'Profile' && (
+            <div className="flex flex-col gap-5 animate-fade-in transition-all duration-300">
+              <section className="p-4 sm:p-6 rounded-3xl flex flex-col gap-6 shadow-2xl" style={glassPanelStyle}>
+                
+                {/* Profile Header Card */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/50">
+                  <div className="flex items-center gap-4">
+                    <div className="relative">
+                      <img
+                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&h=150&q=80"
+                        alt="Deekshitha"
+                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover shadow-lg ring-4 ring-[#7C3AED]"
+                      />
+                      <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-white" />
+                    </div>
+
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-xl sm:text-2xl font-black text-[#2E1065]">
+                          {userName}
+                        </h2>
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FF6B4A]/15 text-[#FF6B4A] border border-[#FF6B4A]/30">
+                          Gold VIP
+                        </span>
+                      </div>
+                      <p className="text-xs font-mono text-slate-500 mt-0.5">
+                        {user?.email || 'customer@gmail.com'} · +1 (415) 555-0199
+                      </p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                          ✓ Verified Customer
+                        </span>
+                        <span className="text-[11px] font-medium text-slate-400">
+                          Member since Oct 2026
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => navigateTo('Browse Menu')}
+                    className="px-4 py-2 rounded-2xl bg-white/70 hover:bg-white text-[#2E1065] font-bold text-xs flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
+                  >
+                    <UtensilsCrossed className="w-4 h-4 text-[#FF6B4A]" />
+                    <span>Back to Food Menu</span>
+                  </button>
                 </div>
 
-                <button
-                  onClick={() => triggerToast('Order #LOGI-8492 is on schedule')}
-                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
+                {/* Profile Cards Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  
+                  {/* Delivery Addresses */}
+                  <div
+                    className="p-5 rounded-3xl flex flex-col gap-3 shadow-sm"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.65)',
+                      border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-[#FF6B4A]" />
+                        <h3 className="text-sm font-black text-[#2E1065] uppercase tracking-wider">
+                          Saved Delivery Addresses
+                        </h3>
+                      </div>
+                      <span className="text-[11px] font-bold text-[#7C3AED] cursor-pointer">
+                        + Add New
+                      </span>
+                    </div>
 
-              {/* Horizontal / Stepper Timeline Bar */}
-              <div className="py-2">
-                <div className="relative flex items-center justify-between mb-4">
-                  {/* Purple Connecting Line */}
-                  <div className="absolute top-1/2 left-4 right-4 h-1 -translate-y-1/2 bg-slate-200 z-0">
-                    <div
-                      className="h-full bg-[#7C3AED] transition-all duration-500"
-                      style={{
-                        width:
-                          orderStage === 0
-                            ? '0%'
-                            : orderStage === 1
-                            ? '33%'
-                            : orderStage === 2
-                            ? '66%'
-                            : '100%',
-                      }}
-                    />
-                  </div>
+                    {/* Address 1 */}
+                    <div className="p-3 rounded-2xl bg-white/70 border border-slate-200/60 flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-black text-[#2E1065]">
+                            Home (Financial Pod)
+                          </span>
+                          <span className="text-[10px] font-bold bg-[#FF6B4A] text-white px-2 py-0.2 rounded-full">
+                            Default
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-1">
+                          100 Market St, Financial Pod, San Francisco, CA 94105
+                        </p>
+                      </div>
+                      <span className="text-xs font-bold text-[#7C3AED] cursor-pointer">Edit</span>
+                    </div>
 
-                  {/* Step 1: Placed */}
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold"
-                      style={{
-                        background:
-                          orderStage >= 0
-                            ? 'linear-gradient(135deg, #7C3AED, #6D28D9)'
-                            : '#E2E8F0',
-                      }}
-                    >
-                      <ShoppingCart className="w-4 h-4" />
+                    {/* Address 2 */}
+                    <div className="p-3 rounded-2xl bg-white/70 border border-slate-200/60 flex items-start justify-between gap-3">
+                      <div>
+                        <span className="text-xs font-black text-[#2E1065]">
+                          Office
+                        </span>
+                        <p className="text-xs text-slate-500 mt-1">
+                          Flat 402, Mission St, San Francisco, CA 94103
+                        </p>
+                      </div>
+                      <span className="text-xs font-bold text-[#7C3AED] cursor-pointer">Edit</span>
                     </div>
                   </div>
 
-                  {/* Step 2: Preparing */}
-                  <div className="relative z-10 flex flex-col items-center">
+                  {/* Payment & Loyalty Card */}
+                  <div
+                    className="p-5 rounded-3xl flex flex-col gap-3 shadow-sm"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.65)',
+                      border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="w-4 h-4 text-[#7C3AED]" />
+                      <h3 className="text-sm font-black text-[#2E1065] uppercase tracking-wider">
+                        Payment & LogiRoute Cash
+                      </h3>
+                    </div>
+
+                    {/* Wallet Balance Pill */}
                     <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold"
+                      className="p-3.5 rounded-2xl text-white flex items-center justify-between shadow-md"
                       style={{
-                        background:
-                          orderStage >= 1
-                            ? 'linear-gradient(135deg, #7C3AED, #6D28D9)'
-                            : '#E2E8F0',
+                        background: 'linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)',
                       }}
                     >
-                      <ChefHat className="w-4 h-4" />
+                      <div>
+                        <span className="text-[10px] uppercase font-bold text-white/80 block">
+                          LogiRoute Cash Balance
+                        </span>
+                        <span className="text-lg font-black font-mono">₹450.00</span>
+                      </div>
+                      <button className="px-3 py-1 rounded-xl bg-white text-[#7C3AED] font-bold text-xs shadow-xs">
+                        Top Up
+                      </button>
+                    </div>
+
+                    {/* Saved UPI */}
+                    <div className="p-3 rounded-2xl bg-white/70 border border-slate-200/60 flex items-center justify-between text-xs">
+                      <div>
+                        <span className="font-black text-[#2E1065] block">UPI AutoPay</span>
+                        <span className="text-slate-500 font-mono">deekshitha@okaxis</span>
+                      </div>
+                      <span className="text-emerald-600 font-bold">✓ Active</span>
                     </div>
                   </div>
 
-                  {/* Step 3: Out for Delivery */}
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-white shadow-md text-xs font-bold ring-2 ring-[#7C3AED]/40"
-                      style={{
-                        background:
-                          orderStage >= 2
-                            ? 'linear-gradient(135deg, #7C3AED, #6D28D9)'
-                            : '#E2E8F0',
-                      }}
-                    >
-                      <Bike className="w-4 h-4" />
+                  {/* Delivery Preferences */}
+                  <div
+                    className="p-5 rounded-3xl flex flex-col gap-3 shadow-sm md:col-span-2"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.65)',
+                      border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                      <h3 className="text-sm font-black text-[#2E1065] uppercase tracking-wider">
+                        Customer Delivery Preferences
+                      </h3>
                     </div>
-                  </div>
 
-                  {/* Step 4: Delivered */}
-                  <div className="relative z-10 flex flex-col items-center">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center shadow-md text-xs font-bold"
-                      style={{
-                        background:
-                          orderStage >= 3
-                            ? 'linear-gradient(135deg, #10B981, #059669)'
-                            : '#E2E8F0',
-                        color: orderStage >= 3 ? '#FFFFFF' : '#94A3B8',
-                      }}
-                    >
-                      <CheckCircle2 className="w-4 h-4" />
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="p-3 rounded-2xl bg-white/70 flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-bold text-[#2E1065] block">
+                            Contactless Delivery
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            Leave at doorstep
+                          </span>
+                        </div>
+                        <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#7C3AED]" />
+                      </div>
+
+                      <div className="p-3 rounded-2xl bg-white/70 flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-bold text-[#2E1065] block">
+                            Thermal Assurance
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            Multi-temp sealed
+                          </span>
+                        </div>
+                        <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#7C3AED]" />
+                      </div>
+
+                      <div className="p-3 rounded-2xl bg-white/70 flex items-center justify-between">
+                        <div>
+                          <span className="text-xs font-bold text-[#2E1065] block">
+                            SMS & WhatsApp Alerts
+                          </span>
+                          <span className="text-[10px] text-slate-400">
+                            Live delivery updates
+                          </span>
+                        </div>
+                        <input type="checkbox" defaultChecked className="w-4 h-4 accent-[#7C3AED]" />
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                {/* Step Labels Grid */}
-                <div className="grid grid-cols-4 gap-1 text-center font-mono">
-                  <div>
-                    <span className="text-[10px] font-bold text-[#2E1065] block leading-tight font-sans">
-                      Order Placed
-                    </span>
-                    <span className="text-[9px] text-slate-400 block mt-0.5">
-                      10:20 AM
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] font-bold text-[#2E1065] block leading-tight font-sans">
-                      Preparing Your Food
-                    </span>
-                    <span className="text-[9px] text-slate-400 block mt-0.5">
-                      10:28 AM
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] font-bold text-[#7C3AED] block leading-tight font-sans">
-                      Out for Delivery
-                    </span>
-                    <span className="text-[9px] text-slate-400 block mt-0.5">
-                      10:40 AM
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-400 block leading-tight font-sans">
-                      Delivered
-                    </span>
-                    <span className="text-[9px] text-slate-400 block mt-0.5">
-                      --:--
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Message Pill */}
-              <div
-                className="p-3 rounded-2xl text-center shadow-xs"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.55)',
-                  border: '1px solid rgba(255, 255, 255, 0.75)',
-                }}
-              >
-                <p className="text-xs font-black text-[#581C87] flex items-center justify-center gap-1.5">
-                  <span>Your order is on the way!</span>
-                  <span>🚀</span>
-                </p>
-              </div>
+              </section>
             </div>
-          </div>
+          )}
+
         </div>
       </div>
     </div>
