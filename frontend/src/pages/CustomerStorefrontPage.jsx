@@ -715,70 +715,74 @@ export default function CustomerStorefrontPage() {
               return (
                 <div key={prod.id} className="relative flex flex-col group">
                   
-                  {/* Floating Transparent 3D Glass Product Card */}
+                  {/* Floating Transparent 3D Glass Product Card (Compact & Professionally Aligned) */}
                   <div
                     style={tint.cardStyle}
-                    className="rounded-[26px] p-4 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.015] relative z-10 min-h-[355px] sm:min-h-[365px] overflow-hidden"
+                    className="rounded-[22px] p-3 sm:p-3.5 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.01] relative z-10 min-h-[290px] sm:min-h-[305px] overflow-hidden"
                   >
                     {/* Glossy Diagonal Specular Glare Reflection */}
                     <div 
-                      className="absolute inset-0 pointer-events-none rounded-[26px]"
+                      className="absolute inset-0 pointer-events-none rounded-[22px]"
                       style={{
                         background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.10) 35%, transparent 65%)',
                       }}
                     />
 
                     {/* Top Row: Thermal State Badge & Wishlist Heart */}
-                    <div className="relative z-10 flex items-center justify-between mb-2.5">
-                      <span className={`bg-gradient-to-r ${prod.badgeGradient} text-white font-black px-3 py-1 rounded-full text-[11px] shadow-sm flex items-center gap-1 select-none`}>
+                    <div className="relative z-10 flex items-center justify-between mb-2">
+                      <span className={`bg-gradient-to-r ${prod.badgeGradient} text-white font-black px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] shadow-sm flex items-center gap-1 select-none`}>
                         {prod.badgeText}
                       </span>
 
                       <button
                         onClick={(e) => handleToggleWishlist(prod.id, e)}
-                        className="w-8 h-8 rounded-full bg-black/25 backdrop-blur-md border border-white/50 flex items-center justify-center text-white hover:bg-black/45 transition-colors shrink-0 cursor-pointer shadow-xs"
+                        className="w-7 h-7 rounded-full bg-black/25 backdrop-blur-md border border-white/50 flex items-center justify-center text-white hover:bg-black/45 transition-colors shrink-0 cursor-pointer shadow-xs"
                         title={isSaved ? "Remove from wishlist" : "Add to wishlist"}
                       >
                         <Heart 
-                          className={`w-4 h-4 ${isSaved ? 'fill-rose-500 text-rose-500' : 'text-white'}`} 
+                          className={`w-3.5 h-3.5 ${isSaved ? 'fill-rose-500 text-rose-500' : 'text-white'}`} 
                         />
                       </button>
                     </div>
 
-                    {/* Product Photo Asset with Weight Pill (Instamart / Quick-Commerce Compact Size) */}
-                    <div className="relative z-10 h-28 sm:h-32 w-full rounded-2xl overflow-hidden mb-2.5 bg-black/20 flex items-center justify-center">
+                    {/* Food Image Asset (Small, Centered, Fully Visible with Object-Fit Contain) */}
+                    <div className="relative z-10 h-24 sm:h-26 w-full rounded-xl overflow-hidden mb-2 bg-black/25 flex items-center justify-center p-1.5">
                       <img
                         src={prod.img}
                         alt={prod.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        style={{
+                          objectFit: 'contain',
+                          objectPosition: 'center',
+                          maxHeight: '100%',
+                          maxWidth: '100%',
+                        }}
+                        className="w-auto h-auto max-h-full max-w-full drop-shadow-sm select-none pointer-events-none"
                         loading="lazy"
                       />
-                      {/* Gradient Mask for bottom edge contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
                       
                       {/* Weight badge pill overlay */}
-                      <div className="absolute bottom-1.5 left-2 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20">
+                      <div className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[9px] font-mono font-bold text-white border border-white/20">
                         {prod.weight}
                       </div>
                     </div>
 
                     {/* Product Title & Description */}
-                    <div className="relative z-10 mb-3 space-y-1">
-                      <h3 className="font-extrabold text-white text-[15px] sm:text-base leading-snug tracking-tight line-clamp-1 drop-shadow-xs">
+                    <div className="relative z-10 mb-2 space-y-0.5">
+                      <h3 className="font-extrabold text-white text-sm sm:text-[15px] leading-tight tracking-tight line-clamp-1 drop-shadow-xs">
                         {prod.displayName || prod.name}
                       </h3>
-                      <p className="text-[12px] text-white/85 line-clamp-2 leading-relaxed font-normal">
+                      <p className="text-[11px] text-white/80 line-clamp-2 leading-relaxed font-normal">
                         {prod.description}
                       </p>
                     </div>
 
                     {/* Price, SLA Telemetry & Stepper Quantity Pill */}
-                    <div className="relative z-10 pt-3 border-t border-white/20 flex items-center justify-between">
+                    <div className="relative z-10 pt-2 border-t border-white/20 flex items-center justify-between">
                       <div>
-                        <div className="text-xl sm:text-2xl font-black text-[#FFD52A] font-mono leading-none tracking-tight drop-shadow-xs">
+                        <div className="text-lg sm:text-xl font-black text-[#FFD52A] font-mono leading-none tracking-tight drop-shadow-xs">
                           ${prod.price.toFixed(2)}
                         </div>
-                        <div className="text-[11px] font-bold text-[#8DFFD0] font-mono mt-1 flex items-center gap-1 drop-shadow-xs">
+                        <div className="text-[10px] sm:text-[11px] font-bold text-[#8DFFD0] font-mono mt-0.5 flex items-center gap-1 drop-shadow-xs">
                           <Zap className="w-3 h-3 fill-[#8DFFD0]" />
                           <span>{prod.eta}</span>
                         </div>
@@ -793,20 +797,20 @@ export default function CustomerStorefrontPage() {
                             border: '1.5px solid rgba(255, 255, 255, 0.65)',
                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
                           }}
-                          className="flex items-center gap-2 px-2.5 py-1 rounded-full shadow-md"
+                          className="flex items-center gap-1.5 px-2 py-0.5 rounded-full shadow-md"
                         >
                           <button
                             onClick={(e) => handleDecreaseQuantity(prod.id, e)}
-                            className="w-5 h-5 rounded-full flex items-center justify-center text-white font-bold text-sm hover:text-[#8DFFD0] active:scale-90 transition-transform cursor-pointer"
+                            className="w-4 h-4 rounded-full flex items-center justify-center text-white font-bold text-xs hover:text-[#8DFFD0] active:scale-90 transition-transform cursor-pointer"
                           >
-                            <Minus className="w-3.5 h-3.5" />
+                            <Minus className="w-3 h-3" />
                           </button>
                           <span className="text-xs font-black text-white px-1 font-mono">{qty}</span>
                           <button
                             onClick={(e) => handleAddToCart(prod, e)}
-                            className="w-5 h-5 rounded-full flex items-center justify-center text-[#8DFFD0] font-bold text-sm hover:brightness-125 active:scale-90 transition-transform cursor-pointer"
+                            className="w-4 h-4 rounded-full flex items-center justify-center text-[#8DFFD0] font-bold text-xs hover:brightness-125 active:scale-90 transition-transform cursor-pointer"
                           >
-                            <Plus className="w-3.5 h-3.5 stroke-[3]" />
+                            <Plus className="w-3 h-3 stroke-[3]" />
                           </button>
                         </div>
                       ) : (
@@ -815,9 +819,9 @@ export default function CustomerStorefrontPage() {
                           style={{
                             background: 'linear-gradient(135deg, #FFD52A 0%, #FFC928 100%)',
                             color: '#1A1A1A',
-                            boxShadow: '0 4px 15px rgba(255, 201, 40, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
+                            boxShadow: '0 3px 12px rgba(255, 201, 40, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
                           }}
-                          className="px-4 py-1.5 rounded-full font-black text-xs hover:brightness-110 active:scale-95 transition-all flex items-center gap-1 cursor-pointer"
+                          className="px-3.5 py-1 rounded-full font-black text-[11px] sm:text-xs hover:brightness-110 active:scale-95 transition-all flex items-center gap-1 cursor-pointer"
                         >
                           <Plus className="w-3 h-3 stroke-[3]" />
                           <span>ADD</span>
@@ -828,7 +832,7 @@ export default function CustomerStorefrontPage() {
 
                   {/* Soft Realistic Ambient Floor Underglow Reflection */}
                   <div
-                    className="w-[88%] h-6 mx-auto -mt-2 rounded-b-[24px] blur-[6px] opacity-40 pointer-events-none select-none hidden sm:block"
+                    className="w-[84%] h-4.5 mx-auto -mt-2 rounded-b-[20px] blur-[5px] opacity-35 pointer-events-none select-none hidden sm:block"
                     style={{ background: tint.underglow }}
                   />
                 </div>
@@ -941,7 +945,9 @@ export default function CustomerStorefrontPage() {
                     className="p-3 rounded-2xl bg-black/30 border border-white/20 flex items-center justify-between"
                   >
                     <div className="flex items-center gap-3">
-                      <img src={prod.img} alt={prod.name} className="w-10 h-10 rounded-xl object-cover shrink-0" />
+                      <div className="w-10 h-10 rounded-xl bg-black/40 flex items-center justify-center p-1 overflow-hidden shrink-0 border border-white/20">
+                        <img src={prod.img} alt={prod.name} style={{ objectFit: 'contain', objectPosition: 'center' }} className="w-full h-full object-contain" />
+                      </div>
                       <div>
                         <div className="text-xs sm:text-sm font-bold text-white line-clamp-1">{prod.name}</div>
                         <div className="text-[11px] text-[#8DFFD0] font-mono">
