@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import {
   ShoppingBag,
   Bike,
@@ -9,7 +10,9 @@ import {
   Zap,
   BarChart3,
   Mail,
-  ShieldCheck
+  ShieldCheck,
+  PlayCircle,
+  ArrowRight
 } from 'lucide-react';
 
 // Dedicated SVG Icon for 3D Shopping Bag matching the reference image
@@ -108,40 +111,40 @@ const PORTALS = [
       backdropFilter: 'blur(12px) saturate(180%)',
       WebkitBackdropFilter: 'blur(12px) saturate(180%)',
       border: '1.5px solid rgba(255, 255, 255, 0.88)',
-      boxShadow: '0 8px 24px -4px rgba(255, 87, 34, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(255, 87, 34, 0.18)',
+      boxShadow: '0 8px 24px -4px rgba(239, 68, 68, 0.28), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(239, 68, 68, 0.18)',
     },
-    // Premium Translucent Peach/Coral Glass
+    // Premium Translucent Warm Peach Glass
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(255, 222, 208, 0.46) 0%, rgba(255, 178, 158, 0.28) 45%, rgba(255, 142, 108, 0.40) 100%)',
+      background: 'linear-gradient(145deg, rgba(255, 245, 238, 0.52) 0%, rgba(255, 225, 215, 0.34) 45%, rgba(255, 195, 180, 0.42) 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.80)',
-      boxShadow: '0 25px 60px -15px rgba(255, 87, 34, 0.32), 0 10px 25px -5px rgba(255, 87, 34, 0.18), inset 0 2px 3px rgba(255, 255, 255, 0.92), inset 0 -2px 3px rgba(255, 87, 34, 0.20)',
+      border: '1.5px solid rgba(255, 255, 255, 0.82)',
+      boxShadow: '0 25px 60px -15px rgba(239, 68, 68, 0.30), 0 10px 25px -5px rgba(255, 87, 34, 0.22), inset 0 2px 3px rgba(255, 255, 255, 0.90), inset 0 -2px 3px rgba(239, 68, 68, 0.18)',
     },
     demoPillStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 205, 185, 0.35) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 230, 220, 0.35) 100%)',
       border: '1px solid rgba(255, 255, 255, 0.85)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
-      boxShadow: '0 4px 15px rgba(255, 87, 34, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
+      boxShadow: '0 4px 15px rgba(239, 68, 68, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(255, 170, 145, 0.35) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(239, 68, 68, 0.35) 0%, transparent 100%)',
     },
-    iconBg: 'bg-white/80 backdrop-blur-md text-[#FF451A] border border-white/90',
+    iconBg: 'bg-white/80 backdrop-blur-md text-[#FF5722] border border-white/90',
   },
   {
     id: 'rider',
     title: 'Delivery Partner HUD',
-    subtitle: 'Deliver more. Earn more.',
+    subtitle: 'Deliver & Earn. Hyper-Local.',
     role: 'RIDER',
     path: '/rider/login',
     buttonText: 'Rider Login →',
     icon: ScooterIcon3D,
-    badgeText: 'Fleet Partner',
-    badgeIcon: Zap,
-    badgeIconColor: '#2563EB',
-    badgeIconDropShadow: 'drop-shadow(0 0 3.5px rgba(37, 99, 235, 0.55))',
+    badgeText: 'Active Navigation HUD',
+    badgeIcon: Bike,
+    badgeIconColor: '#FF3D00',
+    badgeIconDropShadow: 'drop-shadow(0 0 3px rgba(255, 61, 0, 0.40))',
     badgeStyle: {
       background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.58) 100%)',
       backdropFilter: 'blur(12px)',
@@ -151,49 +154,49 @@ const PORTALS = [
       boxShadow: '0 2px 10px rgba(0, 0, 0, 0.05), inset 0 1px 1.5px rgba(255, 255, 255, 0.95)',
     },
     accountInfo: 'Demo: rider@logiroute.ai',
-    mailIconColor: '#6366F1',
-    subtitleColor: '#BE123C',
-    desc: 'Turn-by-turn routing navigation, cold-chain SLA telemetry, dispatch wave acceptance, and shift manager.',
+    mailIconColor: '#F97316',
+    subtitleColor: '#EA580C',
+    desc: 'Accept multi-stop dispatch waves, dark store bay pick-up confirmation, and real-time turn-by-turn routing.',
     // Luminous Frosted Glass Squircle for Symbol
     luminousGlassStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(235, 225, 255, 0.38) 50%, rgba(220, 205, 255, 0.48) 100%)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 230, 215, 0.38) 50%, rgba(255, 205, 185, 0.48) 100%)',
       backdropFilter: 'blur(12px) saturate(180%)',
       WebkitBackdropFilter: 'blur(12px) saturate(180%)',
       border: '1.5px solid rgba(255, 255, 255, 0.88)',
-      boxShadow: '0 8px 24px -4px rgba(168, 85, 247, 0.25), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(168, 85, 247, 0.18)',
+      boxShadow: '0 8px 24px -4px rgba(255, 61, 0, 0.32), 0 0 16px rgba(255, 255, 255, 0.80), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -1.5px 2px rgba(255, 61, 0, 0.20)',
     },
-    // Vibrant Translucent Purple / Violet Glass matching reference image
+    // Premium Translucent Warm Coral Glass
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(240, 225, 255, 0.58) 0%, rgba(216, 182, 255, 0.40) 45%, rgba(196, 150, 255, 0.52) 100%)',
+      background: 'linear-gradient(145deg, rgba(255, 240, 230, 0.52) 0%, rgba(255, 215, 200, 0.34) 45%, rgba(255, 180, 160, 0.42) 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.85)',
-      boxShadow: '0 25px 60px -15px rgba(168, 85, 247, 0.48), 0 10px 30px -5px rgba(147, 51, 234, 0.28), 0 0 25px rgba(192, 132, 252, 0.35), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(168, 85, 247, 0.30)',
+      border: '1.5px solid rgba(255, 255, 255, 0.82)',
+      boxShadow: '0 25px 60px -15px rgba(255, 61, 0, 0.32), 0 10px 25px -5px rgba(234, 88, 12, 0.22), inset 0 2px 3px rgba(255, 255, 255, 0.90), inset 0 -2px 3px rgba(255, 61, 0, 0.20)',
     },
     demoPillStyle: {
-      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(230, 215, 255, 0.40) 100%)',
-      border: '1px solid rgba(255, 255, 255, 0.88)',
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 225, 205, 0.35) 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.85)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
-      boxShadow: '0 4px 15px rgba(168, 85, 247, 0.16), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
+      boxShadow: '0 4px 15px rgba(255, 61, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
-      background: 'linear-gradient(180deg, rgba(168, 85, 247, 0.48) 0%, transparent 100%)',
+      background: 'linear-gradient(180deg, rgba(255, 61, 0, 0.35) 0%, transparent 100%)',
     },
-    iconBg: 'bg-white/80 backdrop-blur-md text-[#FF451A] border border-white/90',
+    iconBg: 'bg-white/80 backdrop-blur-md text-[#FF3D00] border border-white/90',
   },
   {
     id: 'admin',
-    title: 'Control Tower Console',
-    subtitle: 'Manage. Monitor. Grow.',
+    title: 'Admin Operations Hub',
+    subtitle: 'Dark Store Control Tower.',
     role: 'ADMIN',
     path: '/admin/login',
     buttonText: 'Admin Login →',
     icon: BarChartIcon3D,
-    badgeText: 'Hub Operations',
+    badgeText: 'Control Tower & 2-Opt',
     badgeIcon: Building2,
     badgeIconColor: '#EA580C',
-    badgeIconDropShadow: 'drop-shadow(0 0 3.5px rgba(234, 88, 12, 0.55))',
+    badgeIconDropShadow: 'drop-shadow(0 0 3px rgba(234, 88, 12, 0.40))',
     badgeStyle: {
       background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.58) 100%)',
       backdropFilter: 'blur(12px)',
@@ -237,6 +240,17 @@ const PORTALS = [
 ];
 
 export default function LoginPage() {
+  const { enableDemoMode } = useAuth();
+  const navigate = useNavigate();
+
+  const handleQuickDemoAccess = (role) => {
+    enableDemoMode(role);
+    if (role === 'ADMIN') navigate('/admin');
+    else if (role === 'RIDER') navigate('/rider');
+    else if (role === 'CUSTOMER') navigate('/customer');
+    else navigate('/admin');
+  };
+
   return (
     <div className="min-h-screen min-h-[100dvh] w-full relative flex flex-col justify-center items-center p-4 sm:p-6 md:p-10 font-sans overflow-x-hidden selection:bg-[#FF5722]/20 selection:text-[#FF5722]">
       
@@ -258,7 +272,7 @@ export default function LoginPage() {
           WebkitBackfaceVisibility: 'hidden',
         }}
       >
-        {/* Subtle Warm Atmospheric Glow Overlay (Non-obstructive) */}
+        {/* Subtle Warm Atmospheric Glow Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-orange-200/10 via-transparent to-stone-900/25 pointer-events-none" />
       </div>
 
@@ -267,7 +281,7 @@ export default function LoginPage() {
         {/* ==================================================================== */}
         {/* HEADER: High-Contrast Modern Typography                              */}
         {/* ==================================================================== */}
-        <div className="text-center mb-7 sm:mb-10">
+        <div className="text-center mb-6 sm:mb-8">
           
           {/* Top Pill Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-white/90 text-xs font-bold text-[#FF5722] mb-3 shadow-xs">
@@ -292,6 +306,60 @@ export default function LoginPage() {
         </div>
 
         {/* ==================================================================== */}
+        {/* PROMINENT DEMO MODE / INSTANT PRESENTATION ACCESS BANNER              */}
+        {/* ==================================================================== */}
+        <div 
+          style={{
+            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.92) 100%)',
+            backdropFilter: 'blur(20px)',
+            border: '1.5px solid rgba(56, 189, 248, 0.45)',
+            boxShadow: '0 16px 40px -10px rgba(0, 0, 0, 0.45), 0 0 25px rgba(14, 165, 233, 0.2)',
+          }}
+          className="mb-8 p-4 sm:p-5 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-4 text-white"
+        >
+          <div className="flex items-center gap-3.5 text-center lg:text-left">
+            <div className="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+              <Zap className="w-6 h-6 animate-pulse" />
+            </div>
+            <div>
+              <div className="text-sm sm:text-base font-extrabold flex items-center justify-center lg:justify-start gap-2 flex-wrap">
+                <span>Instant Presentation Mode (Bypass Backend)</span>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-xs">
+                  OFFLINE READY
+                </span>
+              </div>
+              <div className="text-xs text-slate-300 mt-1 leading-relaxed">
+                Backend connection delayed? Launch a 100% interactive live demo immediately with preloaded routes, active couriers, and 2-Opt solver metrics.
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2.5 w-full lg:w-auto shrink-0 justify-center">
+            <button
+              onClick={() => handleQuickDemoAccess('ADMIN')}
+              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30 active:scale-[0.98] transition-all cursor-pointer"
+            >
+              <Zap className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+              <span>Admin Demo</span>
+            </button>
+            <button
+              onClick={() => handleQuickDemoAccess('RIDER')}
+              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-amber-500/30 active:scale-[0.98] transition-all cursor-pointer"
+            >
+              <Bike className="w-3.5 h-3.5" />
+              <span>Rider HUD</span>
+            </button>
+            <button
+              onClick={() => handleQuickDemoAccess('CUSTOMER')}
+              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-all cursor-pointer"
+            >
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>Customer</span>
+            </button>
+          </div>
+        </div>
+
+        {/* ==================================================================== */}
         {/* 3 TRANSLUCENT 3D GLASSMORPHISM CARDS (With Specular Highlights)      */}
         {/* ==================================================================== */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 mb-6">
@@ -308,7 +376,7 @@ export default function LoginPage() {
                 {/* 3D Glass Card Container */}
                 <div
                   style={portal.cardStyle}
-                  className="rounded-[32px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.015] relative z-10 min-h-[385px] overflow-hidden"
+                  className="rounded-[32px] p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.015] relative z-10 min-h-[420px] overflow-hidden"
                 >
                   
                   {/* Glossy Specular Diagonal Glass Glare Reflection */}
@@ -379,31 +447,47 @@ export default function LoginPage() {
                     </p>
                   </div>
 
-                  {/* Bottom Actions: Matching Translucent Frosted Glass Demo Pill & 3D CTA Button */}
-                  <div className="relative z-10 pt-4 border-t border-white/45 space-y-3">
+                  {/* Bottom Actions: Matching Translucent Frosted Glass Demo Pill & Action Buttons */}
+                  <div className="relative z-10 pt-4 border-t border-white/45 space-y-2.5">
                     
                     {/* Demo Account Translucent Frosted Glass Pill (Theme-Matched) */}
                     <div 
                       style={portal.demoPillStyle}
-                      className="text-[12px] font-semibold text-slate-800 rounded-xl px-3.5 py-2 flex items-center gap-2 transition-all"
+                      className="text-[12px] font-semibold text-slate-800 rounded-xl px-3.5 py-1.5 flex items-center gap-2 transition-all"
                     >
                       <Mail className="w-3.5 h-3.5 shrink-0" style={{ color: portal.mailIconColor }} />
                       <span className="truncate">{portal.accountInfo}</span>
                     </div>
 
-                    {/* 3D Glossy Orange-to-Red Action Button */}
+                    {/* PROMINENT DEMO ACCESS BUTTON (Bypass Backend Directly) */}
+                    <button
+                      type="button"
+                      onClick={() => handleQuickDemoAccess(portal.role)}
+                      style={{
+                        height: '46px',
+                        borderRadius: '23px',
+                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%)',
+                        boxShadow: '0 8px 20px -2px rgba(16, 185, 129, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.55)',
+                      }}
+                      className="w-full text-white font-bold text-xs tracking-wide flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer relative overflow-hidden group/demobtn"
+                    >
+                      <Zap className="w-3.5 h-3.5 z-10 text-amber-200 fill-amber-200" />
+                      <span className="z-10">Quick Demo Access (Bypass Backend)</span>
+                    </button>
+
+                    {/* 3D Glossy Orange-to-Red Standard Login Button */}
                     <Link
                       to={portal.path}
                       style={{
-                        height: '50px',
-                        borderRadius: '25px',
+                        height: '42px',
+                        borderRadius: '21px',
                         background: 'linear-gradient(135deg, #FF6F3D 0%, #FF3D00 100%)',
-                        boxShadow: '0 10px 25px -3px rgba(255, 61, 0, 0.48), inset 0 1.5px 2px rgba(255, 255, 255, 0.65), inset 0 -1.5px 2px rgba(180, 20, 0, 0.25)',
+                        boxShadow: '0 8px 20px -3px rgba(255, 61, 0, 0.40), inset 0 1.5px 2px rgba(255, 255, 255, 0.65)',
                       }}
-                      className="w-full text-white font-bold text-xs tracking-wide flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_14px_30px_-3px_rgba(255,61,0,0.6)] active:scale-[0.98] transition-all cursor-pointer relative overflow-hidden group/btn"
+                      className="w-full text-white font-bold text-xs tracking-wide flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer relative overflow-hidden group/btn"
                     >
                       {/* Top Specular Sheen on Button */}
-                      <div className="absolute top-0 inset-x-0 h-[45%] bg-gradient-to-b from-white/30 to-transparent pointer-events-none rounded-t-[25px]" />
+                      <div className="absolute top-0 inset-x-0 h-[45%] bg-gradient-to-b from-white/30 to-transparent pointer-events-none rounded-t-[21px]" />
                       <Lock className="w-3.5 h-3.5 z-10" />
                       <span className="z-10">{portal.buttonText}</span>
                     </Link>
@@ -424,7 +508,7 @@ export default function LoginPage() {
         {/* Security Footer Notice */}
         <div className="text-center text-xs font-semibold text-slate-800 flex items-center justify-center gap-1.5 pt-2 drop-shadow-2xs">
           <ShieldCheck className="w-4 h-4 text-[#FF5722]" />
-          <span>Role-Based Secure Access · LogiRoute AI Quick-Commerce Platform</span>
+          <span>Role-Based Secure Access • LogiRoute AI Quick-Commerce Platform</span>
         </div>
 
       </div>

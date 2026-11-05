@@ -33,6 +33,7 @@ import {
   ChefHat,
   ShoppingCart,
   CreditCard,
+  Zap,
   ShieldCheck,
   Check,
   PackageCheck,
@@ -199,7 +200,7 @@ const FOOD_CATALOG = [
 const CATEGORIES = ['All', 'Burgers', 'Pizza', 'Snacks', 'Drinks', 'Desserts', 'Healthy'];
 
 export default function CustomerStorefrontPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, isDemoMode } = useAuth();
   const userName = user?.name || 'Deekshitha';
 
   // Section Display Navigation State (Dashboard / Browse Menu = Food Menu, Live Tracker, My Orders, Wishlist, Profile)
@@ -820,9 +821,21 @@ export default function CustomerStorefrontPage() {
               </div>
 
               <div>
-                <h1 className="text-base sm:text-xl font-black text-[#2E1065] tracking-tight leading-tight">
-                  Welcome, {userName}!
-                </h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-base sm:text-xl font-black text-[#2E1065] tracking-tight leading-tight">
+                    Welcome, {userName}!
+                  </h1>
+                  {isDemoMode && (
+                    <div 
+                      className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold flex items-center gap-1 border shadow-xs select-none bg-amber-500/20 text-amber-950 border-amber-500/40"
+                      title="Demo Mode Active (Bypassing backend)"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                      <Zap className="w-3 h-3 text-amber-600 fill-amber-600" />
+                      <span>Demo Mode</span>
+                    </div>
+                  )}
+                </div>
                 <p className="text-xs sm:text-sm font-semibold text-[#4C1D95]/80 flex items-center gap-1.5 mt-0.5">
                   <span>Order delicious food, delivered in minutes</span>
                   <span className="text-rose-500">❤️</span>

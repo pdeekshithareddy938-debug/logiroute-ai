@@ -1,9 +1,9 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Menu, LogOut, Bell, Shield } from 'lucide-react';
+import { Menu, LogOut, Bell, Shield, Zap } from 'lucide-react';
 
 export default function Navbar({ onToggleSidebar, isDarkTheme = true }) {
-  const { user, logout } = useAuth();
+  const { user, logout, isDemoMode } = useAuth();
   const displayName = user?.name || user?.full_name || 'Deekshitha';
   const displayRole = user?.role ? user.role.toUpperCase() : 'ADMIN';
   const roleTitle = displayRole === 'ADMIN' ? 'Deekshitha - Dark Store Lead (HUB-01)' : displayName;
@@ -31,11 +31,29 @@ export default function Navbar({ onToggleSidebar, isDarkTheme = true }) {
           </button>
 
           {/* Admin Greeting */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <h1 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-1.5">
               <span>Hello, Admin!</span>
               <span className="text-xl">👋</span>
             </h1>
+
+            {/* Subtle Visual Indicator: Demo Mode Active Badge */}
+            {isDemoMode && (
+              <div 
+                className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold flex items-center gap-1.5 border shadow-sm transition-all select-none"
+                style={{
+                  background: 'rgba(245, 158, 11, 0.16)',
+                  color: '#FCD34D',
+                  borderColor: 'rgba(245, 158, 11, 0.45)',
+                  boxShadow: '0 0 12px rgba(245, 158, 11, 0.25)',
+                }}
+                title="Running in offline mock preview mode (Bypassing backend)"
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_6px_#f59e0b]" />
+                <Zap className="w-3 h-3 text-amber-300 fill-amber-300" />
+                <span>Demo Mode Active</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -79,6 +97,11 @@ export default function Navbar({ onToggleSidebar, isDarkTheme = true }) {
           <span className="text-emerald-400 font-bold tracking-wide">HUB-01 COCKPIT</span>
           <span className="text-slate-600">|</span>
           <span className="text-slate-300 font-medium">100 Market St, San Francisco</span>
+          {isDemoMode && (
+            <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] text-amber-300 bg-amber-500/10 border border-amber-500/20 font-sans">
+              Mock Simulation Active
+            </span>
+          )}
         </div>
 
         {/* Right: Deekshitha Lead Info & Sign Out Button */}

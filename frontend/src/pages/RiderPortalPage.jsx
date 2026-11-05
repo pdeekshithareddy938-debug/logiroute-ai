@@ -224,7 +224,7 @@ const getFoodThermalIndicator = (label = '') => {
 };
 
 export default function RiderPortalPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, isDemoMode } = useAuth();
 
   // Navigation State
   const [activeNav, setActiveNav] = useState('Dashboard');
@@ -824,6 +824,17 @@ export default function RiderPortalPage() {
                 <span>Hello, Rider!</span>
                 <span>👋</span>
               </h1>
+
+              {isDemoMode && (
+                <div 
+                  className="px-2.5 py-1 rounded-full text-[11px] font-mono font-bold flex items-center gap-1.5 border shadow-sm transition-all select-none bg-amber-500/20 text-amber-900 border-amber-500/40"
+                  title="Demo Mode Active (Bypassing backend)"
+                >
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <Zap className="w-3 h-3 text-amber-600 fill-amber-600" />
+                  <span className="hidden sm:inline">Demo Mode Active</span>
+                </div>
+              )}
             </div>
 
             {/* Right: Notification Bell + Profile Avatar */}

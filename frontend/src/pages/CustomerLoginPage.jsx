@@ -14,7 +14,8 @@ import {
   Bike,
   Building2,
   ShoppingBag,
-  ExternalLink
+  ExternalLink,
+  Zap
 } from 'lucide-react';
 
 function ScooterLogo3D({ className = "w-16 h-12" }) {
@@ -63,8 +64,13 @@ export default function CustomerLoginPage() {
   const [forgotToast, setForgotToast] = useState(false);
   const [signUpModal, setSignUpModal] = useState(false);
 
-  const { login } = useAuth();
+  const { login, enableDemoMode } = useAuth();
   const navigate = useNavigate();
+
+  const handleDemoAccess = () => {
+    enableDemoMode('CUSTOMER');
+    navigate('/customer');
+  };
 
   // Pre-fill demo shopper credentials
   const handleQuickFill = () => {
@@ -310,8 +316,8 @@ export default function CustomerLoginPage() {
               </button>
             </div>
 
-            {/* Primary Action Button: Log In → */}
-            <div className="pt-1">
+            {/* Primary Action Buttons: Log In & Quick Demo Access */}
+            <div className="pt-1 space-y-2.5">
               <button
                 type="submit"
                 disabled={isLoading}
@@ -328,6 +334,22 @@ export default function CustomerLoginPage() {
                 ) : (
                   <span>Log In →</span>
                 )}
+              </button>
+
+              {/* Prominent Quick Demo Access Button (Bypass Backend) */}
+              <button
+                type="button"
+                onClick={handleDemoAccess}
+                style={{
+                  height: '48px',
+                  borderRadius: '24px',
+                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%)',
+                  boxShadow: '0 8px 20px -2px rgba(16, 185, 129, 0.40), inset 0 1.5px 2px rgba(255, 255, 255, 0.55)',
+                }}
+                className="w-full text-white font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer shadow-lg"
+              >
+                <Zap className="w-4 h-4 text-amber-200 fill-amber-200" />
+                <span>Quick Demo Access (Bypass Backend)</span>
               </button>
             </div>
           </form>
