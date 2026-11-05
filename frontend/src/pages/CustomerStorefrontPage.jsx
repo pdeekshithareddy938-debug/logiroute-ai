@@ -11,10 +11,7 @@ import {
   Bike,
   LogOut,
   ArrowRight,
-  Search,
   X,
-  Flame,
-  Snowflake,
   Heart,
   ShoppingCart,
   Zap,
@@ -206,51 +203,52 @@ const CATEGORIES = [
   'Snacks & More',
 ];
 
-// 4 Frosted Glass Tints with Depth, Specular Highlights, and Glowing Floor Reflections
+// 4 Distinct Balanced Frosted Glass Tints (Olive Green, Subtle Teal, Fresh Emerald, Champagne Gold)
+// Truly transparent with visible natural background scenery, diagonal glare sheen, and floor reflections
 const CARD_TINT_STYLES = [
-  // 0: Olive green glass
+  // 0: Warm Olive Green Glass
   {
     cardStyle: {
-      background: 'linear-gradient(150deg, rgba(31, 91, 56, 0.65) 0%, rgba(31, 91, 56, 0.45) 100%)',
-      backdropFilter: 'blur(18px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(18px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.55)',
-      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 25px rgba(46, 213, 115, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.75)',
+      background: 'linear-gradient(145deg, rgba(45, 90, 55, 0.42) 0%, rgba(35, 75, 45, 0.24) 45%, rgba(55, 100, 65, 0.36) 100%)',
+      backdropFilter: 'blur(16px) saturate(170%)',
+      WebkitBackdropFilter: 'blur(16px) saturate(170%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.65)',
+      boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.38), 0 0 20px rgba(46, 213, 115, 0.25), inset 0 2px 3px rgba(255, 255, 255, 0.85), inset 0 -1.5px 2px rgba(30, 70, 40, 0.28)',
     },
-    underglow: 'linear-gradient(180deg, rgba(46, 213, 115, 0.45) 0%, transparent 100%)',
+    underglow: 'linear-gradient(180deg, rgba(46, 213, 115, 0.35) 0%, transparent 100%)',
   },
-  // 1: Deep emerald/teal glass
+  // 1: Subtle Teal Glass
   {
     cardStyle: {
-      background: 'linear-gradient(150deg, rgba(26, 112, 85, 0.65) 0%, rgba(26, 112, 85, 0.45) 100%)',
-      backdropFilter: 'blur(18px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(18px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.55)',
-      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 25px rgba(141, 255, 208, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.75)',
+      background: 'linear-gradient(145deg, rgba(20, 95, 90, 0.42) 0%, rgba(15, 75, 75, 0.24) 45%, rgba(25, 105, 100, 0.36) 100%)',
+      backdropFilter: 'blur(16px) saturate(170%)',
+      WebkitBackdropFilter: 'blur(16px) saturate(170%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.65)',
+      boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.38), 0 0 20px rgba(141, 255, 208, 0.30), inset 0 2px 3px rgba(255, 255, 255, 0.85), inset 0 -1.5px 2px rgba(15, 75, 75, 0.28)',
     },
-    underglow: 'linear-gradient(180deg, rgba(141, 255, 208, 0.50) 0%, transparent 100%)',
+    underglow: 'linear-gradient(180deg, rgba(141, 255, 208, 0.38) 0%, transparent 100%)',
   },
-  // 2: Olive green / fresh emerald glass
+  // 2: Fresh Emerald Glass
   {
     cardStyle: {
-      background: 'linear-gradient(150deg, rgba(31, 91, 56, 0.65) 0%, rgba(26, 112, 85, 0.48) 100%)',
-      backdropFilter: 'blur(18px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(18px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.55)',
-      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 25px rgba(74, 222, 128, 0.38), inset 0 1.5px 2px rgba(255, 255, 255, 0.75)',
+      background: 'linear-gradient(145deg, rgba(30, 105, 60, 0.42) 0%, rgba(20, 85, 50, 0.24) 45%, rgba(35, 115, 70, 0.36) 100%)',
+      backdropFilter: 'blur(16px) saturate(170%)',
+      WebkitBackdropFilter: 'blur(16px) saturate(170%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.65)',
+      boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.38), 0 0 20px rgba(74, 222, 128, 0.25), inset 0 2px 3px rgba(255, 255, 255, 0.85), inset 0 -1.5px 2px rgba(20, 85, 50, 0.28)',
     },
-    underglow: 'linear-gradient(180deg, rgba(74, 222, 128, 0.45) 0%, transparent 100%)',
+    underglow: 'linear-gradient(180deg, rgba(74, 222, 128, 0.35) 0%, transparent 100%)',
   },
-  // 3: Warm golden glass
+  // 3: Champagne Gold / Warm Amber Glass
   {
     cardStyle: {
-      background: 'linear-gradient(150deg, rgba(151, 105, 37, 0.62) 0%, rgba(151, 105, 37, 0.42) 100%)',
-      backdropFilter: 'blur(18px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(18px) saturate(180%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.55)',
-      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 25px rgba(255, 201, 40, 0.40), inset 0 1.5px 2px rgba(255, 255, 255, 0.75)',
+      background: 'linear-gradient(145deg, rgba(145, 100, 35, 0.42) 0%, rgba(120, 80, 25, 0.24) 45%, rgba(155, 110, 45, 0.36) 100%)',
+      backdropFilter: 'blur(16px) saturate(170%)',
+      WebkitBackdropFilter: 'blur(16px) saturate(170%)',
+      border: '1.5px solid rgba(255, 255, 255, 0.65)',
+      boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.38), 0 0 20px rgba(255, 201, 40, 0.28), inset 0 2px 3px rgba(255, 255, 255, 0.85), inset 0 -1.5px 2px rgba(120, 80, 25, 0.28)',
     },
-    underglow: 'linear-gradient(180deg, rgba(255, 201, 40, 0.48) 0%, transparent 100%)',
+    underglow: 'linear-gradient(180deg, rgba(255, 201, 40, 0.38) 0%, transparent 100%)',
   },
 ];
 
@@ -271,11 +269,9 @@ export default function CustomerStorefrontPage() {
 
   // Filtering
   const [selectedCategory, setSelectedCategory] = useState('All Items');
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Active Live Order Telemetry State
   const [secondsRemaining, setSecondsRemaining] = useState(480); // 8 minutes countdown
-  const [activeStep] = useState(3); // 1: Placed, 2: Packing, 3: Dispatched, 4: Arrived
 
   // Notification Toast Helper
   const triggerToast = (msg) => {
@@ -346,23 +342,19 @@ export default function CustomerStorefrontPage() {
   // Filtered Products
   const filteredProducts = useMemo(() => {
     return CULINARY_CATALOG.filter((item) => {
-      const matchCat =
+      return (
         selectedCategory === 'All Items' ||
         item.category === selectedCategory ||
-        (selectedCategory === 'Snacks & More' && (item.category === 'Frozen Foods' || item.category === 'Gourmet Hot Eats'));
-      const matchSearch =
-        !searchQuery ||
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchCat && matchSearch;
+        (selectedCategory === 'Snacks & More' && (item.category === 'Frozen Foods' || item.category === 'Gourmet Hot Eats'))
+      );
     });
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory]);
 
   return (
     <div className="min-h-screen min-h-[100dvh] w-full relative flex flex-col font-sans overflow-x-hidden selection:bg-[#FFC928]/30 selection:text-[#FFC928]">
       
       {/* ==================================================================== */}
-      {/* 100% FIXED STATIONARY 3D GROCERY MARKET BACKGROUND                   */}
+      {/* 100% FIXED STATIONARY 3D OUTDOOR GROCERY MARKET BACKGROUND           */}
       {/* ==================================================================== */}
       <div 
         aria-hidden="true"
@@ -372,15 +364,15 @@ export default function CustomerStorefrontPage() {
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          backgroundColor: '#163323',
+          backgroundColor: '#1E3B29',
           transform: 'translate3d(0, 0, 0)',
           WebkitTransform: 'translate3d(0, 0, 0)',
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
         }}
       >
-        {/* Subtle Atmospheric Depth Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30 pointer-events-none" />
+        {/* Subtle Atmospheric Daylight & Depth Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/5 via-transparent to-black/25 pointer-events-none" />
       </div>
 
       {/* Dynamic Toast Feedback */}
@@ -398,16 +390,16 @@ export default function CustomerStorefrontPage() {
         
         {/* Brand Left Section */}
         <div className="flex items-center gap-3">
-          {/* Luminous Emerald Squircle Logo */}
+          {/* Luminous Emerald Squircle Logo (48-52px, never stretched) */}
           <div 
             style={{
               background: 'linear-gradient(135deg, rgba(46, 213, 115, 0.95) 0%, rgba(16, 120, 68, 0.95) 100%)',
               border: '1.5px solid rgba(255, 255, 255, 0.85)',
-              boxShadow: '0 0 20px rgba(46, 213, 115, 0.65), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)',
+              boxShadow: '0 0 20px rgba(46, 213, 115, 0.65), inset 0 2px 2px rgba(255, 255, 255, 0.85)',
             }}
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg"
+            className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-lg"
           >
-            <Zap className="w-6 h-6 text-white fill-white drop-shadow-sm" />
+            <Zap className="w-6 h-6 text-white fill-white drop-shadow-sm object-contain" />
           </div>
 
           <div>
@@ -426,7 +418,7 @@ export default function CustomerStorefrontPage() {
                 AI MARKET
               </span>
             </div>
-            <div className="text-xs font-semibold text-white/90 flex items-center gap-1.5 mt-0.5 drop-shadow-sm">
+            <div className="text-xs font-semibold text-white/95 flex items-center gap-1.5 mt-0.5 drop-shadow-sm">
               <MapPin className="w-3.5 h-3.5 text-[#8DFFD0] shrink-0" />
               <span>100 Market St, Financial Pod</span>
             </div>
@@ -439,13 +431,13 @@ export default function CustomerStorefrontPage() {
           <button
             onClick={() => setIsCartDrawerOpen(true)}
             style={{
-              background: 'rgba(31, 91, 56, 0.55)',
+              background: 'rgba(25, 75, 45, 0.48)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
               border: '1.5px solid rgba(255, 255, 255, 0.55)',
-              boxShadow: '0 8px 20px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.65)',
+              boxShadow: '0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1.5px 2px rgba(255, 255, 255, 0.70)',
             }}
-            className="relative w-11 h-11 rounded-2xl flex items-center justify-center text-white hover:border-[#8DFFD0] transition-all cursor-pointer shadow-md"
+            className="relative w-12 h-12 rounded-2xl flex items-center justify-center text-white hover:border-[#8DFFD0] transition-all cursor-pointer shadow-md"
             title="Shopping Cart"
           >
             <ShoppingCart className="w-5 h-5 text-white" />
@@ -466,14 +458,14 @@ export default function CustomerStorefrontPage() {
           <button
             onClick={logout}
             style={{
-              background: 'rgba(31, 91, 56, 0.55)',
+              background: 'rgba(25, 75, 45, 0.48)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
               border: '1.5px solid rgba(255, 255, 255, 0.55)',
-              boxShadow: '0 8px 20px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.65)',
+              boxShadow: '0 6px 18px rgba(0, 0, 0, 0.25), inset 0 1.5px 2px rgba(255, 255, 255, 0.70)',
             }}
             title="Sign Out"
-            className="w-11 h-11 rounded-2xl flex items-center justify-center text-white hover:text-rose-300 transition-colors cursor-pointer shadow-md"
+            className="w-12 h-12 rounded-2xl flex items-center justify-center text-white hover:text-rose-300 transition-colors cursor-pointer shadow-md"
           >
             <LogOut className="w-5 h-5" />
           </button>
@@ -489,7 +481,7 @@ export default function CustomerStorefrontPage() {
           {/* Frosted Glass Container for Live Cold-Chain Tracker */}
           <div 
             style={{
-              background: 'rgba(20, 60, 40, 0.78)',
+              background: 'rgba(16, 52, 32, 0.82)',
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               border: '1.5px solid rgba(255, 255, 255, 0.55)',
@@ -656,18 +648,18 @@ export default function CustomerStorefrontPage() {
                   style={
                     isSelected
                       ? {
-                          background: '#FFC928',
+                          background: 'linear-gradient(135deg, #FFD52A 0%, #FFC928 100%)',
                           color: '#1A1A1A',
-                          boxShadow: '0 0 20px rgba(255, 201, 40, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.8)',
-                          border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                          boxShadow: '0 4px 18px rgba(255, 201, 40, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)',
+                          border: '1.5px solid rgba(255, 255, 255, 0.90)',
                         }
                       : {
-                          background: 'rgba(31, 91, 56, 0.55)',
+                          background: 'rgba(25, 75, 45, 0.45)',
                           backdropFilter: 'blur(16px)',
                           WebkitBackdropFilter: 'blur(16px)',
                           color: '#FFFFFF',
-                          border: '1.5px solid rgba(255, 255, 255, 0.50)',
-                          boxShadow: '0 4px 15px rgba(0, 0, 0, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 0.6)',
+                          border: '1.5px solid rgba(255, 255, 255, 0.45)',
+                          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 0.55)',
                         }
                   }
                   className={`shrink-0 px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer select-none ${
@@ -692,16 +684,16 @@ export default function CustomerStorefrontPage() {
             </div>
             
             <div className="flex items-center gap-3">
-              <span className="text-xs font-mono font-bold text-white/80 tracking-wider">
+              <span className="text-xs font-mono font-bold text-white/85 tracking-wider drop-shadow-xs">
                 {filteredProducts.length} ITEMS
               </span>
               <button
                 onClick={() => setIsTrackingActive(true)}
                 style={{
-                  background: 'rgba(31, 91, 56, 0.55)',
+                  background: 'rgba(25, 75, 45, 0.45)',
                   backdropFilter: 'blur(14px)',
                   WebkitBackdropFilter: 'blur(14px)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.50)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.45)',
                 }}
                 className="px-3.5 py-1.5 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all flex items-center gap-1 cursor-pointer shadow-xs"
               >
@@ -712,7 +704,7 @@ export default function CustomerStorefrontPage() {
           </div>
 
           {/* ================================================================ */}
-          {/* 4-COLUMN DESKTOP PRODUCT GRID (Olive, Emerald & Warm Gold Glass) */}
+          {/* 4-COLUMN DESKTOP PRODUCT GRID (Genuine 3D Transparent Glass)     */}
           {/* ================================================================ */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {filteredProducts.map((prod, index) => {
@@ -723,7 +715,7 @@ export default function CustomerStorefrontPage() {
               return (
                 <div key={prod.id} className="relative flex flex-col group">
                   
-                  {/* Frosted Glass Product Card Container */}
+                  {/* Floating Transparent 3D Glass Product Card */}
                   <div
                     style={tint.cardStyle}
                     className="rounded-[26px] p-4 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.015] relative z-10 min-h-[420px] overflow-hidden"
@@ -732,7 +724,7 @@ export default function CustomerStorefrontPage() {
                     <div 
                       className="absolute inset-0 pointer-events-none rounded-[26px]"
                       style={{
-                        background: 'linear-gradient(125deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.08) 35%, transparent 60%)',
+                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.10) 35%, transparent 65%)',
                       }}
                     />
 
@@ -744,7 +736,7 @@ export default function CustomerStorefrontPage() {
 
                       <button
                         onClick={(e) => handleToggleWishlist(prod.id, e)}
-                        className="w-8 h-8 rounded-full bg-black/30 border border-white/40 flex items-center justify-center text-white hover:bg-black/50 transition-colors shrink-0 cursor-pointer shadow-xs"
+                        className="w-8 h-8 rounded-full bg-black/25 backdrop-blur-md border border-white/50 flex items-center justify-center text-white hover:bg-black/45 transition-colors shrink-0 cursor-pointer shadow-xs"
                         title={isSaved ? "Remove from wishlist" : "Add to wishlist"}
                       >
                         <Heart 
@@ -753,29 +745,29 @@ export default function CustomerStorefrontPage() {
                       </button>
                     </div>
 
-                    {/* Product Image Asset with Weight Pill */}
-                    <div className="relative z-10 h-44 w-full rounded-2xl overflow-hidden mb-3 bg-black/25">
+                    {/* Product Photo Asset with Weight Pill (Properly sized & proportional) */}
+                    <div className="relative z-10 h-40 sm:h-44 w-full rounded-2xl overflow-hidden mb-3 bg-black/20">
                       <img
                         src={prod.img}
                         alt={prod.name}
-                        className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
                       {/* Gradient Mask for bottom edge contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
                       
                       {/* Weight badge pill overlay */}
-                      <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20">
+                      <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md text-[11px] font-mono font-bold text-white border border-white/20">
                         {prod.weight}
                       </div>
                     </div>
 
                     {/* Product Title & Description */}
                     <div className="relative z-10 mb-3 space-y-1">
-                      <h3 className="font-extrabold text-white text-base leading-snug tracking-tight line-clamp-1 drop-shadow-xs">
+                      <h3 className="font-extrabold text-white text-[15px] sm:text-base leading-snug tracking-tight line-clamp-1 drop-shadow-xs">
                         {prod.displayName || prod.name}
                       </h3>
-                      <p className="text-xs text-white/80 line-clamp-2 leading-relaxed font-normal">
+                      <p className="text-[12px] text-white/85 line-clamp-2 leading-relaxed font-normal">
                         {prod.description}
                       </p>
                     </div>
@@ -783,7 +775,7 @@ export default function CustomerStorefrontPage() {
                     {/* Price, SLA Telemetry & Stepper Quantity Pill */}
                     <div className="relative z-10 pt-3 border-t border-white/20 flex items-center justify-between">
                       <div>
-                        <div className="text-xl font-black text-[#FFD52A] font-mono leading-none drop-shadow-xs">
+                        <div className="text-xl sm:text-2xl font-black text-[#FFD52A] font-mono leading-none tracking-tight drop-shadow-xs">
                           ${prod.price.toFixed(2)}
                         </div>
                         <div className="text-[11px] font-bold text-[#8DFFD0] font-mono mt-1 flex items-center gap-1 drop-shadow-xs">
@@ -798,7 +790,8 @@ export default function CustomerStorefrontPage() {
                           style={{
                             background: 'rgba(0, 0, 0, 0.45)',
                             backdropFilter: 'blur(12px)',
-                            border: '1.5px solid rgba(255, 255, 255, 0.55)',
+                            border: '1.5px solid rgba(255, 255, 255, 0.65)',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
                           }}
                           className="flex items-center gap-2 px-2.5 py-1 rounded-full shadow-md"
                         >
@@ -820,9 +813,9 @@ export default function CustomerStorefrontPage() {
                         <button
                           onClick={(e) => handleAddToCart(prod, e)}
                           style={{
-                            background: '#FFC928',
+                            background: 'linear-gradient(135deg, #FFD52A 0%, #FFC928 100%)',
                             color: '#1A1A1A',
-                            boxShadow: '0 4px 15px rgba(255, 201, 40, 0.4), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
+                            boxShadow: '0 4px 15px rgba(255, 201, 40, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
                           }}
                           className="px-4 py-1.5 rounded-full font-black text-xs hover:brightness-110 active:scale-95 transition-all flex items-center gap-1 cursor-pointer"
                         >
@@ -833,9 +826,9 @@ export default function CustomerStorefrontPage() {
                     </div>
                   </div>
 
-                  {/* Soft Glowing Floor Underglow Reflection */}
+                  {/* Soft Realistic Ambient Floor Underglow Reflection */}
                   <div
-                    className="w-[88%] h-6 mx-auto -mt-2 rounded-b-[24px] blur-[6px] opacity-45 pointer-events-none select-none hidden sm:block"
+                    className="w-[88%] h-6 mx-auto -mt-2 rounded-b-[24px] blur-[6px] opacity-40 pointer-events-none select-none hidden sm:block"
                     style={{ background: tint.underglow }}
                   />
                 </div>
@@ -846,17 +839,17 @@ export default function CustomerStorefrontPage() {
       )}
 
       {/* ==================================================================== */}
-      {/* FLOATING DARK EMERALD GLASS CART PANEL (Matching Reference Image)    */}
+      {/* FLOATING DARK EMERALD GLASS CART PANEL (With Subtle Gold Edges)      */}
       {/* ==================================================================== */}
       {!isTrackingActive && cartItemCount > 0 && (
         <div className="fixed bottom-5 inset-x-4 sm:inset-x-6 md:inset-x-8 max-w-7xl mx-auto z-40 animate-fadeIn pointer-events-none">
           <div 
             style={{
-              background: 'rgba(20, 60, 40, 0.85)',
+              background: 'linear-gradient(135deg, rgba(16, 52, 32, 0.82) 0%, rgba(10, 40, 24, 0.85) 100%)',
               backdropFilter: 'blur(22px) saturate(190%)',
               WebkitBackdropFilter: 'blur(22px) saturate(190%)',
               border: '1.5px solid rgba(255, 255, 255, 0.55)',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.45), 0 0 30px rgba(46, 213, 115, 0.35), inset 0 1.5px 2px rgba(255, 255, 255, 0.75)',
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.45), 0 0 25px rgba(255, 201, 40, 0.20), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -1.5px 2px rgba(255, 201, 40, 0.35)',
             }}
             className="rounded-[24px] p-3 sm:p-4 flex items-center justify-between pointer-events-auto shadow-2xl"
           >
@@ -864,11 +857,12 @@ export default function CustomerStorefrontPage() {
             <div className="flex items-center gap-3 sm:gap-4">
               <div 
                 style={{
-                  background: '#FFC928',
+                  background: 'linear-gradient(135deg, #FFD52A 0%, #FFC928 100%)',
                   color: '#1A1A1A',
                   boxShadow: '0 4px 12px rgba(255, 201, 40, 0.4)',
+                  border: '1px solid rgba(255, 255, 255, 0.6)',
                 }}
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center font-black text-sm sm:text-base shrink-0 shadow-md"
+                className="w-11 h-11 rounded-2xl flex items-center justify-center font-black text-base shrink-0 shadow-md"
               >
                 {cartItemCount}
               </div>
@@ -879,25 +873,27 @@ export default function CustomerStorefrontPage() {
                   <span className="text-[#FFD52A] font-mono">${cartSubtotal.toFixed(2)}</span>
                 </div>
                 <div className="text-[11px] sm:text-xs text-[#8DFFD0] font-semibold flex items-center gap-1">
-                  <Lock className="w-3 h-3 text-[#8DFFD0]" />
+                  <Lock className="w-3.5 h-3.5 text-[#8DFFD0]" />
                   <span>Cold-Chain SLA Locked</span>
                 </div>
               </div>
             </div>
 
-            {/* Right: Golden View Cart Button */}
+            {/* Right: Glossy 3D Gold View Cart Button */}
             <button
               onClick={() => setIsCartDrawerOpen(true)}
               style={{
-                background: 'linear-gradient(135deg, #FFD52A 0%, #FFC928 100%)',
+                background: 'linear-gradient(135deg, #FFD52A 0%, #FFC928 60%, #E5A500 100%)',
                 color: '#1A1A1A',
-                border: '1.5px solid rgba(255, 255, 255, 0.75)',
-                boxShadow: '0 8px 20px rgba(255, 201, 40, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.85)',
+                border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                boxShadow: '0 8px 25px rgba(255, 201, 40, 0.50), inset 0 2px 2px rgba(255, 255, 255, 0.90), inset 0 -2px 2px rgba(180, 130, 0, 0.35)',
               }}
-              className="px-5 sm:px-7 py-2.5 rounded-full font-black text-xs sm:text-sm tracking-wide flex items-center gap-2 hover:brightness-105 active:scale-95 transition-all cursor-pointer shadow-lg"
+              className="px-6 sm:px-8 py-2.5 rounded-full font-black text-xs sm:text-sm tracking-wide flex items-center gap-2 hover:brightness-105 active:scale-95 transition-all cursor-pointer shadow-lg relative overflow-hidden group"
             >
-              <ShoppingCart className="w-4 h-4 text-[#1A1A1A]" />
-              <span>View Cart →</span>
+              {/* Top Specular Sheen */}
+              <div className="absolute top-0 inset-x-0 h-[45%] bg-gradient-to-b from-white/35 to-transparent pointer-events-none rounded-t-full" />
+              <ShoppingCart className="w-4 h-4 text-[#1A1A1A] z-10" />
+              <span className="z-10">View Cart →</span>
             </button>
           </div>
         </div>
@@ -910,11 +906,11 @@ export default function CustomerStorefrontPage() {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex flex-col justify-end sm:items-center sm:justify-center p-0 sm:p-6 animate-fadeIn">
           <div 
             style={{
-              background: 'rgba(18, 55, 36, 0.95)',
+              background: 'rgba(16, 50, 32, 0.92)',
               backdropFilter: 'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
               border: '1.5px solid rgba(255, 255, 255, 0.55)',
-              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1.5px 2px rgba(255, 255, 255, 0.75)',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.65), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -1.5px 2px rgba(255, 201, 40, 0.3)',
             }}
             className="w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] flex flex-col justify-between shadow-2xl p-6"
           >
