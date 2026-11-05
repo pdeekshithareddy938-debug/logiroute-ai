@@ -48,7 +48,16 @@ const PORTALS = [
     buttonText: 'Customer Login →',
     icon: ShoppingBag,
     badgeText: 'Grocery & 3D Catalog',
-    badgeIcon: null,
+    badgeIcon: ShoppingBag,
+    badgeIconColor: '#00B86B',
+    badgeStyle: {
+      background: 'rgba(201, 255, 229, 0.78)',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      color: '#087443',
+      border: '1px solid rgba(255, 255, 255, 0.85)',
+      boxShadow: '0 2px 8px rgba(0, 184, 107, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
+    },
     accountInfo: 'Demo: customer@gmail.com',
     mailIconColor: '#EF4444',
     subtitleColor: '#C2410C',
@@ -83,7 +92,15 @@ const PORTALS = [
     icon: ScooterIcon3D,
     badgeText: 'Fleet Partner',
     badgeIcon: Zap,
-    badgeIconColor: '#2563EB',
+    badgeIconColor: '#168BFF',
+    badgeStyle: {
+      background: 'rgba(213, 238, 255, 0.78)',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      color: '#0759B8',
+      border: '1px solid rgba(255, 255, 255, 0.85)',
+      boxShadow: '0 2px 8px rgba(22, 139, 255, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
+    },
     accountInfo: 'Demo: rider@logiroute.ai',
     mailIconColor: '#6366F1',
     subtitleColor: '#BE123C',
@@ -118,7 +135,15 @@ const PORTALS = [
     icon: BarChart3,
     badgeText: 'Hub Operations',
     badgeIcon: Building2,
-    badgeIconColor: '#D97706',
+    badgeIconColor: '#963BDB',
+    badgeStyle: {
+      background: 'rgba(234, 215, 255, 0.78)',
+      backdropFilter: 'blur(10px)',
+      WebkitBackdropFilter: 'blur(10px)',
+      color: '#6820A8',
+      border: '1px solid rgba(255, 255, 255, 0.85)',
+      boxShadow: '0 2px 8px rgba(150, 59, 219, 0.12), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
+    },
     accountInfo: 'Demo: admin@logiroute.ai',
     mailIconColor: '#EA580C',
     subtitleColor: '#B45309',
@@ -243,9 +268,18 @@ export default function LoginPage() {
                       </div>
 
                       {/* Translucent Glass Pill Badge */}
-                      <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-white/75 backdrop-blur-md border border-white/85 text-slate-800 shadow-2xs flex items-center gap-1.5">
+                      <span 
+                        style={portal.badgeStyle}
+                        className="px-3 py-1 rounded-full text-[11px] font-bold shadow-2xs flex items-center gap-1.5 transition-all select-none"
+                      >
                         {BadgeIconComponent && (
-                          <BadgeIconComponent className="w-3.5 h-3.5" style={{ color: portal.badgeIconColor }} />
+                          <BadgeIconComponent 
+                            className="w-3.5 h-3.5 shrink-0 stroke-[2.4]" 
+                            style={{ 
+                              color: portal.badgeIconColor,
+                              filter: `drop-shadow(0 0 3.5px ${portal.badgeIconColor}95)`
+                            }} 
+                          />
                         )}
                         <span>{portal.badgeText}</span>
                       </span>
