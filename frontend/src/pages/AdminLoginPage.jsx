@@ -91,21 +91,28 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full relative flex items-center justify-center p-4 sm:p-6 md:p-8 font-sans overflow-x-hidden selection:bg-[#FF5722]/20 selection:text-[#FF5722]">
+    <div className="min-h-screen min-h-[100dvh] w-full relative flex items-center justify-center p-4 sm:p-6 md:p-8 font-sans overflow-x-hidden selection:bg-[#FF5722]/20 selection:text-[#FF5722]">
       
       {/* ==================================================================== */}
-      {/* 3D SCENE BACKGROUND: Modern Warehouse, Delivery Van, Parcels & Gear  */}
+      {/* 100% STATIONARY FIXED 3D BACKGROUND (Zero Mobile Touch Shift)        */}
       {/* ==================================================================== */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-700 transform scale-100"
+        aria-hidden="true"
+        className="fixed top-0 left-0 w-full h-screen h-[100dvh] z-0 pointer-events-none select-none overflow-hidden"
         style={{
           backgroundImage: `url('/assets/admin_bg_3d.png'), url('/assets/admin_reference.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
           backgroundColor: '#FDEEE6',
+          transform: 'translate3d(0, 0, 0)',
+          WebkitTransform: 'translate3d(0, 0, 0)',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
         }}
       >
         {/* Ambient Warm Warehouse & Volumetric Lighting Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-100/20 via-transparent to-stone-900/35 pointer-events-none" />
-        <div className="absolute inset-0 bg-radial from-transparent via-amber-100/10 to-stone-900/25 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-100/15 via-transparent to-stone-900/30 pointer-events-none" />
       </div>
 
       {/* Top Left Navigation Pill */}

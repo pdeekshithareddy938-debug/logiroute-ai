@@ -55,11 +55,18 @@ const PORTALS = [
     desc: 'Browse instant quick-commerce grocery catalog, temperature badges, and real-time live 3D order tracking.',
     // Premium Translucent Peach/Coral Glass
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(255, 235, 225, 0.48) 0%, rgba(255, 205, 185, 0.30) 45%, rgba(255, 170, 145, 0.38) 100%)',
+      background: 'linear-gradient(145deg, rgba(255, 222, 208, 0.46) 0%, rgba(255, 178, 158, 0.28) 45%, rgba(255, 142, 108, 0.40) 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.75)',
-      boxShadow: '0 25px 60px -15px rgba(255, 87, 34, 0.28), 0 10px 25px -5px rgba(255, 87, 34, 0.16), inset 0 2px 3px rgba(255, 255, 255, 0.85), inset 0 -2px 3px rgba(255, 87, 34, 0.2)',
+      border: '1.5px solid rgba(255, 255, 255, 0.80)',
+      boxShadow: '0 25px 60px -15px rgba(255, 87, 34, 0.32), 0 10px 25px -5px rgba(255, 87, 34, 0.18), inset 0 2px 3px rgba(255, 255, 255, 0.92), inset 0 -2px 3px rgba(255, 87, 34, 0.20)',
+    },
+    demoPillStyle: {
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 205, 185, 0.35) 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.85)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      boxShadow: '0 4px 15px rgba(255, 87, 34, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
       background: 'linear-gradient(180deg, rgba(255, 170, 145, 0.35) 0%, transparent 100%)',
@@ -83,11 +90,18 @@ const PORTALS = [
     desc: 'Turn-by-turn routing navigation, cold-chain SLA telemetry, dispatch wave acceptance, and shift manager.',
     // Premium Translucent Soft Lavender / Pink Glass
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(245, 235, 255, 0.50) 0%, rgba(230, 210, 255, 0.32) 40%, rgba(255, 220, 240, 0.40) 100%)',
+      background: 'linear-gradient(145deg, rgba(236, 226, 255, 0.48) 0%, rgba(212, 198, 255, 0.30) 45%, rgba(198, 218, 255, 0.40) 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.80)',
-      boxShadow: '0 25px 60px -15px rgba(168, 85, 247, 0.28), 0 10px 25px -5px rgba(236, 72, 153, 0.18), inset 0 2px 3px rgba(255, 255, 255, 0.90), inset 0 -2px 3px rgba(168, 85, 247, 0.2)',
+      border: '1.5px solid rgba(255, 255, 255, 0.82)',
+      boxShadow: '0 25px 60px -15px rgba(168, 85, 247, 0.30), 0 10px 25px -5px rgba(147, 51, 234, 0.18), inset 0 2px 3px rgba(255, 255, 255, 0.92), inset 0 -2px 3px rgba(168, 85, 247, 0.20)',
+    },
+    demoPillStyle: {
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.52) 0%, rgba(222, 208, 255, 0.35) 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.85)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      boxShadow: '0 4px 15px rgba(168, 85, 247, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
       background: 'linear-gradient(180deg, rgba(236, 72, 153, 0.32) 0%, transparent 100%)',
@@ -111,11 +125,18 @@ const PORTALS = [
     desc: 'GIS live fleet radar, multi-order wave dispatching, TSP route optimization, and dark store inventory sync.',
     // Premium Translucent Warm Amber / Orange Glass
     cardStyle: {
-      background: 'linear-gradient(145deg, rgba(255, 245, 220, 0.52) 0%, rgba(255, 215, 160, 0.32) 45%, rgba(255, 175, 130, 0.40) 100%)',
+      background: 'linear-gradient(145deg, rgba(255, 242, 208, 0.50) 0%, rgba(255, 218, 155, 0.32) 45%, rgba(255, 178, 115, 0.40) 100%)',
       backdropFilter: 'blur(20px) saturate(190%)',
       WebkitBackdropFilter: 'blur(20px) saturate(190%)',
-      border: '1.5px solid rgba(255, 255, 255, 0.78)',
-      boxShadow: '0 25px 60px -15px rgba(249, 115, 22, 0.32), 0 10px 25px -5px rgba(234, 88, 12, 0.20), inset 0 2px 3px rgba(255, 255, 255, 0.88), inset 0 -2px 3px rgba(249, 115, 22, 0.2)',
+      border: '1.5px solid rgba(255, 255, 255, 0.80)',
+      boxShadow: '0 25px 60px -15px rgba(249, 115, 22, 0.32), 0 10px 25px -5px rgba(234, 88, 12, 0.20), inset 0 2px 3px rgba(255, 255, 255, 0.90), inset 0 -2px 3px rgba(249, 115, 22, 0.20)',
+    },
+    demoPillStyle: {
+      background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 228, 165, 0.35) 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.85)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
+      boxShadow: '0 4px 15px rgba(249, 115, 22, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.85)',
     },
     reflectionStyle: {
       background: 'linear-gradient(180deg, rgba(249, 115, 22, 0.35) 0%, transparent 100%)',
@@ -126,20 +147,28 @@ const PORTALS = [
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen w-full relative flex flex-col justify-center items-center p-4 sm:p-6 md:p-10 font-sans overflow-x-hidden selection:bg-[#FF5722]/20 selection:text-[#FF5722]">
+    <div className="min-h-screen min-h-[100dvh] w-full relative flex flex-col justify-center items-center p-4 sm:p-6 md:p-10 font-sans overflow-x-hidden selection:bg-[#FF5722]/20 selection:text-[#FF5722]">
       
       {/* ==================================================================== */}
-      {/* VIBRANT 3D SCENE BACKGROUND: City, Storefront & Logistics Depot      */}
+      {/* 100% STATIONARY FIXED 3D BACKGROUND (Zero Mobile Touch Shift)        */}
       {/* ==================================================================== */}
       <div 
-        className="fixed inset-0 z-0 bg-cover bg-center bg-no-repeat transition-all duration-700 transform scale-[1.01]"
+        aria-hidden="true"
+        className="fixed top-0 left-0 w-full h-screen h-[100dvh] z-0 pointer-events-none select-none overflow-hidden"
         style={{
           backgroundImage: `url('/assets/portal_bg_3d.png'), url('/assets/portal_reference.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
           backgroundColor: '#FDEEE6',
+          transform: 'translate3d(0, 0, 0)',
+          WebkitTransform: 'translate3d(0, 0, 0)',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
         }}
       >
         {/* Subtle Warm Atmospheric Glow Overlay (Non-obstructive) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-200/15 via-transparent to-stone-900/25 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-200/10 via-transparent to-stone-900/25 pointer-events-none" />
       </div>
 
       <div className="max-w-6xl w-full z-10 py-6 sm:py-8 my-auto">
@@ -236,11 +265,14 @@ export default function LoginPage() {
                     </p>
                   </div>
 
-                  {/* Bottom Actions: Demo Account Pill & Primary CTA Button */}
+                  {/* Bottom Actions: Matching Translucent Frosted Glass Demo Pill & 3D CTA Button */}
                   <div className="relative z-10 pt-4 border-t border-white/45 space-y-3">
                     
-                    {/* Demo Account Translucent Pill */}
-                    <div className="text-[12px] font-semibold text-slate-800 bg-white/65 backdrop-blur-md rounded-xl px-3 py-2 border border-white/80 flex items-center gap-2 shadow-2xs">
+                    {/* Demo Account Translucent Frosted Glass Pill (Theme-Matched) */}
+                    <div 
+                      style={portal.demoPillStyle}
+                      className="text-[12px] font-semibold text-slate-800 rounded-xl px-3.5 py-2 flex items-center gap-2 transition-all"
+                    >
                       <Mail className="w-3.5 h-3.5 shrink-0" style={{ color: portal.mailIconColor }} />
                       <span className="truncate">{portal.accountInfo}</span>
                     </div>
@@ -251,13 +283,15 @@ export default function LoginPage() {
                       style={{
                         height: '50px',
                         borderRadius: '25px',
-                        background: 'linear-gradient(135deg, #FF6A3D 0%, #FF3D00 100%)',
-                        boxShadow: '0 10px 25px -3px rgba(255, 61, 0, 0.48), inset 0 1.5px 2px rgba(255, 255, 255, 0.55), inset 0 -1.5px 2px rgba(180, 20, 0, 0.25)',
+                        background: 'linear-gradient(135deg, #FF6F3D 0%, #FF3D00 100%)',
+                        boxShadow: '0 10px 25px -3px rgba(255, 61, 0, 0.48), inset 0 1.5px 2px rgba(255, 255, 255, 0.65), inset 0 -1.5px 2px rgba(180, 20, 0, 0.25)',
                       }}
-                      className="w-full text-white font-bold text-xs tracking-wide flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_14px_30px_-3px_rgba(255,61,0,0.6)] active:scale-[0.98] transition-all cursor-pointer"
+                      className="w-full text-white font-bold text-xs tracking-wide flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_14px_30px_-3px_rgba(255,61,0,0.6)] active:scale-[0.98] transition-all cursor-pointer relative overflow-hidden group/btn"
                     >
-                      <Lock className="w-3.5 h-3.5" />
-                      <span>{portal.buttonText}</span>
+                      {/* Top Specular Sheen on Button */}
+                      <div className="absolute top-0 inset-x-0 h-[45%] bg-gradient-to-b from-white/30 to-transparent pointer-events-none rounded-t-[25px]" />
+                      <Lock className="w-3.5 h-3.5 z-10" />
+                      <span className="z-10">{portal.buttonText}</span>
                     </Link>
                   </div>
                 </div>
