@@ -672,7 +672,7 @@ export default function CustomerStorefrontPage() {
           {/* ================================================================ */}
           {/* CATEGORY NAVIGATION PILLS (Translucent Green Glass + Gold Active) */}
           {/* ================================================================ */}
-          <div className="py-3 flex items-center gap-2.5 overflow-x-auto no-scrollbar max-w-5xl mx-auto">
+          <div className="py-3 flex items-center gap-2.5 overflow-x-auto no-scrollbar max-w-4xl mx-auto">
             {CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat;
               return (
@@ -709,7 +709,7 @@ export default function CustomerStorefrontPage() {
           {/* ================================================================ */}
           {/* SECTION HEADER: "Artisanal Cold-Chain & Hot Picks" + 8 ITEMS     */}
           {/* ================================================================ */}
-          <div className="pt-4 pb-3 flex items-center justify-between max-w-5xl mx-auto">
+          <div className="pt-4 pb-3 flex items-center justify-between max-w-4xl mx-auto">
             <div className="flex items-center gap-2.5">
               <span className="w-3 h-3 rounded-full bg-[#FFC928] shadow-[0_0_12px_#FFC928]" />
               <h2 className="font-extrabold text-base sm:text-lg md:text-xl text-white tracking-tight drop-shadow-md">
@@ -741,23 +741,23 @@ export default function CustomerStorefrontPage() {
           {/* ================================================================ */}
           {/* 4-COLUMN DESKTOP PRODUCT GRID (Compact Width, 3D Transparent Glass) */}
           {/* ================================================================ */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 max-w-4xl mx-auto justify-items-center">
             {filteredProducts.map((prod, index) => {
               const qty = cart[prod.id] || 0;
               const isSaved = !!wishlist[prod.id];
               const tint = CARD_TINT_STYLES[index % CARD_TINT_STYLES.length];
 
               return (
-                <div key={prod.id} className="relative flex flex-col group">
+                <div key={prod.id} className="relative flex flex-col group w-full max-w-[215px]">
                   
-                  {/* Floating Transparent 3D Glass Product Card (Compact & Professionally Aligned) */}
+                  {/* Floating Transparent 3D Glass Product Card (Reduced Width, Compact & Sleek) */}
                   <div
                     style={tint.cardStyle}
-                    className="rounded-[22px] p-3 sm:p-3.5 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.01] relative z-10 min-h-[315px] sm:min-h-[330px] overflow-hidden"
+                    className="rounded-[20px] p-2.5 sm:p-3 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.01] relative z-10 min-h-[295px] sm:min-h-[305px] overflow-hidden"
                   >
                     {/* Glossy Diagonal Specular Glare Reflection */}
                     <div 
-                      className="absolute inset-0 pointer-events-none rounded-[22px]"
+                      className="absolute inset-0 pointer-events-none rounded-[20px]"
                       style={{
                         background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.10) 35%, transparent 65%)',
                       }}
@@ -765,23 +765,23 @@ export default function CustomerStorefrontPage() {
 
                     {/* Top Row: Thermal State Badge & Wishlist Heart */}
                     <div className="relative z-10 flex items-center justify-between mb-2">
-                      <span className={`bg-gradient-to-r ${prod.badgeGradient} text-white font-black px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] shadow-sm flex items-center gap-1 select-none`}>
+                      <span className={`bg-gradient-to-r ${prod.badgeGradient} text-white font-black px-2 py-0.5 rounded-full text-[9.5px] sm:text-[10px] shadow-sm flex items-center gap-1 select-none`}>
                         {prod.badgeText}
                       </span>
 
                       <button
                         onClick={(e) => handleToggleWishlist(prod.id, e)}
-                        className="w-7 h-7 rounded-full bg-black/25 backdrop-blur-md border border-white/50 flex items-center justify-center text-white hover:bg-black/45 transition-colors shrink-0 cursor-pointer shadow-xs"
+                        className="w-6.5 h-6.5 rounded-full bg-black/25 backdrop-blur-md border border-white/50 flex items-center justify-center text-white hover:bg-black/45 transition-colors shrink-0 cursor-pointer shadow-xs"
                         title={isSaved ? "Remove from wishlist" : "Add to wishlist"}
                       >
                         <Heart 
-                          className={`w-3.5 h-3.5 ${isSaved ? 'fill-rose-500 text-rose-500' : 'text-white'}`} 
+                          className={`w-3 h-3 ${isSaved ? 'fill-rose-500 text-rose-500' : 'text-white'}`} 
                         />
                       </button>
                     </div>
 
                     {/* Food Image Asset (Fills entire container with width: 100%, height: 100%, object-fit: cover, no gaps) */}
-                    <div className="relative z-10 h-32 sm:h-34 w-full rounded-xl overflow-hidden mb-2.5 bg-black/20">
+                    <div className="relative z-10 h-28 sm:h-30 w-full rounded-xl overflow-hidden mb-2 bg-black/20">
                       <img
                         src={prod.img}
                         alt={prod.name}
@@ -798,17 +798,17 @@ export default function CustomerStorefrontPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
                       
                       {/* Weight badge pill overlay */}
-                      <div className="absolute bottom-1.5 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20">
+                      <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[9px] font-mono font-bold text-white border border-white/20">
                         {prod.weight}
                       </div>
                     </div>
 
                     {/* Product Title & Description */}
                     <div className="relative z-10 mb-2 space-y-0.5">
-                      <h3 className="font-extrabold text-white text-sm sm:text-[15px] leading-tight tracking-tight line-clamp-1 drop-shadow-xs">
+                      <h3 className="font-extrabold text-white text-xs sm:text-[13.5px] leading-tight tracking-tight line-clamp-1 drop-shadow-xs">
                         {prod.displayName || prod.name}
                       </h3>
-                      <p className="text-[11px] text-white/80 line-clamp-2 leading-relaxed font-normal">
+                      <p className="text-[10.5px] text-white/80 line-clamp-2 leading-relaxed font-normal">
                         {prod.description}
                       </p>
                     </div>
@@ -816,11 +816,11 @@ export default function CustomerStorefrontPage() {
                     {/* Price, SLA Telemetry & Stepper Quantity Pill */}
                     <div className="relative z-10 pt-2 border-t border-white/20 flex items-center justify-between">
                       <div>
-                        <div className="text-lg sm:text-xl font-black text-[#FFD52A] font-mono leading-none tracking-tight drop-shadow-xs">
+                        <div className="text-base sm:text-lg font-black text-[#FFD52A] font-mono leading-none tracking-tight drop-shadow-xs">
                           ${prod.price.toFixed(2)}
                         </div>
-                        <div className="text-[10px] sm:text-[11px] font-bold text-[#8DFFD0] font-mono mt-0.5 flex items-center gap-1 drop-shadow-xs">
-                          <Zap className="w-3 h-3 fill-[#8DFFD0]" />
+                        <div className="text-[9.5px] sm:text-[10px] font-bold text-[#8DFFD0] font-mono mt-0.5 flex items-center gap-0.5 drop-shadow-xs">
+                          <Zap className="w-2.5 h-2.5 fill-[#8DFFD0]" />
                           <span>{prod.eta}</span>
                         </div>
                       </div>
@@ -834,7 +834,7 @@ export default function CustomerStorefrontPage() {
                             border: '1.5px solid rgba(255, 255, 255, 0.65)',
                             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.6)',
                           }}
-                          className="flex items-center gap-1.5 px-2 py-0.5 rounded-full shadow-md"
+                          className="flex items-center gap-1 px-1.5 py-0.5 rounded-full shadow-md"
                         >
                           <button
                             onClick={(e) => handleDecreaseQuantity(prod.id, e)}
@@ -858,7 +858,7 @@ export default function CustomerStorefrontPage() {
                             color: '#1A1A1A',
                             boxShadow: '0 3px 12px rgba(255, 201, 40, 0.45), inset 0 1px 1.5px rgba(255, 255, 255, 0.8)',
                           }}
-                          className="px-3.5 py-1 rounded-full font-black text-[11px] sm:text-xs hover:brightness-110 active:scale-95 transition-all flex items-center gap-1 cursor-pointer"
+                          className="px-3 py-1 rounded-full font-black text-[10.5px] hover:brightness-110 active:scale-95 transition-all flex items-center gap-1 cursor-pointer"
                         >
                           <Plus className="w-3 h-3 stroke-[3]" />
                           <span>ADD</span>
