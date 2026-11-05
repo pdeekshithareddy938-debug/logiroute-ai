@@ -1439,7 +1439,6 @@ app.get('/api/analytics', async (req, res) => {
 });
 
 // Serve production frontend build if available (single service Render deployment)
-const fs = require('fs');
 const frontendDistPath = path.join(__dirname, '../frontend/dist');
 if (fs.existsSync(frontendDistPath)) {
   app.use(express.static(frontendDistPath));
