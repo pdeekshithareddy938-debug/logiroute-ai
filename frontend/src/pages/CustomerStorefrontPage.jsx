@@ -718,7 +718,7 @@ export default function CustomerStorefrontPage() {
                   {/* Floating Transparent 3D Glass Product Card */}
                   <div
                     style={tint.cardStyle}
-                    className="rounded-[26px] p-4 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.015] relative z-10 min-h-[420px] overflow-hidden"
+                    className="rounded-[26px] p-4 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.015] relative z-10 min-h-[355px] sm:min-h-[365px] overflow-hidden"
                   >
                     {/* Glossy Diagonal Specular Glare Reflection */}
                     <div 
@@ -729,7 +729,7 @@ export default function CustomerStorefrontPage() {
                     />
 
                     {/* Top Row: Thermal State Badge & Wishlist Heart */}
-                    <div className="relative z-10 flex items-center justify-between mb-3">
+                    <div className="relative z-10 flex items-center justify-between mb-2.5">
                       <span className={`bg-gradient-to-r ${prod.badgeGradient} text-white font-black px-3 py-1 rounded-full text-[11px] shadow-sm flex items-center gap-1 select-none`}>
                         {prod.badgeText}
                       </span>
@@ -745,8 +745,8 @@ export default function CustomerStorefrontPage() {
                       </button>
                     </div>
 
-                    {/* Product Photo Asset with Weight Pill (Properly sized & proportional) */}
-                    <div className="relative z-10 h-40 sm:h-44 w-full rounded-2xl overflow-hidden mb-3 bg-black/20">
+                    {/* Product Photo Asset with Weight Pill (Instamart / Quick-Commerce Compact Size) */}
+                    <div className="relative z-10 h-28 sm:h-32 w-full rounded-2xl overflow-hidden mb-2.5 bg-black/20 flex items-center justify-center">
                       <img
                         src={prod.img}
                         alt={prod.name}
@@ -757,7 +757,7 @@ export default function CustomerStorefrontPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 pointer-events-none" />
                       
                       {/* Weight badge pill overlay */}
-                      <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md text-[11px] font-mono font-bold text-white border border-white/20">
+                      <div className="absolute bottom-1.5 left-2 px-2 py-0.5 rounded-md bg-black/65 backdrop-blur-md text-[10px] font-mono font-bold text-white border border-white/20">
                         {prod.weight}
                       </div>
                     </div>
@@ -941,7 +941,7 @@ export default function CustomerStorefrontPage() {
                     className="p-3 rounded-2xl bg-black/30 border border-white/20 flex items-center justify-between"
                   >
                     <div className="flex items-center gap-3">
-                      <img src={prod.img} alt={prod.name} className="w-12 h-12 rounded-xl object-cover" />
+                      <img src={prod.img} alt={prod.name} className="w-10 h-10 rounded-xl object-cover shrink-0" />
                       <div>
                         <div className="text-xs sm:text-sm font-bold text-white line-clamp-1">{prod.name}</div>
                         <div className="text-[11px] text-[#8DFFD0] font-mono">
