@@ -150,32 +150,8 @@ export default function RiderLoginPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-orange-200/15 via-transparent to-stone-900/30 pointer-events-none" />
       </div>
 
-      {/* Top Left Navigation Pill */}
-      <div className="fixed top-4 left-4 sm:top-6 sm:left-6 z-30 flex items-center gap-2">
-        <Link
-          to="/login"
-          aria-label="Back to Portal Gateway"
-          className="px-3 py-1.5 rounded-full bg-white/85 hover:bg-white backdrop-blur-md border border-white/90 text-slate-700 text-xs font-semibold flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all active:scale-95"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 text-slate-600" />
-          <span>All Portals</span>
-        </Link>
-      </div>
-
-      {/* Top Right Quick Demo Fill Pill */}
-      <div className="fixed top-4 right-4 sm:top-6 sm:right-6 z-30">
-        <button
-          type="button"
-          onClick={handleQuickFill}
-          className="px-3.5 py-1.5 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border border-[#FF6F43]/40 text-[#FF451A] text-xs font-bold flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-[#FF6F43] animate-pulse" />
-          <span>Demo Fill</span>
-        </button>
-      </div>
-
       {/* ==================================================================== */}
-      {/* CENTRAL FLOATING 3D GLASS CARD (Translucent Frosted Glassmorphism)   */}
+      {/* CENTRAL FLOATING 3D GLASS CARD (Crystal Transparent Glassmorphism)  */}
       {/* ==================================================================== */}
       <div className="relative z-20 w-full max-w-[390px] sm:max-w-[420px] my-auto">
         
@@ -185,32 +161,53 @@ export default function RiderLoginPage() {
         {/* The Card Body */}
         <div 
           style={{
-            background: 'rgba(255, 255, 255, 0.18)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1.5px solid rgba(255, 255, 255, 0.35)',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.18), inset 0 1px 2px rgba(255, 255, 255, 0.45)',
+            background: 'rgba(255, 255, 255, 0.12)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: '1.5px solid rgba(255, 255, 255, 0.70)',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15), 0 0 30px rgba(255, 255, 255, 0.35), inset 0 1.5px 3px rgba(255, 255, 255, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.15)',
           }}
-          className="w-full rounded-[32px] p-6 sm:p-8 flex flex-col relative transition-all duration-300"
+          className="w-full rounded-[38px] p-6 sm:p-7 flex flex-col relative transition-all duration-300"
         >
           
+          {/* Top Action Bar inside Card matching reference image */}
+          <div className="flex items-center justify-between mb-3 w-full">
+            <Link
+              to="/login"
+              aria-label="Back to Portals"
+              className="px-3.5 py-1.5 rounded-full bg-white/85 hover:bg-white backdrop-blur-md border border-white/90 text-slate-800 text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-slate-700" />
+              <span>Back to Portals</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={handleQuickFill}
+              className="px-3.5 py-1.5 rounded-full bg-white/85 hover:bg-white backdrop-blur-md border border-white/90 text-[#FF5722] text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#FF5722]" />
+              <span>Demo Fill</span>
+            </button>
+          </div>
+
           {/* Brand Header */}
-          <div className="flex flex-col items-center text-center mb-5">
+          <div className="flex flex-col items-center text-center mb-4">
             <ScooterLogo3D className="w-16 h-11 mb-1 text-[#FF5722]" />
-            <h1 className="text-[22px] sm:text-[24px] font-extrabold text-[#111827] tracking-tight leading-tight">
+            <h1 className="text-[24px] sm:text-[26px] font-black text-[#1E1B4B] tracking-tight leading-tight">
               LogiRoute AI
             </h1>
-            <p className="text-[12px] font-medium text-slate-600 tracking-wide mt-0.5">
+            <p className="text-[12px] font-semibold text-[#4338CA] tracking-wide mt-0.5">
               Smart 10-Minute Delivery
             </p>
           </div>
 
           {/* Title & Subtitle */}
-          <div className="text-center mb-5">
-            <h2 className="text-[20px] font-bold text-[#1E293B] tracking-tight">
+          <div className="text-center mb-4">
+            <h2 className="text-[22px] font-black text-[#1E1B4B] tracking-tight">
               Rider Login
             </h2>
-            <p className="text-[13px] text-slate-600 mt-0.5 font-medium">
+            <p className="text-[13px] text-[#EA580C] mt-0.5 font-bold">
               Deliver more. Earn more.
             </p>
           </div>
@@ -233,38 +230,52 @@ export default function RiderLoginPage() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-3.5">
             
-            {/* Rider ID / Email Input */}
+            {/* Rider ID / Email Input (Pill Shaped Transparent Glass) */}
             <div>
               <div className="relative">
-                <User className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
+                <User className="w-4 h-4 text-slate-600 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Rider ID or Email"
                   required
-                  className="w-full bg-white/70 backdrop-blur-sm border border-white/60 focus:bg-white/90 focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-500 font-medium transition-all outline-none shadow-xs"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.26)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.72)',
+                    boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(0, 0, 0, 0.04)',
+                  }}
+                  className="w-full rounded-full pl-11 pr-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-600 font-medium transition-all outline-none focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 focus:bg-white/40"
                 />
               </div>
             </div>
 
-            {/* Password Input */}
+            {/* Password Input (Pill Shaped Transparent Glass) */}
             <div>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
+                <Lock className="w-4 h-4 text-slate-600 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none transition-colors" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Password"
                   required
-                  className="w-full bg-white/70 backdrop-blur-sm border border-white/60 focus:bg-white/90 focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 rounded-2xl pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder:text-slate-500 font-medium transition-all outline-none shadow-xs"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.26)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.72)',
+                    boxShadow: 'inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(0, 0, 0, 0.04)',
+                  }}
+                  className="w-full rounded-full pl-11 pr-11 py-3.5 text-sm text-slate-900 placeholder:text-slate-600 font-medium transition-all outline-none focus:border-[#FF5722] focus:ring-4 focus:ring-[#FF5722]/15 focus:bg-white/40"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors p-1"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-800 transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -279,15 +290,15 @@ export default function RiderLoginPage() {
                 className="flex items-center gap-2 select-none group text-left cursor-pointer"
               >
                 <div
-                  className={`w-4 h-4 rounded-md flex items-center justify-center transition-all ${
+                  className={`w-4 h-4 rounded-[4px] flex items-center justify-center transition-all ${
                     keepSignedIn
                       ? 'bg-[#FF5722] border-[#FF5722] text-white shadow-xs'
-                      : 'border border-slate-300 bg-white/80 group-hover:border-slate-400'
+                      : 'border border-white/80 bg-white/40 group-hover:border-white'
                   }`}
                 >
                   {keepSignedIn && <Check className="w-3 h-3 stroke-[3]" />}
                 </div>
-                <span className="text-xs font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">
+                <span className="text-xs font-bold text-slate-900">
                   Keep me signed in
                 </span>
               </button>
@@ -295,23 +306,24 @@ export default function RiderLoginPage() {
               <button
                 type="button"
                 onClick={() => setForgotToast(true)}
-                className="text-xs font-bold text-[#FF5722] hover:text-[#E64A19] transition-colors cursor-pointer"
+                className="text-xs font-bold text-[#EA580C] hover:text-[#C2410C] transition-colors cursor-pointer"
               >
                 Forgot Password?
               </button>
             </div>
 
             {/* Primary Action Button: Log In → */}
-            <div className="pt-1.5">
+            <div className="pt-1">
               <button
                 type="submit"
                 disabled={isLoading}
                 style={{
                   height: '52px',
                   borderRadius: '26px',
-                  background: 'linear-gradient(135deg, #FF6F43 0%, #FF451A 100%)',
+                  background: 'linear-gradient(135deg, #FF6A00 0%, #FF3D00 100%)',
+                  boxShadow: '0 10px 25px rgba(255, 61, 0, 0.45), inset 0 2px 2px rgba(255, 255, 255, 0.55), inset 0 -2px 2px rgba(180, 20, 0, 0.25)',
                 }}
-                className="w-full text-white font-bold text-base tracking-wide flex items-center justify-center gap-2 shadow-lg shadow-[#FF5722]/35 hover:shadow-xl hover:shadow-[#FF5722]/45 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-60 cursor-pointer"
+                className="w-full text-white font-bold text-base tracking-wide flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.99] transition-all duration-200 disabled:opacity-60 cursor-pointer"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -337,20 +349,27 @@ export default function RiderLoginPage() {
           )}
 
           {/* Divider */}
-          <div className="relative flex py-4 items-center">
-            <div className="flex-grow border-t border-slate-300/60"></div>
-            <span className="flex-shrink mx-3 text-slate-600 text-xs font-medium">
+          <div className="relative flex py-3.5 items-center">
+            <div className="flex-grow border-t border-white/50"></div>
+            <span className="flex-shrink mx-3 text-slate-800 text-xs font-semibold">
               Or Continue With
             </span>
-            <div className="flex-grow border-t border-slate-300/60"></div>
+            <div className="flex-grow border-t border-white/50"></div>
           </div>
 
-          {/* Dual Social Logins: Google & Apple */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
+          {/* Dual Social Logins: Google & Apple (Pill Shaped Glass) */}
+          <div className="grid grid-cols-2 gap-3 mb-3">
             <button
               type="button"
               onClick={() => handleSocialAuth('Google')}
-              className="w-full py-2.5 px-3 rounded-2xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/60 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer"
+              style={{
+                background: 'rgba(255, 255, 255, 0.65)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 2px rgba(255, 255, 255, 0.6)',
+              }}
+              className="w-full py-2.5 px-3 rounded-full hover:bg-white/80 text-slate-900 font-semibold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -364,7 +383,14 @@ export default function RiderLoginPage() {
             <button
               type="button"
               onClick={() => handleSocialAuth('Apple')}
-              className="w-full py-2.5 px-3 rounded-2xl bg-white/70 hover:bg-white/90 backdrop-blur-sm border border-white/60 text-slate-800 font-semibold text-xs flex items-center justify-center gap-2 shadow-xs hover:shadow transition-all active:scale-[0.98] cursor-pointer"
+              style={{
+                background: 'rgba(255, 255, 255, 0.65)',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)',
+                border: '1.5px solid rgba(255, 255, 255, 0.85)',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 2px rgba(255, 255, 255, 0.6)',
+              }}
+              className="w-full py-2.5 px-3 rounded-full hover:bg-white/80 text-slate-900 font-semibold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.98] cursor-pointer"
             >
               <svg className="w-4 h-4 fill-current text-slate-900" viewBox="0 0 24 24">
                 <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.76 1.05-1.83.93-2.89-.91.04-2.02.61-2.66 1.36-.57.65-1.07 1.73-.93 2.76 1.02.08 2.04-.51 2.66-1.23z" />
@@ -374,8 +400,8 @@ export default function RiderLoginPage() {
           </div>
 
           {/* Footer Registration & Guest Links */}
-          <div className="space-y-2 text-center pt-1 border-t border-slate-300/50">
-            <p className="text-xs text-slate-700 font-medium">
+          <div className="space-y-1.5 text-center pt-1 border-t border-white/40">
+            <p className="text-xs text-slate-800 font-semibold">
               New Rider?{' '}
               <button
                 type="button"
@@ -386,26 +412,15 @@ export default function RiderLoginPage() {
               </button>
             </p>
 
-            <div>
-              <button
-                type="button"
-                onClick={handleGuestTrack}
-                className="font-bold text-xs text-[#FF5722] hover:text-[#E64A19] transition-all inline-flex items-center gap-1 active:scale-95 group cursor-pointer"
-              >
-                <span>Quick Track as Guest</span>
-                <span className="group-hover:translate-x-0.5 transition-transform">→</span>
-              </button>
-            </div>
-
-            {/* Quick Switch Links */}
-            <div className="pt-2 flex items-center justify-center gap-3 text-[11px] text-slate-400">
-              <Link to="/customer/login" className="hover:text-emerald-600 transition-colors flex items-center gap-1">
-                <ShoppingBag className="w-3 h-3" />
+            {/* Quick Switch Links matching reference image */}
+            <div className="pt-1 flex items-center justify-center gap-3 text-[11px] text-slate-700 font-semibold">
+              <Link to="/customer/login" className="hover:text-emerald-700 transition-colors flex items-center gap-1">
+                <ShoppingBag className="w-3.5 h-3.5 text-slate-700" />
                 <span>Customer Store</span>
               </Link>
               <span>•</span>
-              <Link to="/admin/login" className="hover:text-cyan-600 transition-colors flex items-center gap-1">
-                <Building2 className="w-3 h-3" />
+              <Link to="/admin/login" className="hover:text-cyan-700 transition-colors flex items-center gap-1">
+                <Building2 className="w-3.5 h-3.5 text-slate-700" />
                 <span>Dark Store Lead</span>
               </Link>
             </div>
